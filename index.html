@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shaheer Opticals | Luxury Eyewear & Diagnostics Rawalpindi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Shaheer Opticals | Luxury Eyewear & Computerized Optical Diagnostics</title>
+  <meta name="description" content="Shaheer Opticals - Premium luxury frames, sunglasses and computerized eye diagnostics in Saidpur Road, Kali Tanki, Rawalpindi. Order online with Cash on Delivery." />
   
   <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -22,737 +20,1379 @@
         extend: {
           colors: {
             gold: {
-              DEFAULT: '#D4AF37',
-              light: '#F3E5AB',
-              dark: '#AA820A',
+              300: '#F3E5AB',
+              400: '#E6C65A',
+              500: '#D4AF37',
+              600: '#AA771C',
+              700: '#8A5D0F',
+            },
+            dark: {
+              950: '#040404',
+              900: '#09090b',
+              850: '#111114',
+              800: '#18181b',
+              700: '#27272a',
             }
           },
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            serif: ['Cinzel', 'serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            mono: ['"Space Mono"', 'monospace'],
           }
         }
       }
     }
   </script>
 
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Supabase JS v2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
-    body {
-      background-color: #09090b;
-      color: #f4f4f5;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+    /* Custom Luxury Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
     }
-    .font-serif-luxury { font-family: 'Cinzel', serif; }
-    .font-mono-luxury { font-family: 'JetBrains Mono', monospace; }
-    
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #0c0c0e; }
-    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
-    
+    ::-webkit-scrollbar-track {
+      background: #09090b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 4px;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #D4AF37;
+    }
     .gold-gradient-text {
-      background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #AA820A 100%);
+      background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #AA771C 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .glass-card {
-      background: linear-gradient(180deg, rgba(24, 24, 27, 0.85) 0%, rgba(12, 12, 14, 0.95) 100%);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(212, 175, 55, 0.2);
-    }
-    .glass-card:hover {
-      border-color: rgba(212, 175, 55, 0.5);
-      box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.15);
+    .modal-backdrop {
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-[#D4AF37] selection:text-black">
+<body class="bg-dark-950 text-zinc-100 font-sans antialiased selection:bg-gold-500 selection:text-black min-h-screen flex flex-col">
 
-  <!-- Top Emergency & Location Bar -->
-  <div class="bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 border-b border-zinc-800 text-[11px] py-1.5 px-4 text-zinc-400">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-      <div class="flex items-center gap-4">
-        <span class="flex items-center gap-1.5 text-zinc-300">
-          <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#D4AF37]"></i>
-          <span>Kali Tanki, Saidpur Road, Rawalpindi</span>
-        </span>
-        <span class="hidden sm:flex items-center gap-1 text-emerald-400">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>Showroom Open Today (10 AM - 10 PM)</span>
-        </span>
+  <!-- Top Ambient Golden Hairline -->
+  <div class="fixed top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-gold-500 to-transparent z-50 pointer-events-none opacity-80"></div>
+
+  <!-- Announcement Bar -->
+  <div class="bg-dark-900 border-b border-zinc-800/80 text-[11px] sm:text-xs py-2 px-4">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2 text-zinc-400">
+      <div class="flex items-center gap-3">
+        <a href="https://maps.app.goo.gl/9C4wwK2NEBDd46PA7?g_st=ic" target="_blank" rel="noopener noreferrer" class="hover:text-gold-400 transition flex items-center gap-1">
+          <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gold-500"></i>
+          <span>Shaheer Optical, Saidpur Road, Kali Tanki, Rawalpindi</span>
+        </a>
       </div>
       <div class="flex items-center gap-4">
-        <a href="tel:03345514480" class="hover:text-[#D4AF37] transition flex items-center gap-1 font-mono-luxury">
-          <i data-lucide="phone" class="w-3 h-3 text-[#D4AF37]"></i>
-          <span>0334 5514480</span>
-        </a>
-        <a href="https://api.whatsapp.com/send?phone=923345514480" target="_blank" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1">
-          <i data-lucide="message-circle" class="w-3.5 h-3.5 fill-current"></i>
-          <span>WhatsApp Help</span>
+        <span class="hidden md:inline text-zinc-500">•</span>
+        <span class="hidden sm:inline">🕒 Open Daily: 10:00 AM – 10:00 PM</span>
+        <a href="tel:03345514480" class="text-gold-400 hover:underline flex items-center gap-1 font-mono">
+          <i data-lucide="phone" class="w-3 h-3"></i> 0334-5514480
         </a>
       </div>
     </div>
   </div>
 
-  <!-- Main Navigation Header -->
-  <header class="sticky top-0 z-40 bg-[#0c0c0f]/90 backdrop-blur-md border-b border-zinc-800/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+  <!-- Main Navbar -->
+  <header class="sticky top-0 z-40 bg-dark-950/90 backdrop-blur-md border-b border-zinc-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
       
       <!-- Brand Logo -->
       <a href="#" class="flex items-center gap-3 group">
-        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#8C6D1F] p-0.5 shadow-lg shadow-[#D4AF37]/20 flex items-center justify-center">
-          <div class="w-full h-full bg-black rounded-[10px] flex items-center justify-center text-[#D4AF37] group-hover:scale-105 transition">
-            <i data-lucide="glasses" class="w-6 h-6"></i>
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-gold-500 via-gold-600 to-amber-900 flex items-center justify-center p-[1px] shadow-lg shadow-gold-500/10">
+          <div class="w-full h-full bg-dark-950 rounded-[11px] flex items-center justify-center group-hover:bg-transparent transition-colors duration-300">
+            <i data-lucide="glasses" class="w-6 h-6 text-gold-500 group-hover:text-black transition-colors"></i>
           </div>
         </div>
         <div>
-          <span class="font-serif-luxury text-xl sm:text-2xl font-bold tracking-wider gold-gradient-text block">
-            SHAHEER OPTICALS
+          <span class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-1">
+            SHAHEER <span class="text-gold-500 font-sans font-light text-base sm:text-lg tracking-widest">OPTICALS</span>
           </span>
-          <span class="text-[9px] font-mono-luxury tracking-[0.25em] text-zinc-400 uppercase block -mt-1">
-            Bespoke Eyewear • Rawalpindi
-          </span>
+          <p class="text-[10px] text-zinc-400 font-mono uppercase tracking-widest -mt-1 hidden sm:block">
+            Luxury Eyewear & 3D Optics Lab
+          </p>
         </div>
       </a>
 
-      <!-- Navigation Links -->
-      <nav class="hidden md:flex items-center gap-7 text-xs font-semibold uppercase tracking-wider text-zinc-300">
-        <a href="#catalog" class="hover:text-[#D4AF37] transition">Eyewear Catalog</a>
-        <a href="#brands" class="hover:text-[#D4AF37] transition">Designer Brands</a>
-        <a href="#eyetesting" class="hover:text-[#D4AF37] transition text-[#D4AF37]">Book Eye Test</a>
-        <a href="#about" class="hover:text-[#D4AF37] transition">Our Showroom</a>
-      </nav>
+      <!-- Search Bar -->
+      <div class="hidden md:flex flex-1 max-w-md mx-6">
+        <div class="relative w-full">
+          <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search frame model, brand, sunglasses..."
+            class="w-full bg-dark-900 border border-zinc-800 focus:border-gold-500 rounded-full pl-10 pr-4 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-gold-500/50 transition"
+          />
+          <button id="clearSearchBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
 
-      <!-- Cart Button & WhatsApp CTA -->
+      <!-- Action Buttons -->
       <div class="flex items-center gap-3">
-        <button onclick="toggleCartDrawer(true)" class="relative p-2.5 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-[#D4AF37] text-zinc-200 hover:text-[#D4AF37] transition">
-          <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-          <span id="cartCountBadge" class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#D4AF37] text-black font-mono font-bold text-[10px] flex items-center justify-center">0</span>
-        </button>
+        <!-- Supabase Live Status Badge -->
+        <div id="dbStatusBadge" class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-dark-900 border border-zinc-800 text-[11px] text-zinc-400">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse" id="statusDot"></span>
+          <span id="statusText">Connecting...</span>
+        </div>
 
-        <a href="https://api.whatsapp.com/send?phone=923345514480&text=Assalam-o-Alaikum%20Shaheer%20Opticals!%20Mujhe%20glasses%20aur%20eye%20testing%20k%20baray%20mein%20inquire%20karna%20hay." target="_blank" class="hidden sm:flex px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider items-center gap-2 shadow-lg shadow-emerald-950 transition">
-          <i data-lucide="message-circle" class="w-4 h-4 fill-current"></i>
-          <span>Direct WhatsApp</span>
+        <!-- Direct WhatsApp Contact -->
+        <a 
+          href="https://wa.me/923345514480?text=Hello%20Shaheer%20Opticals!%20I%20am%20visiting%20your%20website%20and%20want%20to%20inquire%20about%20frames." 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 hover:bg-emerald-600 hover:text-white text-xs font-semibold transition"
+          title="Direct WhatsApp"
+        >
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">WhatsApp</span>
         </a>
+
+        <!-- Call Showroom -->
+        <a 
+          href="tel:03345514480"
+          class="p-2.5 rounded-full bg-dark-900 border border-zinc-800 text-zinc-300 hover:text-gold-400 hover:border-gold-500/50 transition"
+          title="Call Showroom (0334-5514480)"
+        >
+          <i data-lucide="phone" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile Search Row -->
+    <div class="md:hidden px-4 pb-3">
+      <div class="relative w-full">
+        <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+        <input 
+          type="text" 
+          id="mobileSearchInput" 
+          placeholder="Search by brand (Ray-Ban, Gucci...) or category..."
+          class="w-full bg-dark-900 border border-zinc-800 focus:border-gold-500 rounded-full pl-10 pr-4 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-gold-500/50"
+        />
       </div>
     </div>
   </header>
 
   <!-- Hero Section -->
-  <section class="relative py-16 sm:py-24 overflow-hidden bg-gradient-to-b from-[#121216] via-[#09090b] to-[#09090b]">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-      <div class="space-y-6">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-mono">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-          <span>Rawalpindi's Premier Optical Destination</span>
-        </div>
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif-luxury leading-tight text-white">
-          Precision Optics & <span class="gold-gradient-text">Luxury Frames</span>
-        </h1>
-        <p class="text-zinc-400 text-sm sm:text-base leading-relaxed max-w-xl">
-          Explore iconic collections from Ray-Ban, Gucci, Tom Ford, Cartier, and bespoke Japanese titanium frames. Fitted with computerized Zeiss & Essilor digital blue-shield lenses at Kali Tanki, Saidpur Road.
-        </p>
-
-        <div class="flex flex-wrap items-center gap-4 pt-2">
-          <a href="#catalog" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#AA820A] text-black font-bold text-xs uppercase tracking-wider hover:opacity-90 shadow-xl shadow-[#D4AF37]/20 transition">
-            Explore 2026 Collection
-          </a>
-          <button onclick="openBookingModal()" class="px-6 py-3.5 rounded-xl bg-zinc-900 border border-zinc-700 hover:border-[#D4AF37] text-zinc-200 font-bold text-xs uppercase tracking-wider transition">
-            Book Eye Test (Free)
-          </button>
-        </div>
-
-        <div class="grid grid-cols-3 gap-4 pt-6 border-t border-zinc-800/80 text-xs">
-          <div>
-            <span class="block font-serif-luxury font-bold text-lg text-white">10,000+</span>
-            <span class="text-zinc-500 text-[11px]">Happy Customers</span>
-          </div>
-          <div>
-            <span class="block font-serif-luxury font-bold text-lg text-[#D4AF37]">100% Original</span>
-            <span class="text-zinc-500 text-[11px]">Brand Guarantee</span>
-          </div>
-          <div>
-            <span class="block font-serif-luxury font-bold text-lg text-white">24h Delivery</span>
-            <span class="text-zinc-500 text-[11px]">Rawalpindi / Islamabad</span>
-          </div>
-        </div>
+  <section class="relative bg-gradient-to-b from-dark-900 to-dark-950 border-b border-zinc-800/80 overflow-hidden py-12 md:py-16">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gold-500/5 rounded-full blur-3xl pointer-events-none"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-semibold mb-4 tracking-wide">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        <span>Official Optical Store &bull; Saidpur Road, Rawalpindi</span>
       </div>
 
-      <!-- Hero Featured Showcase -->
-      <div class="relative">
-        <div class="glass-card rounded-2xl p-6 relative overflow-hidden">
-          <div class="aspect-[4/3] rounded-xl overflow-hidden bg-black/60 relative">
-            <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1200&q=80" alt="Shaheer Opticals Luxury Frame" class="w-full h-full object-cover" />
-            <div class="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#D4AF37] text-black font-mono font-bold text-xs">
-              MODEL: SH-502-GOLD
-            </div>
-          </div>
-          <div class="mt-5 flex items-center justify-between">
-            <div>
-              <span class="text-[#D4AF37] text-xs font-mono">Ray-Ban Aviator Heritage Edition</span>
-              <h3 class="font-serif-luxury text-lg font-bold text-white">24K Gold Titanium Frame</h3>
-              <p class="font-mono-luxury font-bold text-base text-[#D4AF37] mt-1">PKR 14,500</p>
-            </div>
-            <a href="https://api.whatsapp.com/send?phone=923345514480&text=Assalam-o-Alaikum%20Shaheer%20Opticals!%20I%20want%20to%20order%20Model%20SH-502-GOLD%20Ray-Ban%20Aviator%20PKR%2014,500" target="_blank" class="px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs flex items-center gap-1.5">
-              <i data-lucide="message-circle" class="w-4 h-4 fill-current"></i>
-              <span>Order Now</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-white tracking-tight max-w-4xl mx-auto leading-tight">
+        Precision Vision & <span class="gold-gradient-text">Artisanal Eyewear</span>
+      </h1>
 
-  <!-- Product Catalog Section -->
-  <section id="catalog" class="py-16 bg-[#09090b]">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-      
-      <!-- Catalog Controls -->
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-zinc-800 pb-6">
-        <div>
-          <span class="text-xs font-mono uppercase tracking-widest text-[#D4AF37]">Curated Selection</span>
-          <h2 class="text-3xl font-bold font-serif-luxury text-white mt-1">Eyewear Catalog</h2>
-        </div>
-
-        <!-- Filter & Search -->
-        <div class="flex flex-wrap items-center gap-3">
-          <div class="relative">
-            <i data-lucide="search" class="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-            <input type="text" id="searchInput" oninput="filterProducts()" placeholder="Search model or brand..." class="pl-10 pr-4 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#D4AF37]" />
-          </div>
-
-          <select id="categoryFilter" onchange="filterProducts()" class="px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-xs text-zinc-300 focus:outline-none focus:border-[#D4AF37]">
-            <option value="All">All Categories</option>
-            <option value="Sunglasses">Luxury Sunglasses</option>
-            <option value="Optical Glasses">Optical Eyeglasses</option>
-            <option value="Rimless">Rimless & Titanium</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Products Grid -->
-      <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <!-- Rendered dynamically by JavaScript -->
-      </div>
-    </div>
-  </section>
-
-  <!-- Eye Test Booking Section -->
-  <section id="eyetesting" class="py-16 bg-gradient-to-b from-[#0e0e12] to-[#09090b] border-y border-zinc-800/80">
-    <div class="max-w-4xl mx-auto px-4 text-center space-y-6">
-      <span class="text-xs font-mono uppercase tracking-widest text-emerald-400">Diagnostic Suite</span>
-      <h2 class="text-3xl sm:text-4xl font-bold font-serif-luxury text-white">
-        Computerized Eye Testing & Vision Consultation
-      </h2>
-      <p class="text-zinc-400 text-sm max-w-xl mx-auto">
-        Visit our clinic at Saidpur Road Rawalpindi for automated refractive testing, astigmatism detection, and precision progressive lens mapping.
+      <p class="mt-4 text-sm sm:text-base text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+        Explore 100% authentic designer eyeglasses, polarized UV400 sunglasses, and Japanese computerized ophthalmic lens fitting. Fast delivery across Pakistan with Cash on Delivery.
       </p>
-      <button onclick="openBookingModal()" class="px-8 py-3.5 rounded-xl bg-[#D4AF37] hover:bg-[#AA820A] text-black font-bold text-xs uppercase tracking-widest transition shadow-xl shadow-[#D4AF37]/20">
-        Book Free In-Store Appointment
+
+      <!-- Trust Badges -->
+      <div class="mt-8 flex flex-wrap justify-center items-center gap-4 sm:gap-8 text-xs text-zinc-300">
+        <div class="flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-4 h-4 text-gold-500"></i>
+          <span>100% Authentic Frames</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <i data-lucide="truck" class="w-4 h-4 text-gold-500"></i>
+          <span>Cash on Delivery</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <i data-lucide="eye" class="w-4 h-4 text-gold-500"></i>
+          <span>Computerized 3D Eye Tests</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter & Catalog Section -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full" id="catalogSection">
+    
+    <!-- Controls Bar -->
+    <div class="space-y-6">
+      
+      <!-- Top Filters: Category Tabs + Brand Filter + Sort -->
+      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-6 border-b border-zinc-800">
+        
+        <!-- Category Tabs -->
+        <div>
+          <span class="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mb-2">Category Filter</span>
+          <div class="flex flex-wrap items-center gap-2" id="categoryTabsContainer">
+            <button class="cat-btn active px-4 py-2 rounded-full text-xs font-semibold transition border border-gold-500 bg-gold-500 text-black shadow-lg shadow-gold-500/20" data-category="all">
+              All Frames
+            </button>
+            <button class="cat-btn px-4 py-2 rounded-full text-xs font-semibold transition border border-zinc-800 bg-dark-900 text-zinc-300 hover:border-gold-500/50 hover:text-white" data-category="men">
+              Men
+            </button>
+            <button class="cat-btn px-4 py-2 rounded-full text-xs font-semibold transition border border-zinc-800 bg-dark-900 text-zinc-300 hover:border-gold-500/50 hover:text-white" data-category="women">
+              Women
+            </button>
+            <button class="cat-btn px-4 py-2 rounded-full text-xs font-semibold transition border border-zinc-800 bg-dark-900 text-zinc-300 hover:border-gold-500/50 hover:text-white" data-category="kids">
+              Kids
+            </button>
+            <button class="cat-btn px-4 py-2 rounded-full text-xs font-semibold transition border border-zinc-800 bg-dark-900 text-zinc-300 hover:border-gold-500/50 hover:text-white" data-category="sunglasses">
+              Sunglasses
+            </button>
+          </div>
+        </div>
+
+        <!-- Brand Filter & Sort Dropdown -->
+        <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+          <!-- Brand Dropdown -->
+          <div class="flex-1 sm:flex-initial">
+            <span class="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mb-2">Filter By Brand</span>
+            <div class="relative">
+              <select id="brandSelect" class="w-full sm:w-48 appearance-none bg-dark-900 border border-zinc-800 text-xs text-white rounded-xl px-3.5 py-2.5 pr-8 focus:outline-none focus:border-gold-500 transition cursor-pointer">
+                <option value="all">All Brands</option>
+                <option value="ray-ban">Ray-Ban</option>
+                <option value="gucci">Gucci</option>
+                <option value="oakley">Oakley</option>
+                <option value="carrera">Carrera</option>
+                <option value="tom-ford">Tom Ford</option>
+                <option value="persol">Persol</option>
+              </select>
+              <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
+          </div>
+
+          <!-- Price Sort Dropdown -->
+          <div class="flex-1 sm:flex-initial">
+            <span class="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mb-2">Sort By</span>
+            <div class="relative">
+              <select id="sortSelect" class="w-full sm:w-44 appearance-none bg-dark-900 border border-zinc-800 text-xs text-white rounded-xl px-3.5 py-2.5 pr-8 focus:outline-none focus:border-gold-500 transition cursor-pointer">
+                <option value="default">Featured</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="name-asc">Alphabetical (A-Z)</option>
+              </select>
+              <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
+          </div>
+
+          <!-- Reset Filter Button -->
+          <div class="self-end pb-0.5">
+            <button id="resetFiltersBtn" class="px-3 py-2.5 rounded-xl bg-dark-900 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 text-xs transition flex items-center gap-1.5" title="Reset all filters">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+              <span class="hidden sm:inline">Reset</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Filter Status & Count -->
+      <div class="flex items-center justify-between text-xs text-zinc-400">
+        <div>
+          Showing <span id="productCount" class="font-bold text-white font-mono">0</span> frames
+          <span id="activeFilterDesc" class="text-zinc-500 ml-1"></span>
+        </div>
+        <button id="refreshBtn" class="text-gold-400 hover:text-gold-300 inline-flex items-center gap-1 transition">
+          <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+          <span>Sync Database</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Product Grid Container -->
+    <div id="productGrid" class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <!-- Loading Skeleton is placed here by JS -->
+    </div>
+
+    <!-- Empty State Message -->
+    <div id="emptyState" class="hidden py-20 text-center">
+      <div class="w-16 h-16 rounded-full bg-dark-900 border border-zinc-800 text-zinc-500 flex items-center justify-center mx-auto mb-4">
+        <i data-lucide="package-open" class="w-8 h-8"></i>
+      </div>
+      <h3 class="text-lg font-serif font-bold text-white">No Frames Found</h3>
+      <p class="text-xs text-zinc-400 mt-1 max-w-sm mx-auto">
+        No products matched your selected category, brand, or search criteria. Try choosing another filter or resetting.
+      </p>
+      <button onclick="resetFilters()" class="mt-4 px-4 py-2 rounded-full bg-gold-500 text-black text-xs font-bold hover:bg-gold-400 transition">
+        View All Frames
       </button>
     </div>
+
   </section>
 
-  <!-- Showroom Location & Contact -->
-  <section id="about" class="py-16 bg-[#09090b]">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
-      <div class="space-y-4">
-        <span class="text-xs font-mono uppercase tracking-widest text-[#D4AF37]">Visit Us</span>
-        <h2 class="text-3xl font-bold font-serif-luxury text-white">Shaheer Opticals Showroom</h2>
-        <p class="text-zinc-400 text-sm leading-relaxed">
-          Conveniently situated in the heart of Rawalpindi near Kali Tanki on Saidpur Road. Drop by to experience luxury frame fitting and live lens edging.
-        </p>
-        <div class="space-y-3 pt-2 text-sm text-zinc-300">
-          <div class="flex items-center gap-3">
-            <i data-lucide="map-pin" class="w-5 h-5 text-[#D4AF37]"></i>
-            <span>Shop # 4-5, Near Kali Tanki, Saidpur Road, Rawalpindi, Pakistan</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <i data-lucide="phone" class="w-5 h-5 text-[#D4AF37]"></i>
-            <span>0334 5514480 / +92 51 4458921</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <i data-lucide="clock" class="w-5 h-5 text-[#D4AF37]"></i>
-            <span>Monday – Sunday: 10:00 AM – 10:30 PM</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900 p-2">
-        <iframe 
-          title="Shaheer Opticals Location"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3322.037728414324!2d73.064563!3d33.629851!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDM3JzQ3LjUiTiA3M8KwMDMnNTIuNCJF!5e0!3m2!1sen!2spk!4v1620000000000!5m2!1sen!2spk" 
-          width="100%" 
-          height="280" 
-          style="border:0; border-radius:12px;" 
-          allowfullscreen="" 
-          loading="lazy">
-        </iframe>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-black border-t border-zinc-800 py-8 text-center text-xs text-zinc-500">
-    <p>© 2026 Shaheer Opticals. All Rights Reserved. Kali Tanki, Saidpur Road, Rawalpindi.</p>
-  </footer>
-
-  <!-- ================= MODALS & DRAWERS ================= -->
-
-  <!-- Quick View Modal -->
-  <div id="quickViewModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
-    <div class="relative w-full max-w-3xl bg-[#0e0e12] border border-[#D4AF37]/50 rounded-2xl p-6 sm:p-8 text-white my-8 shadow-2xl">
-      <button onclick="closeQuickView()" class="absolute top-4 right-4 p-2 rounded-full bg-zinc-900 border border-zinc-700 text-zinc-300 hover:text-white">
+  <!-- Product Details Modal -->
+  <div id="detailsModal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="relative bg-dark-900 border border-zinc-800 rounded-2xl max-w-3xl w-full overflow-hidden shadow-2xl my-8">
+      
+      <!-- Close Button -->
+      <button onclick="closeDetailsModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-dark-950/80 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-        <!-- Photo with HD Zoom Trigger -->
-        <div class="space-y-2">
-          <div class="aspect-[4/3] rounded-xl overflow-hidden bg-black relative border border-zinc-800 cursor-pointer" onclick="openLightboxCurrent()">
-            <img id="qvImage" src="" alt="" class="w-full h-full object-cover hover:scale-105 transition duration-300" />
-            <div class="absolute bottom-2 left-2 px-2.5 py-1 rounded bg-black/80 text-[#D4AF37] text-[10px] font-mono flex items-center gap-1">
-              <i data-lucide="zoom-in" class="w-3 h-3"></i> Click to Zoom HD
-            </div>
+      <div class="grid grid-cols-1 md:grid-cols-2">
+        <!-- Left: Product Image -->
+        <div class="relative bg-dark-950 flex items-center justify-center p-6 border-b md:border-b-0 md:border-r border-zinc-800 min-h-[300px]">
+          <img id="modalImg" src="" alt="" class="max-h-[320px] w-full object-contain rounded-xl transition duration-500 hover:scale-105" />
+          <div id="modalBadge" class="absolute top-4 left-4 px-2.5 py-1 rounded-md bg-gold-500/20 border border-gold-500/40 text-gold-400 font-mono text-[10px] uppercase font-bold tracking-wider">
+            Authentic
           </div>
         </div>
 
-        <!-- Details -->
-        <div class="space-y-4">
+        <!-- Right: Details & Order CTA -->
+        <div class="p-6 sm:p-8 flex flex-col justify-between">
           <div>
-            <span id="qvBrand" class="px-2 py-0.5 rounded bg-[#D4AF37]/15 text-[#D4AF37] text-[10px] font-bold uppercase font-mono"></span>
-            <span id="qvModel" class="ml-2 font-mono text-xs text-zinc-400"></span>
-            <h3 id="qvName" class="text-xl font-bold font-serif-luxury mt-1"></h3>
-            <p id="qvPrice" class="text-2xl font-bold font-mono text-[#D4AF37] mt-1"></p>
+            <div class="flex items-center gap-2 mb-2">
+              <span id="modalBrand" class="text-xs font-mono text-gold-400 uppercase tracking-widest font-bold"></span>
+              <span class="text-zinc-600">&bull;</span>
+              <span id="modalCategory" class="text-[11px] text-zinc-400 uppercase tracking-wider"></span>
+            </div>
+
+            <h2 id="modalTitle" class="text-xl sm:text-2xl font-serif font-bold text-white leading-tight"></h2>
+
+            <div class="mt-4 flex items-baseline gap-3">
+              <span id="modalPrice" class="text-2xl font-bold font-mono text-gold-400"></span>
+              <span class="text-xs text-zinc-400">PKR (Free Delivery)</span>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-zinc-800/80">
+              <h4 class="text-xs font-mono uppercase text-zinc-400 tracking-wider mb-2">Description & Optics:</h4>
+              <p id="modalDesc" class="text-xs text-zinc-300 leading-relaxed max-h-36 overflow-y-auto pr-1"></p>
+            </div>
+
+            <!-- Features Pills -->
+            <div class="mt-4 space-y-1.5 text-[11px] text-zinc-400">
+              <div class="flex items-center gap-2">
+                <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span>UV400 Polarized / Anti-Reflective Optics</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span>Tested at Saidpur Road Optical Lab, Rawalpindi</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="truck" class="w-3.5 h-3.5 text-gold-400"></i>
+                <span>Cash on Delivery Available Across Pakistan</span>
+              </div>
+            </div>
           </div>
 
-          <p id="qvDesc" class="text-xs text-zinc-300 leading-relaxed"></p>
-
-          <div class="space-y-2">
-            <button onclick="addCurrentQvToCart()" class="w-full py-3 rounded-xl bg-[#D4AF37] text-black font-bold text-xs uppercase tracking-wider hover:opacity-90">
-              Add to Shopping Bag
+          <!-- Modal Actions -->
+          <div class="mt-6 pt-4 border-t border-zinc-800 space-y-2.5">
+            <button 
+              id="modalBuyNowBtn"
+              class="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 text-black font-bold text-sm tracking-wide hover:from-gold-400 hover:to-gold-500 transition shadow-lg shadow-gold-500/20 flex items-center justify-center gap-2 active:scale-[0.98]"
+            >
+              <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+              <span>Buy Now / Order Now</span>
             </button>
-            <a id="qvWhatsAppBtn" href="#" target="_blank" class="w-full py-3 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2">
-              <i data-lucide="message-circle" class="w-4 h-4 fill-current"></i> Order via WhatsApp with Photo
+
+            <a 
+              id="modalWhatsAppBtn" 
+              href="#" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="w-full py-2.5 px-4 rounded-xl bg-dark-950 border border-emerald-500/40 text-emerald-400 hover:bg-emerald-950/40 text-xs font-semibold transition flex items-center justify-center gap-2"
+            >
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+              <span>Inquire on WhatsApp</span>
             </a>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 
-  <!-- HD Lightbox Modal with Zoom & Pan -->
-  <div id="lightboxModal" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl hidden flex-col justify-between select-none p-4">
-    <div class="flex items-center justify-between text-white border-b border-zinc-800 pb-3">
-      <div>
-        <h3 id="lbTitle" class="text-sm font-bold font-serif-luxury"></h3>
-        <p id="lbSubtitle" class="text-[11px] font-mono text-zinc-400"></p>
+  <!-- Direct Checkout Modal -->
+  <div id="checkoutModal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="relative bg-dark-900 border border-zinc-800 rounded-2xl max-w-xl w-full overflow-hidden shadow-2xl my-8">
+      
+      <!-- Close Button -->
+      <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-dark-950 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Checkout Header -->
+      <div class="p-6 border-b border-zinc-800 bg-dark-950">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-serif font-bold text-lg text-white">Shaheer Opticals Direct Checkout</h3>
+            <p class="text-[11px] text-zinc-400">Cash on Delivery & Instant Dispatch from Saidpur Road Showroom</p>
+          </div>
+        </div>
       </div>
-      <div class="flex items-center gap-2">
-        <button onclick="zoomIn()" class="p-2 rounded bg-zinc-900 border border-zinc-800 hover:border-[#D4AF37] text-white"><i data-lucide="zoom-in" class="w-4 h-4"></i></button>
-        <button onclick="zoomOut()" class="p-2 rounded bg-zinc-900 border border-zinc-800 hover:border-[#D4AF37] text-white"><i data-lucide="zoom-out" class="w-4 h-4"></i></button>
-        <button onclick="resetZoom()" class="p-2 rounded bg-zinc-900 border border-zinc-800 hover:border-[#D4AF37] text-white"><i data-lucide="rotate-ccw" class="w-4 h-4"></i></button>
-        <button onclick="closeLightbox()" class="p-2 rounded bg-zinc-900 border border-red-800 text-white ml-2"><i data-lucide="x" class="w-4 h-4"></i></button>
+
+      <!-- Checkout Form View -->
+      <div id="checkoutFormView" class="p-6 space-y-4">
+        
+        <!-- Selected Product Mini Summary -->
+        <div class="p-3.5 rounded-xl bg-dark-950 border border-zinc-800/80 flex items-center gap-3">
+          <img id="checkoutProductImg" src="" alt="" class="w-14 h-14 rounded-lg object-contain bg-dark-900 p-1 border border-zinc-800" />
+          <div class="flex-1 min-w-0">
+            <div id="checkoutProductBrand" class="text-[10px] font-mono uppercase text-gold-400 tracking-wider"></div>
+            <h4 id="checkoutProductTitle" class="text-xs font-bold text-white truncate"></h4>
+            <div class="text-xs font-mono font-bold text-gold-400 mt-0.5" id="checkoutProductPrice"></div>
+          </div>
+          <div class="text-right text-[11px] text-emerald-400 font-medium">
+            <span>Free Delivery</span>
+          </div>
+        </div>
+
+        <!-- Input Form -->
+        <form id="orderForm" onsubmit="handleOrderSubmit(event)" class="space-y-3.5">
+          
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">Customer Full Name <span class="text-rose-400">*</span></label>
+            <div class="relative">
+              <i data-lucide="user" class="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input 
+                type="text" 
+                id="orderName" 
+                required 
+                placeholder="e.g. Khalid Abbasi" 
+                class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-gold-500/50"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">Mobile / WhatsApp Number <span class="text-rose-400">*</span></label>
+            <div class="relative">
+              <i data-lucide="phone" class="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input 
+                type="tel" 
+                id="orderPhone" 
+                required 
+                placeholder="e.g. 0334-5514480" 
+                class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-gold-500/50"
+              />
+            </div>
+            <span class="text-[10px] text-zinc-500 mt-0.5 block">Used for order confirmation call & courier tracking SMS.</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-zinc-300 mb-1">City <span class="text-rose-400">*</span></label>
+              <div class="relative">
+                <i data-lucide="map" class="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                <input 
+                  type="text" 
+                  id="orderCity" 
+                  required 
+                  placeholder="Rawalpindi / Islamabad" 
+                  class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-gold-500/50"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-zinc-300 mb-1">Payment Method</label>
+              <div class="relative">
+                <select id="orderPaymentMethod" class="w-full bg-dark-950 border border-zinc-800 text-xs text-white rounded-xl px-3 py-2.5 focus:outline-none focus:border-gold-500">
+                  <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
+                  <option value="EasyPaisa / JazzCash">EasyPaisa / JazzCash (0334-5514480)</option>
+                  <option value="Direct Bank Transfer">Direct Bank Transfer</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-zinc-300 mb-1">Complete Delivery Address <span class="text-rose-400">*</span></label>
+            <div class="relative">
+              <i data-lucide="home" class="w-4 h-4 text-zinc-500 absolute left-3 top-3"></i>
+              <textarea 
+                id="orderAddress" 
+                required 
+                rows="2" 
+                placeholder="House / Flat No, Street, Sector / Area, Landmark..." 
+                class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl pl-9 pr-3.5 py-2.5 text-xs text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-gold-500/50"
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Order Summary Total Bar -->
+          <div class="p-3 rounded-xl bg-dark-950 border border-zinc-800/80 flex items-center justify-between text-xs">
+            <span class="text-zinc-400">Total Payable at Delivery:</span>
+            <span id="orderSummaryTotal" class="text-base font-bold font-mono text-gold-400"></span>
+          </div>
+
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            id="orderSubmitBtn" 
+            class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 text-black font-bold text-sm tracking-wide hover:from-gold-400 hover:to-gold-500 transition shadow-lg shadow-gold-500/20 flex items-center justify-center gap-2"
+          >
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>Confirm Order</span>
+          </button>
+        </form>
+
       </div>
-    </div>
 
-    <div class="flex-1 flex items-center justify-center overflow-hidden relative">
-      <img id="lbImage" src="" alt="HD View" class="max-h-[75vh] max-w-[90vw] object-contain rounded-xl transition-transform duration-100" />
-    </div>
+      <!-- Success Screen View -->
+      <div id="checkoutSuccessView" class="hidden p-8 text-center space-y-4">
+        <div class="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto animate-bounce">
+          <i data-lucide="check-check" class="w-8 h-8"></i>
+        </div>
 
-    <div class="text-center pt-3 border-t border-zinc-800">
-      <a id="lbWhatsAppBtn" href="#" target="_blank" class="inline-flex px-6 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs items-center gap-2">
-        <i data-lucide="message-circle" class="w-4 h-4 fill-current"></i> Order This Model on WhatsApp
-      </a>
-    </div>
-  </div>
+        <h3 class="text-xl font-serif font-bold text-white">Order Placed Successfully!</h3>
+        
+        <p class="text-xs text-zinc-300 max-w-sm mx-auto leading-relaxed">
+          Thank you for choosing <strong class="text-gold-400">Shaheer Opticals</strong>. We will contact you soon on your phone number for dispatch verification.
+        </p>
 
-  <!-- Shopping Cart Drawer -->
-  <div id="cartDrawer" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden justify-end">
-    <div class="w-full max-w-md bg-[#0e0e12] h-full border-l border-zinc-800 p-6 flex flex-col justify-between text-white">
-      <div>
-        <div class="flex items-center justify-between pb-4 border-b border-zinc-800">
-          <h3 class="font-serif-luxury text-lg font-bold">Your Eyewear Bag</h3>
-          <button onclick="toggleCartDrawer(false)" class="p-1 rounded bg-zinc-900 text-zinc-400 hover:text-white">
-            <i data-lucide="x" class="w-5 h-5"></i>
+        <!-- Order Summary Card -->
+        <div class="p-4 rounded-xl bg-dark-950 border border-zinc-800 text-left text-xs space-y-2 max-w-md mx-auto font-mono">
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Order Ref:</span>
+            <span id="successOrderRef" class="text-gold-400 font-bold"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Customer:</span>
+            <span id="successCustomerName" class="text-white"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Item:</span>
+            <span id="successProductTitle" class="text-zinc-300 truncate max-w-[200px]"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Total Price:</span>
+            <span id="successTotalPrice" class="text-emerald-400 font-bold"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Status:</span>
+            <span class="text-amber-400">Pending Verification</span>
+          </div>
+        </div>
+
+        <!-- WhatsApp Order Summary Action -->
+        <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a 
+            id="successWhatsAppBtn" 
+            href="#" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/50"
+          >
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            <span>Send Order Summary on WhatsApp</span>
+          </a>
+
+          <button 
+            onclick="closeCheckoutModal()" 
+            class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-dark-950 border border-zinc-800 text-zinc-300 hover:text-white text-xs font-medium transition"
+          >
+            Continue Browsing
           </button>
         </div>
-        <div id="cartItemsList" class="divide-y divide-zinc-800/80 my-4 max-h-[60vh] overflow-y-auto pr-1">
-          <!-- Cart Items generated by JS -->
-        </div>
       </div>
 
-      <div class="pt-4 border-t border-zinc-800 space-y-3">
-        <div class="flex items-center justify-between text-sm">
-          <span class="text-zinc-400">Total Net Amount:</span>
-          <span id="cartTotalPrice" class="font-mono font-bold text-xl text-[#D4AF37]">PKR 0</span>
-        </div>
-        <button onclick="checkoutViaWhatsApp()" class="w-full py-3.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2">
-          <i data-lucide="message-circle" class="w-4 h-4 fill-current"></i> Send Order on WhatsApp
-        </button>
-      </div>
     </div>
   </div>
 
-  <!-- Booking Modal -->
-  <div id="bookingModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
-    <div class="w-full max-w-md bg-[#0e0e12] border border-[#D4AF37]/40 rounded-2xl p-6 text-white space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="font-serif-luxury text-lg font-bold text-[#D4AF37]">Book Free Eye Test</h3>
-        <button onclick="closeBookingModal()" class="text-zinc-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-      <form onsubmit="submitBooking(event)" class="space-y-3 text-xs">
-        <div>
-          <label class="block text-zinc-400 mb-1">Your Full Name:</label>
-          <input type="text" id="bkName" required class="w-full p-2.5 rounded-lg bg-zinc-900 border border-zinc-700 text-white focus:border-[#D4AF37]" placeholder="e.g. Ali Khan" />
-        </div>
-        <div>
-          <label class="block text-zinc-400 mb-1">WhatsApp Phone Number:</label>
-          <input type="tel" id="bkPhone" required class="w-full p-2.5 rounded-lg bg-zinc-900 border border-zinc-700 text-white focus:border-[#D4AF37]" placeholder="0334 1234567" />
-        </div>
-        <div>
-          <label class="block text-zinc-400 mb-1">Preferred Date & Time:</label>
-          <input type="datetime-local" id="bkDate" required class="w-full p-2.5 rounded-lg bg-zinc-900 border border-zinc-700 text-white focus:border-[#D4AF37]" />
-        </div>
-        <button type="submit" class="w-full py-3 rounded-xl bg-[#D4AF37] text-black font-bold uppercase tracking-wider hover:opacity-90 mt-2">
-          Confirm & Send to WhatsApp
-        </button>
-      </form>
-    </div>
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="fixed bottom-6 left-6 z-50 p-4 rounded-xl bg-dark-950 border border-gold-500/40 text-white shadow-2xl hidden items-center gap-3 text-xs max-w-sm">
+    <i data-lucide="check-circle-2" class="w-4 h-4 text-gold-500 flex-shrink-0"></i>
+    <span id="toastMsg" class="font-medium"></span>
   </div>
 
-  <!-- ================= JAVASCRIPT APP LOGIC ================= -->
+  <!-- Footer -->
+  <footer class="bg-dark-900 border-t border-zinc-800/80 mt-16 text-zinc-400 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        
+        <!-- Col 1: Brand Info -->
+        <div class="space-y-3 md:col-span-2">
+          <div class="flex items-center gap-2">
+            <i data-lucide="glasses" class="w-5 h-5 text-gold-500"></i>
+            <span class="font-serif text-lg font-bold text-white tracking-wide">SHAHEER OPTICALS</span>
+          </div>
+          <p class="text-xs text-zinc-400 max-w-md leading-relaxed">
+            Rawalpindi's trusted destination for precision ophthalmic lenses, German Blue-Shield 420nm coatings, computerized Japanese 3D eye diagnostics, and international luxury eyewear collections.
+          </p>
+          <div class="pt-2 text-[11px] text-zinc-500 font-mono">
+            Connected to Supabase Database &bull; REST API Realtime
+          </div>
+        </div>
+
+        <!-- Col 2: Showroom Location -->
+        <div class="space-y-2">
+          <h4 class="font-mono uppercase text-white font-bold text-xs tracking-wider">Showroom Visit</h4>
+          <p class="text-xs text-zinc-300">
+            Shaheer Optical, Saidpur Road, Kali Tanki, Rawalpindi, Punjab, Pakistan
+          </p>
+          <a 
+            href="https://maps.app.goo.gl/9C4wwK2NEBDd46PA7?g_st=ic" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="text-gold-400 hover:underline inline-flex items-center gap-1 text-xs pt-1 font-semibold"
+          >
+            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+            <span>Open in Google Maps</span>
+          </a>
+        </div>
+
+        <!-- Col 3: Contact & Hours -->
+        <div class="space-y-2">
+          <h4 class="font-mono uppercase text-white font-bold text-xs tracking-wider">Direct Contacts</h4>
+          <p class="text-xs text-zinc-300">Phone: 0334-5514480</p>
+          <p class="text-xs text-zinc-300">WhatsApp: +92 334 5514480</p>
+          <p class="text-xs text-zinc-300">Timings: 10:00 AM – 10:00 PM (Daily)</p>
+        </div>
+
+      </div>
+
+      <div class="mt-10 pt-6 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-zinc-500">
+        <div>
+          &copy; <span id="currentYear"></span> Shaheer Opticals. All Rights Reserved. Saidpur Road, Kali Tanki, Rawalpindi.
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="https://maps.app.goo.gl/9C4wwK2NEBDd46PA7?g_st=ic" target="_blank" class="hover:text-gold-400">Store Map</a>
+          <a href="https://wa.me/923345514480" target="_blank" class="hover:text-gold-400">WhatsApp Help</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Core Supabase & Application Logic -->
   <script>
-    // Products Data
-    const products = [
+    // ==========================================
+    // 1. SUPABASE CONFIGURATION
+    // ==========================================
+    const SUPABASE_URL = 'https://dyktxqujiwmxnxsttwng.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5a3R4cXVqaXdteG54c3R0d25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5MTAzODYsImV4cCI6MjEwMzQ4NjM4Nn0.ph94foTBafg02zJojYA9RjLFoxq-d4OlcuhnWjAwvbA';
+
+    // Initialize Supabase Client
+    let supabaseClient = null;
+    try {
+      if (window.supabase) {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      }
+    } catch (e) {
+      console.error('Supabase init error:', e);
+    }
+
+    // Default Fallback Products (to ensure store is never blank if DB is empty)
+    const DEFAULT_PRODUCTS = [
       {
-        id: '1',
-        name: 'Ray-Ban Aviator Heritage Gold',
-        modelNumber: 'RB-3025-GOLD',
-        brand: 'Ray-Ban',
-        category: 'Sunglasses',
-        frameColor: '24K Polished Gold',
-        frameMaterial: 'Japanese Titanium',
-        frameShape: 'Aviator',
-        gender: 'Unisex',
+        id: 101,
+        title: "Ray-Ban Aviator Classic Gold UV400",
+        brand: "Ray-Ban",
+        price: 8500,
+        category: "Men",
+        image_url: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80",
+        description: "Iconic teardrop crystal green polarized lenses encased in polished 24K gold-plated lightweight metal alloy. Offers 100% UV400 protection."
+      },
+      {
+        id: 102,
+        title: "Gucci Square Obsidian Black Acetate",
+        brand: "Gucci",
         price: 14500,
-        originalPrice: 18000,
-        image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=1000&q=80',
-        description: 'Iconic teardrop luxury aviators with G-15 mineral crystal lenses and gold double bridge.'
+        category: "Men",
+        image_url: "https://images.unsplash.com/photo-1508296695146-257a814070b4?auto=format&fit=crop&w=800&q=80",
+        description: "Bold rectangular handcrafted Italian acetate profile with signature interlocking gold temples. Fitted with computer blue-shield anti-glare optics."
       },
       {
-        id: '2',
-        name: 'Tom Ford Square Optical Frame',
-        modelNumber: 'TF-5405-BLK',
-        brand: 'Tom Ford',
-        category: 'Optical Glasses',
-        frameColor: 'Onyx Black & Gold T-Logo',
-        frameMaterial: 'Italian Mazzucchelli Acetate',
-        frameShape: 'Square',
-        gender: 'Men',
-        price: 18500,
-        originalPrice: 22000,
-        image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=1000&q=80',
-        description: 'Architectural masculine square eyeglasses featuring signature gold T-hinges.'
+        id: 103,
+        title: "Oakley Flak 2.0 XL Hydrophobic Sport",
+        brand: "Oakley",
+        price: 12500,
+        category: "Men",
+        image_url: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=800&q=80",
+        description: "Lightweight O Matter frame with Unobtainium earsocks for no-slip grip. High Definition Optics (HDO) for outdoor sports and driving."
       },
       {
-        id: '3',
-        name: 'Gucci Round Vintage Hexagon',
-        modelNumber: 'GG-0061S-HAV',
-        brand: 'Gucci',
-        category: 'Sunglasses',
-        frameColor: 'Havana Tortoise',
-        frameMaterial: 'Cellulose Acetate & Metal',
-        frameShape: 'Round / Geometric',
-        gender: 'Women',
-        price: 21000,
-        originalPrice: 26000,
-        image: 'https://images.unsplash.com/photo-1508296695146-257a814070b4?auto=format&fit=crop&w=1000&q=80',
-        description: 'High-fashion geometric rounded sunglasses with subtle red-green web temple detailing.'
+        id: 104,
+        title: "Carrera Grand Prix Vintage Navigator",
+        brand: "Carrera",
+        price: 9800,
+        category: "Men",
+        image_url: "https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&w=800&q=80",
+        description: "Distinctive double-bridge sporty silhouette with contrasting temple striping and gradient grey impact-resistant polycarbonate lenses."
       },
       {
-        id: '4',
-        name: 'Cartier Rimless Titanium Elegance',
-        modelNumber: 'CT-0120O-PLAT',
-        brand: 'Cartier',
-        category: 'Rimless',
-        frameColor: 'Platinum Silver',
-        frameMaterial: 'Ultra-Pure Titanium',
-        frameShape: 'Rectangular Rimless',
-        gender: 'Unisex',
-        price: 29500,
-        originalPrice: 35000,
-        image: 'https://images.unsplash.com/photo-1591076482161-42ce6da69f67?auto=format&fit=crop&w=1000&q=80',
-        description: 'Featherlight rimless executive frame with C-Décor hardware and custom beveled lenses.'
+        id: 105,
+        title: "Tom Ford Aurelia Cateye Champagne",
+        brand: "Tom Ford",
+        price: 16500,
+        category: "Women",
+        image_url: "https://images.unsplash.com/photo-1509695507497-903c140c43b0?auto=format&fit=crop&w=800&q=80",
+        description: "Sophisticated upswept cat-eye feminine frame featuring Tom Ford signature metal T accents. Gentle warm gradient lenses."
+      },
+      {
+        id: 106,
+        title: "Persol 714 Steve McQueen Folding Tortoise",
+        brand: "Persol",
+        price: 17500,
+        category: "Men",
+        image_url: "https://images.unsplash.com/photo-1591076482161-42ce6da69f67?auto=format&fit=crop&w=800&q=80",
+        description: "Masterpiece folding optical frame with patented Meflecto flexible stem system and premium Havana crystal brown polarized glass."
+      },
+      {
+        id: 107,
+        title: "Shaheer Kids Flexi-Lite Anti-Break Frame",
+        brand: "Shaheer Signature",
+        price: 4500,
+        category: "Kids",
+        image_url: "https://images.unsplash.com/photo-1473496169904-658ba7c44d8a?auto=format&fit=crop&w=800&q=80",
+        description: "Hypoallergenic ultra-flexible TR90 memory material designed for school children. Drop-proof, lightweight, and comes with blue-blocker lenses."
+      },
+      {
+        id: 108,
+        title: "Gucci Butterfly Gradient Rose Gold",
+        brand: "Gucci",
+        price: 15800,
+        category: "Women",
+        image_url: "https://images.unsplash.com/photo-1582142839970-2b9da082f6e9?auto=format&fit=crop&w=800&q=80",
+        description: "Oversized butterfly silhouette crafted in feather-light polished rose gold wire. 100% UV protection and gradient tint."
       }
     ];
 
-    let cart = [];
-    let currentQvProduct = null;
-    let lbScale = 1;
+    // ==========================================
+    // 2. STATE MANAGEMENT
+    // ==========================================
+    let allProducts = [];
+    let filteredProducts = [];
+    let selectedCategory = 'all';
+    let selectedBrand = 'all';
+    let searchQuery = '';
+    let sortOption = 'default';
 
-    // Initialize UI & Render
+    let selectedProductForModal = null;
+    let selectedProductForCheckout = null;
+
+    // ==========================================
+    // 3. INITIALIZATION & DATA FETCHING
+    // ==========================================
     document.addEventListener('DOMContentLoaded', () => {
-      renderProducts(products);
-      lucide.createIcons();
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
+      initEventListeners();
+      fetchProductsFromSupabase();
     });
 
-    function formatPKR(val) {
-      return 'PKR ' + val.toLocaleString('en-PK');
+    async function fetchProductsFromSupabase() {
+      renderLoadingSkeleton();
+      updateDbStatus('connecting', 'Connecting to Supabase...');
+
+      let fetchedData = [];
+      let success = false;
+
+      if (supabaseClient) {
+        try {
+          // Check 'products' or 'Products' table
+          let res = await supabaseClient.from('products').select('*');
+          if (res.error || !res.data || res.data.length === 0) {
+            res = await supabaseClient.from('Products').select('*');
+          }
+
+          if (!res.error && res.data && res.data.length > 0) {
+            fetchedData = res.data.map(item => normalizeProduct(item));
+            success = true;
+            updateDbStatus('connected', 'Live Supabase DB');
+          } else {
+            console.warn('Supabase query returned no products, using fallback:', res.error);
+            updateDbStatus('fallback', 'Store Active');
+          }
+        } catch (err) {
+          console.error('Fetch error:', err);
+          updateDbStatus('fallback', 'Store Active');
+        }
+      }
+
+      if (success && fetchedData.length > 0) {
+        allProducts = [...fetchedData];
+        if (allProducts.length < 4) {
+          const existingIds = new Set(allProducts.map(p => String(p.id)));
+          DEFAULT_PRODUCTS.forEach(dp => {
+            if (!existingIds.has(String(dp.id))) {
+              allProducts.push(dp);
+            }
+          });
+        }
+      } else {
+        allProducts = [...DEFAULT_PRODUCTS];
+      }
+
+      populateBrandDropdown();
+      applyFilters();
     }
 
-    function generateWhatsAppProductUrl(product) {
-      const phone = '923345514480';
-      const lines = [
-        '👓 *PURCHASE ORDER - SHAHEER OPTICALS* 👓',
-        '📍 Showroom: Kali Tanki, Saidpur Road, Rawalpindi',
-        '',
-        '📋 *PRODUCT DETAILS:*',
-        `• *Model Number:* ${product.modelNumber}`,
-        `• *Product Name:* ${product.name}`,
-        `• *Brand:* ${product.brand}`,
-        `• *Color / Material:* ${product.frameColor} (${product.frameMaterial})`,
-        `• *Price:* ${formatPKR(product.price)}`,
-        '',
-        '🖼️ *HIGH-RESOLUTION PHOTO LINK:*',
-        product.image,
-        '',
-        'Assalam-o-Alaikum! Mujhe yeh frame khareedna hay. Please confirm kar dain k yeh model available hay?'
-      ];
-      return `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(lines.join('\n'))}`;
+    function normalizeProduct(raw) {
+      return {
+        id: raw.id || Math.random().toString(),
+        title: raw.title || raw.Name || raw.name || 'Handcrafted Luxury Frame',
+        brand: raw.brand || raw.Brand || 'Shaheer Opticals',
+        price: Number(raw.price || raw.Price || 8500),
+        category: (raw.category || raw.Category || 'Men').trim(),
+        image_url: raw.image_url || raw.Image_url || raw.image || raw.imageUrl || 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80',
+        description: (raw.description || raw.Description || 'Authentic designer frame with UV400 eye protection and precision optical fitting.').trim(),
+        in_stock: raw['In stock'] !== false && raw.in_stock !== false
+      };
     }
 
-    function renderProducts(list) {
-      const grid = document.getElementById('productsGrid');
-      grid.innerHTML = '';
+    function updateDbStatus(type, text) {
+      const badge = document.getElementById('dbStatusBadge');
+      const dot = document.getElementById('statusDot');
+      const label = document.getElementById('statusText');
+      if (!badge || !dot || !label) return;
 
-      if (list.length === 0) {
-        grid.innerHTML = '<p class="text-zinc-500 col-span-full text-center py-12">No matching frames found.</p>';
+      badge.classList.remove('hidden');
+      label.textContent = text;
+
+      if (type === 'connected') {
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+      } else if (type === 'connecting') {
+        dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
+      } else {
+        dot.className = 'w-2 h-2 rounded-full bg-gold-400';
+      }
+    }
+
+    function populateBrandDropdown() {
+      const select = document.getElementById('brandSelect');
+      if (!select) return;
+
+      const brands = new Set();
+      allProducts.forEach(p => {
+        if (p.brand && p.brand.trim()) {
+          brands.add(p.brand.trim());
+        }
+      });
+
+      ['Ray-Ban', 'Gucci', 'Oakley', 'Carrera', 'Tom Ford', 'Persol'].forEach(b => brands.add(b));
+
+      select.innerHTML = '<option value="all">All Brands</option>';
+      Array.from(brands).sort().forEach(brand => {
+        const opt = document.createElement('option');
+        opt.value = brand.toLowerCase();
+        opt.textContent = brand;
+        select.appendChild(opt);
+      });
+    }
+
+    // ==========================================
+    // 4. FILTERING & SORTING ENGINE
+    // ==========================================
+    function applyFilters() {
+      const q = searchQuery.toLowerCase().trim();
+
+      filteredProducts = allProducts.filter(item => {
+        let matchCat = true;
+        if (selectedCategory !== 'all') {
+          const itemCat = (item.category || '').toLowerCase();
+          const targetCat = selectedCategory.toLowerCase();
+
+          if (targetCat === 'sunglasses') {
+            matchCat = itemCat.includes('sunglas') || item.title.toLowerCase().includes('sunglass');
+          } else {
+            matchCat = itemCat === targetCat || itemCat.includes(targetCat);
+          }
+        }
+
+        let matchBrand = true;
+        if (selectedBrand !== 'all') {
+          const itemBrand = (item.brand || '').toLowerCase();
+          matchBrand = itemBrand === selectedBrand || itemBrand.includes(selectedBrand);
+        }
+
+        let matchSearch = true;
+        if (q) {
+          matchSearch = 
+            item.title.toLowerCase().includes(q) ||
+            item.brand.toLowerCase().includes(q) ||
+            item.category.toLowerCase().includes(q) ||
+            (item.description && item.description.toLowerCase().includes(q));
+        }
+
+        return matchCat && matchBrand && matchSearch;
+      });
+
+      if (sortOption === 'price-asc') {
+        filteredProducts.sort((a, b) => a.price - b.price);
+      } else if (sortOption === 'price-desc') {
+        filteredProducts.sort((a, b) => b.price - a.price);
+      } else if (sortOption === 'name-asc') {
+        filteredProducts.sort((a, b) => a.title.localeCompare(b.title));
+      }
+
+      renderProductsGrid();
+      updateFilterSummary();
+    }
+
+    function updateFilterSummary() {
+      const countEl = document.getElementById('productCount');
+      const descEl = document.getElementById('activeFilterDesc');
+      if (countEl) countEl.textContent = filteredProducts.length;
+
+      if (descEl) {
+        let parts = [];
+        if (selectedCategory !== 'all') parts.push(`Category: ${selectedCategory.toUpperCase()}`);
+        if (selectedBrand !== 'all') parts.push(`Brand: ${selectedBrand.toUpperCase()}`);
+        if (searchQuery) parts.push(`Query: "${searchQuery}"`);
+        descEl.textContent = parts.length ? `(${parts.join(' • ')})` : '';
+      }
+    }
+
+    // ==========================================
+    // 5. RENDERING ENGINE
+    // ==========================================
+    function renderLoadingSkeleton() {
+      const grid = document.getElementById('productGrid');
+      if (!grid) return;
+      grid.innerHTML = Array(8).fill(0).map(() => `
+        <div class="rounded-2xl bg-dark-900 border border-zinc-800 p-4 animate-pulse">
+          <div class="h-48 bg-dark-950 rounded-xl mb-4"></div>
+          <div class="h-3 w-20 bg-zinc-800 rounded mb-2"></div>
+          <div class="h-4 w-3/4 bg-zinc-800 rounded mb-4"></div>
+          <div class="h-5 w-24 bg-zinc-800 rounded mb-4"></div>
+          <div class="h-10 w-full bg-zinc-800 rounded-xl"></div>
+        </div>
+      `).join('');
+    }
+
+    function renderProductsGrid() {
+      const grid = document.getElementById('productGrid');
+      const empty = document.getElementById('emptyState');
+      if (!grid) return;
+
+      if (filteredProducts.length === 0) {
+        grid.innerHTML = '';
+        if (empty) empty.classList.remove('hidden');
         return;
       }
 
-      list.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'glass-card rounded-2xl overflow-hidden flex flex-col justify-between transition-all duration-300';
+      if (empty) empty.classList.add('hidden');
+
+      grid.innerHTML = filteredProducts.map(p => {
+        const formattedPrice = `PKR ${p.price.toLocaleString()}`;
+        const safeImageUrl = p.image_url || 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80';
         
-        card.innerHTML = `
-          <div class="relative aspect-[4/3] bg-black/40 overflow-hidden group">
-            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 cursor-pointer" onclick="openQuickView('${p.id}')" />
-            <span class="absolute top-3 left-3 px-2 py-0.5 rounded bg-black/70 text-[#D4AF37] font-mono text-[10px] border border-[#D4AF37]/30">
-              ${p.modelNumber}
-            </span>
-          </div>
-          <div class="p-4 flex flex-col justify-between flex-grow space-y-3">
-            <div>
-              <span class="text-[#D4AF37] text-[10px] font-bold uppercase font-mono">${p.brand}</span>
-              <h3 class="font-serif-luxury text-sm font-semibold text-white mt-0.5 line-clamp-1 cursor-pointer" onclick="openQuickView('${p.id}')">${p.name}</h3>
-              <p class="text-[11px] text-zinc-400 mt-1">${p.frameColor} • ${p.frameMaterial}</p>
+        return `
+          <div class="group relative rounded-2xl bg-dark-900 border border-zinc-800/80 hover:border-gold-500/50 p-4 transition-all duration-300 hover:shadow-xl hover:shadow-gold-500/5 flex flex-col justify-between">
+            
+            <!-- Top Badges -->
+            <div class="relative w-full h-48 bg-dark-950 rounded-xl overflow-hidden p-3 flex items-center justify-center cursor-pointer" onclick="openDetailsModal('${p.id}')">
+              <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-dark-900/90 border border-zinc-800 text-gold-400 font-mono text-[10px] uppercase font-bold tracking-wider z-10">
+                ${escapeHtml(p.brand)}
+              </span>
+
+              <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-emerald-950/80 border border-emerald-500/30 text-emerald-400 font-mono text-[10px] z-10">
+                In Stock
+              </span>
+
+              <img 
+                src="${safeImageUrl}" 
+                alt="${escapeHtml(p.title)}" 
+                loading="lazy"
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80';"
+                class="max-h-40 w-full object-contain transition duration-500 group-hover:scale-105"
+              />
             </div>
-            <div class="pt-2 border-t border-zinc-800 flex items-baseline justify-between">
-              <span class="font-mono font-bold text-sm text-[#D4AF37]">${formatPKR(p.price)}</span>
-              <span class="text-[10px] text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">In Stock</span>
+
+            <!-- Content Details -->
+            <div class="pt-4 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="text-[10px] font-mono text-zinc-400 uppercase tracking-wider mb-1">
+                  ${escapeHtml(p.category || 'Eyewear')}
+                </div>
+
+                <h3 
+                  onclick="openDetailsModal('${p.id}')"
+                  class="font-serif font-bold text-sm text-white line-clamp-2 hover:text-gold-400 transition cursor-pointer"
+                  title="${escapeHtml(p.title)}"
+                >
+                  ${escapeHtml(p.title)}
+                </h3>
+              </div>
+
+              <div class="pt-3 mt-3 border-t border-zinc-800/80">
+                <div class="flex items-baseline justify-between mb-3">
+                  <span class="text-base font-bold font-mono text-gold-400">${formattedPrice}</span>
+                  <span class="text-[10px] text-zinc-400">COD Available</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                  <button 
+                    onclick="openDetailsModal('${p.id}')" 
+                    class="w-full py-2 px-3 rounded-xl bg-dark-950 hover:bg-zinc-800 border border-zinc-800 text-xs font-semibold text-zinc-300 hover:text-white transition flex items-center justify-center gap-1.5"
+                  >
+                    <i data-lucide="eye" class="w-3.5 h-3.5 text-zinc-400"></i>
+                    <span>Details</span>
+                  </button>
+
+                  <button 
+                    onclick="openCheckoutForProduct('${p.id}')" 
+                    class="w-full py-2 px-3 rounded-xl bg-gold-500 hover:bg-gold-400 text-black text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-md shadow-gold-500/10 active:scale-95"
+                  >
+                    <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+                    <span>Buy Now</span>
+                  </button>
+                </div>
+              </div>
             </div>
-            <div class="grid grid-cols-2 gap-2">
-              <button onclick="addToBag('${p.id}')" class="py-2 px-2 rounded-lg bg-zinc-800 hover:bg-[#D4AF37] text-zinc-200 hover:text-black font-semibold text-xs transition">
-                Add to Bag
-              </button>
-              <a href="${generateWhatsAppProductUrl(p)}" target="_blank" class="py-2 px-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-semibold text-xs transition text-center flex items-center justify-center gap-1">
-                <i data-lucide="message-circle" class="w-3.5 h-3.5 fill-current"></i> WhatsApp
-              </a>
-            </div>
+
           </div>
         `;
-        grid.appendChild(card);
-      });
-      lucide.createIcons();
+      }).join('');
+
+      if (window.lucide) window.lucide.createIcons();
     }
 
-    function filterProducts() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const cat = document.getElementById('categoryFilter').value;
+    // ==========================================
+    // 6. EVENT LISTENERS
+    // ==========================================
+    function initEventListeners() {
+      // Category Tab Buttons
+      const tabButtons = document.querySelectorAll('#categoryTabsContainer .cat-btn');
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabButtons.forEach(b => {
+            b.classList.remove('active', 'bg-gold-500', 'text-black', 'border-gold-500', 'shadow-lg');
+            b.classList.add('bg-dark-900', 'text-zinc-300', 'border-zinc-800');
+          });
+          btn.classList.add('active', 'bg-gold-500', 'text-black', 'border-gold-500', 'shadow-lg');
+          btn.classList.remove('bg-dark-900', 'text-zinc-300', 'border-zinc-800');
 
-      const filtered = products.filter(p => {
-        const matchesCat = cat === 'All' || p.category === cat;
-        const matchesSearch = p.name.toLowerCase().includes(search) || 
-                              p.modelNumber.toLowerCase().includes(search) || 
-                              p.brand.toLowerCase().includes(search);
-        return matchesCat && matchesSearch;
+          selectedCategory = btn.getAttribute('data-category');
+          applyFilters();
+        });
       });
-      renderProducts(filtered);
+
+      // Brand Dropdown
+      const brandSelect = document.getElementById('brandSelect');
+      if (brandSelect) {
+        brandSelect.addEventListener('change', (e) => {
+          selectedBrand = e.target.value;
+          applyFilters();
+        });
+      }
+
+      // Sort Dropdown
+      const sortSelect = document.getElementById('sortSelect');
+      if (sortSelect) {
+        sortSelect.addEventListener('change', (e) => {
+          sortOption = e.target.value;
+          applyFilters();
+        });
+      }
+
+      // Reset Button
+      const resetBtn = document.getElementById('resetFiltersBtn');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', resetFilters);
+      }
+
+      // Refresh Button
+      const refreshBtn = document.getElementById('refreshBtn');
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+          fetchProductsFromSupabase();
+          showToast('Database Synchronized!');
+        });
+      }
+
+      // Search Inputs
+      const searchInput = document.getElementById('searchInput');
+      const mobileSearchInput = document.getElementById('mobileSearchInput');
+      const clearSearchBtn = document.getElementById('clearSearchBtn');
+
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          searchQuery = e.target.value;
+          if (mobileSearchInput) mobileSearchInput.value = searchQuery;
+          if (clearSearchBtn) {
+            clearSearchBtn.classList.toggle('hidden', !searchQuery);
+          }
+          applyFilters();
+        });
+      }
+
+      if (mobileSearchInput) {
+        mobileSearchInput.addEventListener('input', (e) => {
+          searchQuery = e.target.value;
+          if (searchInput) searchInput.value = searchQuery;
+          applyFilters();
+        });
+      }
+
+      if (clearSearchBtn) {
+        clearSearchBtn.addEventListener('click', () => {
+          searchQuery = '';
+          if (searchInput) searchInput.value = '';
+          if (mobileSearchInput) mobileSearchInput.value = '';
+          clearSearchBtn.classList.add('hidden');
+          applyFilters();
+        });
+      }
+
+      // Modal Outside Clicks
+      window.addEventListener('click', (e) => {
+        const detailsModal = document.getElementById('detailsModal');
+        const checkoutModal = document.getElementById('checkoutModal');
+        if (e.target === detailsModal) closeDetailsModal();
+        if (e.target === checkoutModal) closeCheckoutModal();
+      });
+
+      // ESC Key to close modals
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeDetailsModal();
+          closeCheckoutModal();
+        }
+      });
     }
 
-    // Quick View Modal Controls
-    function openQuickView(id) {
-      const p = products.find(x => x.id === id);
-      if (!p) return;
-      currentQvProduct = p;
+    function resetFilters() {
+      selectedCategory = 'all';
+      selectedBrand = 'all';
+      searchQuery = '';
+      sortOption = 'default';
 
-      document.getElementById('qvImage').src = p.image;
-      document.getElementById('qvBrand').innerText = p.brand;
-      document.getElementById('qvModel').innerText = `Model: ${p.modelNumber}`;
-      document.getElementById('qvName').innerText = p.name;
-      document.getElementById('qvPrice').innerText = formatPKR(p.price);
-      document.getElementById('qvDesc').innerText = `${p.description} Constructed with ${p.frameMaterial} in ${p.frameColor}.`;
-      document.getElementById('qvWhatsAppBtn').href = generateWhatsAppProductUrl(p);
+      const tabButtons = document.querySelectorAll('#categoryTabsContainer .cat-btn');
+      tabButtons.forEach((b, index) => {
+        if (index === 0) {
+          b.classList.add('active', 'bg-gold-500', 'text-black', 'border-gold-500', 'shadow-lg');
+          b.classList.remove('bg-dark-900', 'text-zinc-300', 'border-zinc-800');
+        } else {
+          b.classList.remove('active', 'bg-gold-500', 'text-black', 'border-gold-500', 'shadow-lg');
+          b.classList.add('bg-dark-900', 'text-zinc-300', 'border-zinc-800');
+        }
+      });
 
-      const modal = document.getElementById('quickViewModal');
+      const brandSelect = document.getElementById('brandSelect');
+      if (brandSelect) brandSelect.value = 'all';
+
+      const sortSelect = document.getElementById('sortSelect');
+      if (sortSelect) sortSelect.value = 'default';
+
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) searchInput.value = '';
+
+      const mobileSearchInput = document.getElementById('mobileSearchInput');
+      if (mobileSearchInput) mobileSearchInput.value = '';
+
+      const clearSearchBtn = document.getElementById('clearSearchBtn');
+      if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
+
+      applyFilters();
+    }
+
+    // ==========================================
+    // 7. PRODUCT DETAILS MODAL
+    // ==========================================
+    function openDetailsModal(productId) {
+      const product = allProducts.find(p => String(p.id) === String(productId));
+      if (!product) return;
+
+      selectedProductForModal = product;
+
+      document.getElementById('modalImg').src = product.image_url;
+      document.getElementById('modalBrand').textContent = product.brand;
+      document.getElementById('modalCategory').textContent = product.category || 'Eyewear';
+      document.getElementById('modalTitle').textContent = product.title;
+      document.getElementById('modalPrice').textContent = `PKR ${product.price.toLocaleString()}`;
+      document.getElementById('modalDesc').textContent = product.description;
+
+      // WhatsApp Button URL
+      const waMsg = encodeURIComponent(
+        `Hello Shaheer Opticals! I am inquiring about:\n` +
+        `👓 Frame: ${product.title}\n` +
+        `🏢 Brand: ${product.brand}\n` +
+        `💰 Price: PKR ${product.price.toLocaleString()}\n` +
+        `📍 Store: Saidpur Road, Kali Tanki, Rawalpindi\n` +
+        `Please provide availability & lens power options.`
+      );
+      document.getElementById('modalWhatsAppBtn').href = `https://wa.me/923345514480?text=${waMsg}`;
+
+      // Buy Now Button in Modal
+      document.getElementById('modalBuyNowBtn').onclick = () => {
+        closeDetailsModal();
+        openCheckoutForProduct(product.id);
+      };
+
+      const modal = document.getElementById('detailsModal');
       modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      if (window.lucide) window.lucide.createIcons();
     }
 
-    function closeQuickView() {
-      const modal = document.getElementById('quickViewModal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
+    function closeDetailsModal() {
+      document.getElementById('detailsModal').classList.add('hidden');
+      selectedProductForModal = null;
     }
 
-    function addCurrentQvToCart() {
-      if (currentQvProduct) {
-        addToBag(currentQvProduct.id);
-        closeQuickView();
-        toggleCartDrawer(true);
-      }
+    // ==========================================
+    // 8. DIRECT CHECKOUT & ORDER HANDLING
+    // ==========================================
+    function openCheckoutForProduct(productId) {
+      const product = allProducts.find(p => String(p.id) === String(productId));
+      if (!product) return;
+
+      selectedProductForCheckout = product;
+
+      // Fill summary
+      document.getElementById('checkoutProductImg').src = product.image_url;
+      document.getElementById('checkoutProductBrand').textContent = product.brand;
+      document.getElementById('checkoutProductTitle').textContent = product.title;
+      document.getElementById('checkoutProductPrice').textContent = `PKR ${product.price.toLocaleString()}`;
+      document.getElementById('orderSummaryTotal').textContent = `PKR ${product.price.toLocaleString()}`;
+
+      // Reset views
+      document.getElementById('checkoutFormView').classList.remove('hidden');
+      document.getElementById('checkoutSuccessView').classList.add('hidden');
+
+      const modal = document.getElementById('checkoutModal');
+      modal.classList.remove('hidden');
+      if (window.lucide) window.lucide.createIcons();
     }
 
-    // HD Lightbox Controls
-    function openLightboxCurrent() {
-      if (!currentQvProduct) return;
-      document.getElementById('lbImage').src = currentQvProduct.image;
-      document.getElementById('lbTitle').innerText = currentQvProduct.name;
-      document.getElementById('lbSubtitle').innerText = `Model: ${currentQvProduct.modelNumber} | ${currentQvProduct.brand}`;
-      document.getElementById('lbWhatsAppBtn').href = generateWhatsAppProductUrl(currentQvProduct);
-
-      lbScale = 1;
-      document.getElementById('lbImage').style.transform = 'scale(1)';
-
-      const lb = document.getElementById('lightboxModal');
-      lb.classList.remove('hidden');
-      lb.classList.add('flex');
+    function closeCheckoutModal() {
+      document.getElementById('checkoutModal').classList.add('hidden');
+      selectedProductForCheckout = null;
     }
 
-    function closeLightbox() {
-      const lb = document.getElementById('lightboxModal');
-      lb.classList.add('hidden');
-      lb.classList.remove('flex');
-    }
-
-    function zoomIn() {
-      lbScale = Math.min(lbScale + 0.5, 3.5);
-      document.getElementById('lbImage').style.transform = `scale(${lbScale})`;
-    }
-
-    function zoomOut() {
-      lbScale = Math.max(lbScale - 0.5, 1);
-      document.getElementById('lbImage').style.transform = `scale(${lbScale})`;
-    }
-
-    function resetZoom() {
-      lbScale = 1;
-      document.getElementById('lbImage').style.transform = 'scale(1)';
-    }
-
-    // Cart Drawer Controls
-    function toggleCartDrawer(show) {
-      const d = document.getElementById('cartDrawer');
-      if (show) {
-        renderCartItems();
-        d.classList.remove('hidden');
-        d.classList.add('flex');
-      } else {
-        d.classList.add('hidden');
-        d.classList.remove('flex');
-      }
-    }
-
-    function addToBag(id) {
-      const p = products.find(x => x.id === id);
-      if (!p) return;
-      const exist = cart.find(x => x.product.id === id);
-      if (exist) {
-        exist.qty += 1;
-      } else {
-        cart.push({ product: p, qty: 1 });
-      }
-      updateCartBadge();
-    }
-
-    function updateCartBadge() {
-      const total = cart.reduce((acc, c) => acc + c.qty, 0);
-      document.getElementById('cartCountBadge').innerText = total;
-    }
-
-    function renderCartItems() {
-      const list = document.getElementById('cartItemsList');
-      list.innerHTML = '';
-      let sum = 0;
-
-      if (cart.length === 0) {
-        list.innerHTML = '<p class="text-zinc-500 text-center py-8 text-xs">Your shopping bag is empty.</p>';
-        document.getElementById('cartTotalPrice').innerText = 'PKR 0';
-        return;
-      }
-
-      cart.forEach((item, idx) => {
-        sum += item.product.price * item.qty;
-        const row = document.createElement('div');
-        row.className = 'py-3 flex items-center justify-between gap-3 text-xs';
-        row.innerHTML = `
-          <div class="flex items-center gap-3">
-            <img src="${item.product.image}" class="w-12 h-10 object-cover rounded bg-zinc-900" />
-            <div>
-              <p class="font-bold text-white">${item.product.name}</p>
-              <p class="font-mono text-[10px] text-[#D4AF37]">${item.product.modelNumber} x ${item.qty}</p>
-            </div>
-          </div>
-          <span class="font-mono font-bold">${formatPKR(item.product.price * item.qty)}</span>
-        `;
-        list.appendChild(row);
-      });
-      document.getElementById('cartTotalPrice').innerText = formatPKR(sum);
-    }
-
-    function checkoutViaWhatsApp() {
-      if (cart.length === 0) return;
-      const phone = '923345514480';
-      let msg = `*NEW CART ORDER - SHAHEER OPTICALS*\n📍 Kali Tanki, Saidpur Road, Rawalpindi\n\n*ORDER ITEMS:*\n`;
-      
-      let sum = 0;
-      cart.forEach((item, idx) => {
-        sum += item.product.price * item.qty;
-        msg += `${idx + 1}. *${item.product.name}*\n`;
-        msg += `   • Model: ${item.product.modelNumber} | Qty: ${item.qty}\n`;
-        msg += `   • Photo: ${item.product.image}\n\n`;
-      });
-      msg += `*TOTAL NET AMOUNT: ${formatPKR(sum)}*\n\nAssalam-o-Alaikum! Please confirm my order and share delivery details.`;
-
-      window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    // Booking Modal
-    function openBookingModal() {
-      const b = document.getElementById('bookingModal');
-      b.classList.remove('hidden');
-      b.classList.add('flex');
-    }
-
-    function closeBookingModal() {
-      const b = document.getElementById('bookingModal');
-      b.classList.add('hidden');
-      b.classList.remove('flex');
-    }
-
-    function submitBooking(e) {
+    async function handleOrderSubmit(e) {
       e.preventDefault();
-      const name = document.getElementById('bkName').value;
-      const phone = document.getElementById('bkPhone').value;
-      const date = document.getElementById('bkDate').value;
+      if (!selectedProductForCheckout) return;
 
-      const text = `Assalam-o-Alaikum Shaheer Opticals! I want to book a Free Eye Test.\n• Customer: ${name}\n• Phone: ${phone}\n• Preferred Slot: ${date}\n📍 Showroom: Saidpur Road, Rawalpindi.`;
-      
-      window.open(`https://api.whatsapp.com/send?phone=923345514480&text=${encodeURIComponent(text)}`, '_blank');
-      closeBookingModal();
+      const submitBtn = document.getElementById('orderSubmitBtn');
+      const originalBtnHtml = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+        <span class="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
+        <span>Placing Order in Database...</span>
+      `;
+
+      const customerName = document.getElementById('orderName').value.trim();
+      const phoneNumber = document.getElementById('orderPhone').value.trim();
+      const city = document.getElementById('orderCity').value.trim();
+      const address = document.getElementById('orderAddress').value.trim();
+      const paymentMethod = document.getElementById('orderPaymentMethod').value;
+
+      const orderRef = 'SO-' + Math.floor(100000 + Math.random() * 900000);
+
+      const orderPayload = {
+        customer_name: customerName,
+        phone_number: phoneNumber,
+        city: city,
+        address: address,
+        total_price: selectedProductForCheckout.price,
+        product_details: {
+          product_id: selectedProductForCheckout.id,
+          title: selectedProductForCheckout.title,
+          brand: selectedProductForCheckout.brand,
+          price: selectedProductForCheckout.price,
+          category: selectedProductForCheckout.category,
+          payment_method: paymentMethod,
+          order_ref: orderRef,
+          showroom: 'Shaheer Optical, Saidpur Road, Kali Tanki, Rawalpindi'
+        },
+        status: 'Pending'
+      };
+
+      // 1. Attempt insertion into Supabase orders table
+      let dbSuccess = false;
+      if (supabaseClient) {
+        try {
+          // Attempt insertion into 'orders' table
+          let res = await supabaseClient.from('orders').insert([orderPayload]);
+          if (res.error) {
+            // Attempt insertion into 'Orders' table if uppercase
+            res = await supabaseClient.from('Orders').insert([orderPayload]);
+          }
+
+          if (!res.error) {
+            dbSuccess = true;
+            console.log('Order successfully inserted into Supabase orders table:', res);
+          } else {
+            console.warn('Supabase order insert note:', res.error.message || res.error);
+          }
+        } catch (dbErr) {
+          console.error('Supabase order insert exception:', dbErr);
+        }
+      }
+
+      // 2. Always persist safely in browser LocalStorage
+      try {
+        const localOrders = JSON.parse(localStorage.getItem('shaheer_orders') || '[]');
+        localOrders.push({ ...orderPayload, createdAt: new Date().toISOString() });
+        localStorage.setItem('shaheer_orders', JSON.stringify(localOrders));
+      } catch (err) {
+        console.warn('LocalStorage save note:', err);
+      }
+
+      // Reset button
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnHtml;
+
+      // 3. Show Success View
+      document.getElementById('checkoutFormView').classList.add('hidden');
+      document.getElementById('checkoutSuccessView').classList.remove('hidden');
+
+      document.getElementById('successOrderRef').textContent = `#${orderRef}`;
+      document.getElementById('successCustomerName').textContent = customerName;
+      document.getElementById('successProductTitle').textContent = selectedProductForCheckout.title;
+      document.getElementById('successTotalPrice').textContent = `PKR ${selectedProductForCheckout.price.toLocaleString()}`;
+
+      // 4. Configure WhatsApp Summary Link for Customer
+      const waSummaryMsg = encodeURIComponent(
+        `*NEW ORDER PLACED - SHAHEER OPTICALS*\n` +
+        `Order Ref: #${orderRef}\n\n` +
+        `👤 Customer: ${customerName}\n` +
+        `📞 Phone: ${phoneNumber}\n` +
+        `🏙️ City: ${city}\n` +
+        `🏠 Address: ${address}\n\n` +
+        `👓 Frame: ${selectedProductForCheckout.title} (${selectedProductForCheckout.brand})\n` +
+        `💰 Total Price: PKR ${selectedProductForCheckout.price.toLocaleString()} (COD)\n` +
+        `💳 Payment: ${paymentMethod}\n\n` +
+        `Please confirm my order dispatch from Saidpur Road Showroom. Thank you!`
+      );
+
+      document.getElementById('successWhatsAppBtn').href = `https://wa.me/923345514480?text=${waSummaryMsg}`;
+
+      showToast(`Order #${orderRef} placed successfully!`);
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    // ==========================================
+    // 9. UTILITIES & HELPERS
+    // ==========================================
+    function showToast(message) {
+      const toast = document.getElementById('toastNotification');
+      const msg = document.getElementById('toastMsg');
+      if (!toast || !msg) return;
+
+      msg.textContent = message;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+
+      setTimeout(() => {
+        toast.classList.remove('flex');
+        toast.classList.add('hidden');
+      }, 4000);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
   </script>
+
 </body>
 </html>
