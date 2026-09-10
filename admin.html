@@ -523,7 +523,11 @@
     }
 
     // Application State
-    let currentUser = null;
+    let currentUser = null;// FORCED OPEN FOR TESTING
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('login-section')?.classList.add('hidden');
+  document.getElementById('dashboard-section')?.classList.remove('hidden');
+});
     let products = [];
     let orders = [];
     let deletingProductId = null;
