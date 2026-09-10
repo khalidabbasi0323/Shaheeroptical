@@ -3,84 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shaheer Opticals - Management Dashboard</title>
-  <!-- Tailwind CSS CDN -->
+  <title>Shaheer Opticals - Live Management Panel</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-900 text-gray-100 min-h-screen">
 
-  <!-- ================= 1. LOGIN SECTION (ONLY BYPASS) ================= -->
+  <!-- LOGIN BYPASS SECTION -->
   <div id="login-section" class="flex items-center justify-center min-h-screen px-4">
     <div class="max-w-md w-full bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-700 text-center">
       <div class="w-16 h-16 bg-yellow-500/10 text-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-500/20">
         <i class="fa-solid fa-glasses text-3xl"></i>
       </div>
       <h2 class="text-3xl font-bold text-yellow-500 mb-2">Shaheer Opticals</h2>
-      <p class="text-gray-400 text-sm mb-6">Management Panel Access</p>
+      <p class="text-gray-400 text-sm mb-6">Live Website Database Control</p>
       
       <button id="bypass-btn" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3.5 px-4 rounded-lg shadow-lg transition flex items-center justify-center gap-2">
         <i class="fa-solid fa-bolt text-lg"></i>
-        <span>Open Admin Dashboard</span>
+        <span>Open Live Admin Panel</span>
       </button>
     </div>
   </div>
 
-  <!-- ================= 2. MAIN DASHBOARD SECTION ================= -->
+  <!-- MAIN DASHBOARD -->
   <div id="dashboard-section" class="hidden min-h-screen p-4 md:p-8">
-    
-    <!-- Top Header -->
     <header class="flex flex-col md:flex-row justify-between items-center bg-gray-800 p-4 rounded-xl border border-gray-700 mb-6 gap-4">
       <div class="flex items-center gap-3">
         <i class="fa-solid fa-glasses text-2xl text-yellow-500"></i>
         <h1 class="text-xl font-bold text-white">Shaheer Opticals Portal</h1>
       </div>
       <div class="flex items-center gap-3">
-        <span class="bg-green-500/10 text-green-400 text-xs px-3 py-1.5 rounded-full border border-green-500/30 font-medium">
-          <i class="fa-solid fa-circle text-[8px] mr-1"></i> Admin Active
+        <span id="db-status" class="bg-green-500/10 text-green-400 text-xs px-3 py-1.5 rounded-full border border-green-500/30 font-medium">
+          <i class="fa-solid fa-circle text-[8px] mr-1"></i> Live DB Connected
         </span>
-        <button onclick="handleLogout()" class="bg-red-600/80 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
-          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        <button onclick="location.reload()" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold">
+          <i class="fa-solid fa-rotate mr-1"></i> Refresh Data
         </button>
       </div>
     </header>
 
-    <!-- Top KPI Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-      <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
-        <p class="text-gray-400 text-sm">Total Products</p>
-        <h3 id="stat-total-products" class="text-3xl font-bold text-white mt-1">0</h3>
-      </div>
-      <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
-        <p class="text-gray-400 text-sm">Daily Revenue</p>
-        <h3 id="stat-daily-revenue" class="text-3xl font-bold text-green-400 mt-1">Rs. 0</h3>
-      </div>
-      <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
-        <p class="text-gray-400 text-sm">Weekly Sales</p>
-        <h3 id="stat-weekly-sales" class="text-3xl font-bold text-yellow-400 mt-1">0 Frames</h3>
-      </div>
-      <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
-        <p class="text-gray-400 text-sm">Monthly Progress</p>
-        <h3 id="stat-monthly-progress" class="text-3xl font-bold text-blue-400 mt-1">0 Orders</h3>
-      </div>
-    </div>
-
-    <!-- MAIN GRID: Product Form & Table -->
+    <!-- GRID: Product Form & Live Inventory -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
       
-      <!-- Product Add / Edit Form -->
+      <!-- ADD / EDIT FORM -->
       <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 h-fit">
         <h2 id="form-title" class="text-lg font-bold text-yellow-500 mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-plus-circle"></i> Add New Product
+          <i class="fa-solid fa-plus-circle"></i> Add Live Product
         </h2>
         
         <form id="product-form" class="space-y-4">
           <input type="hidden" id="product-id">
           
           <div>
-            <label class="block text-xs text-gray-400 mb-1">Product Name / Title</label>
-            <input type="text" id="p-name" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2.5 text-white text-sm focus:border-yellow-500 focus:outline-none" placeholder="e.g. Ray-Ban Aviator Frame">
+            <label class="block text-xs text-gray-400 mb-1">Product Title</label>
+            <input type="text" id="p-name" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2.5 text-white text-sm focus:border-yellow-500 focus:outline-none" placeholder="Ray-Ban Aviator">
           </div>
 
           <div class="grid grid-cols-2 gap-3">
@@ -101,7 +78,7 @@
 
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs text-gray-400 mb-1">Stock Quantity</label>
+              <label class="block text-xs text-gray-400 mb-1">Stock</label>
               <input type="number" id="p-stock" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2.5 text-white text-sm focus:border-yellow-500 focus:outline-none" placeholder="10">
             </div>
             <div>
@@ -110,24 +87,15 @@
             </div>
           </div>
 
-          <div class="pt-2 flex gap-2">
-            <button type="submit" id="save-btn" class="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2.5 rounded-lg transition text-sm">
-              Save Product
-            </button>
-            <button type="button" id="cancel-btn" onclick="resetForm()" class="hidden bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2.5 px-4 rounded-lg transition text-sm">
-              Cancel
-            </button>
-          </div>
+          <button type="submit" id="save-btn" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2.5 rounded-lg transition text-sm">
+            Publish to Live Website
+          </button>
         </form>
       </div>
 
-      <!-- Products Inventory Table -->
+      <!-- LIVE INVENTORY TABLE -->
       <div class="lg:col-span-2 bg-gray-800 p-6 rounded-xl border border-gray-700">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-          <h2 class="text-lg font-bold text-white"><i class="fa-solid fa-boxes-stacked mr-2"></i> Products Inventory</h2>
-          <input type="text" id="search-input" oninput="renderProducts()" placeholder="Search products..." class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-yellow-500 w-full sm:w-48">
-        </div>
-
+        <h2 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-boxes-stacked mr-2"></i> Live Website Products</h2>
         <div class="overflow-x-auto">
           <table class="w-full text-left text-sm text-gray-300">
             <thead class="bg-gray-700/50 text-xs text-gray-400 uppercase">
@@ -135,199 +103,97 @@
                 <th class="p-3">Product</th>
                 <th class="p-3">Category</th>
                 <th class="p-3">Price</th>
-                <th class="p-3">Stock</th>
                 <th class="p-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody id="products-tbody" class="divide-y divide-gray-700">
-              <!-- JS Dynamic Rows -->
+              <tr><td colspan="4" class="p-4 text-center text-gray-400">Loading live products...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
     </div>
-
-    <!-- DAILY, WEEKLY & MONTHLY PROGRESS TABLE -->
-    <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <div>
-          <h2 class="text-lg font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-chart-line text-yellow-500"></i> Business Progress Summary
-          </h2>
-          <p class="text-xs text-gray-400">Track Daily, Weekly, and Monthly performance metrics</p>
-        </div>
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm text-gray-300">
-          <thead class="bg-gray-700/50 text-xs text-gray-400 uppercase">
-            <tr>
-              <th class="p-3">Timeline Period</th>
-              <th class="p-3">Orders Completed</th>
-              <th class="p-3">Frames Sold</th>
-              <th class="p-3">Gross Revenue</th>
-              <th class="p-3">Growth Rate</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-700">
-            <tr>
-              <td class="p-3 font-semibold text-yellow-400"><i class="fa-solid fa-calendar-day mr-2"></i> Today (Daily)</td>
-              <td class="p-3">12 Orders</td>
-              <td class="p-3">18 Frames</td>
-              <td class="p-3 text-green-400 font-bold">Rs. 45,000</td>
-              <td class="p-3"><span class="bg-green-500/10 text-green-400 px-2 py-0.5 rounded text-xs">+15% vs yesterday</span></td>
-            </tr>
-            <tr>
-              <td class="p-3 font-semibold text-yellow-400"><i class="fa-solid fa-calendar-week mr-2"></i> This Week</td>
-              <td class="p-3">84 Orders</td>
-              <td class="p-3">112 Frames</td>
-              <td class="p-3 text-green-400 font-bold">Rs. 310,000</td>
-              <td class="p-3"><span class="bg-green-500/10 text-green-400 px-2 py-0.5 rounded text-xs">+8% vs last week</span></td>
-            </tr>
-            <tr>
-              <td class="p-3 font-semibold text-yellow-400"><i class="fa-solid fa-calendar-days mr-2"></i> This Month</td>
-              <td class="p-3">340 Orders</td>
-              <td class="p-3">450 Frames</td>
-              <td class="p-3 text-green-400 font-bold">Rs. 1,250,000</td>
-              <td class="p-3"><span class="bg-green-500/10 text-green-400 px-2 py-0.5 rounded text-xs">+22% monthly growth</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
   </div>
 
-  <!-- ================= 3. JAVASCRIPT LOGIC ================= -->
   <script>
-    // Initial Products Data Storage (LocalStorage Sync)
-    let products = JSON.parse(localStorage.getItem('shaheer_products')) || [
-      { id: 1, name: 'Ray-Ban Wayfarer Classic', category: 'Sunglasses', price: 4500, stock: 15, image: '' },
-      { id: 2, name: 'Titanium Blue Cut Glasses', category: 'Eyeglasses', price: 2800, stock: 24, image: '' },
-      { id: 3, name: 'Acuvue Soft Contact Lenses', category: 'Contact Lenses', price: 3500, stock: 10, image: '' }
-    ];
+    // Supabase Configuration
+    const SUPABASE_URL = 'https://dyktxqujiwmxnxsttwng.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5a3R4cXVqaXdteG54c3R0d25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMzQ1NjcsImV4cCI6MjA1NjgxMDU2N30';
+    
+    let supabaseClient = null;
 
-    document.addEventListener('DOMContentLoaded', () => {
-      // Direct Bypass Event
-      const bypassBtn = document.getElementById('bypass-btn');
-      if (bypassBtn) {
-        bypassBtn.addEventListener('click', () => {
-          document.getElementById('login-section').classList.add('hidden');
-          document.getElementById('dashboard-section').classList.remove('hidden');
-          renderProducts();
-        });
-      }
-
-      // Product Form Submit Handler (Add / Edit)
-      const productForm = document.getElementById('product-form');
-      if (productForm) {
-        productForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-          saveProduct();
-        });
-      }
-    });
-
-    // Save Product Function
-    function saveProduct() {
-      const id = document.getElementById('product-id').value;
-      const name = document.getElementById('p-name').value;
-      const category = document.getElementById('p-category').value;
-      const price = parseFloat(document.getElementById('p-price').value);
-      const stock = parseInt(document.getElementById('p-stock').value);
-      const image = document.getElementById('p-image').value;
-
-      if (id) {
-        // Edit Existing Product
-        const index = products.findIndex(p => p.id == id);
-        if (index !== -1) {
-          products[index] = { id: parseInt(id), name, category, price, stock, image };
-        }
-      } else {
-        // Add New Product
-        const newProduct = {
-          id: Date.now(),
-          name,
-          category,
-          price,
-          stock,
-          image
-        };
-        products.push(newProduct);
-      }
-
-      localStorage.setItem('shaheer_products', JSON.stringify(products));
-      resetForm();
-      renderProducts();
+    if (window.supabase) {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
 
-    // Render Products Table & Update Stats
-    function renderProducts() {
-      const tbody = document.getElementById('products-tbody');
-      const search = document.getElementById('search-input')?.value.toLowerCase() || '';
-      
-      const filtered = products.filter(p => p.name.toLowerCase().includes(search) || p.category.toLowerCase().includes(search));
+    document.getElementById('bypass-btn')?.addEventListener('click', () => {
+      document.getElementById('login-section').classList.add('hidden');
+      document.getElementById('dashboard-section').classList.remove('hidden');
+      fetchLiveProducts();
+    });
 
-      tbody.innerHTML = filtered.map(p => `
+    // Fetch Live Products from Supabase Table
+    async function fetchLiveProducts() {
+      if (!supabaseClient) return;
+      const { data, error } = await supabaseClient.from('products').select('*');
+      
+      const tbody = document.getElementById('products-tbody');
+      if (error) {
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-400">Error loading DB: ${error.message}</td></tr>`;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-400">No products found in live database table.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = data.map(p => `
         <tr class="hover:bg-gray-750">
           <td class="p-3 font-medium text-white flex items-center gap-2">
             ${p.image ? `<img src="${p.image}" class="w-8 h-8 rounded object-cover">` : '<i class="fa-solid fa-glasses text-gray-500"></i>'}
-            ${p.name}
+            ${p.title || p.name || 'Unnamed Frame'}
           </td>
-          <td class="p-3">${p.category}</td>
-          <td class="p-3 text-yellow-400 font-semibold">Rs. ${p.price.toLocaleString()}</td>
-          <td class="p-3">${p.stock}</td>
+          <td class="p-3">${p.category || 'General'}</td>
+          <td class="p-3 text-yellow-400 font-semibold">Rs. ${p.price || 0}</td>
           <td class="p-3 text-right">
-            <button onclick="editProduct(${p.id})" class="text-blue-400 hover:text-blue-300 mr-3"><i class="fa-solid fa-pen-to-square"></i></button>
-            <button onclick="deleteProduct(${p.id})" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="deleteLiveProduct('${p.id}')" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button>
           </td>
         </tr>
       `).join('');
-
-      // Update KPI Cards
-      document.getElementById('stat-total-products').innerText = products.length;
     }
 
-    // Edit Product Setup
-    function editProduct(id) {
-      const p = products.find(item => item.id == id);
-      if (!p) return;
+    // Insert Product directly into Supabase Table
+    document.getElementById('product-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('p-name').value;
+      const category = document.getElementById('p-category').value;
+      const price = parseFloat(document.getElementById('p-price').value);
+      const image = document.getElementById('p-image').value;
 
-      document.getElementById('product-id').value = p.id;
-      document.getElementById('p-name').value = p.name;
-      document.getElementById('p-category').value = p.category;
-      document.getElementById('p-price').value = p.price;
-      document.getElementById('p-stock').value = p.stock;
-      document.getElementById('p-image').value = p.image || '';
+      if (!supabaseClient) return;
 
-      document.getElementById('form-title').innerHTML = '<i class="fa-solid fa-pen"></i> Edit Product';
-      document.getElementById('save-btn').innerText = 'Update Product';
-      document.getElementById('cancel-btn').classList.remove('hidden');
-    }
+      const { data, error } = await supabaseClient.from('products').insert([
+        { title: name, category: category, price: price, image: image }
+      ]);
 
-    // Delete Product
-    function deleteProduct(id) {
-      if (confirm('Kya aap waqai is product ko delete karna chahte hain?')) {
-        products = products.filter(p => p.id != id);
-        localStorage.setItem('shaheer_products', JSON.stringify(products));
-        renderProducts();
+      if (error) {
+        alert("❌ Error uploading to live site: " + error.message);
+      } else {
+        alert("✅ Product published live successfully!");
+        document.getElementById('product-form').reset();
+        fetchLiveProducts();
       }
-    }
+    });
 
-    // Reset Form
-    function resetForm() {
-      document.getElementById('product-id').value = '';
-      document.getElementById('product-form').reset();
-      document.getElementById('form-title').innerHTML = '<i class="fa-solid fa-plus-circle"></i> Add New Product';
-      document.getElementById('save-btn').innerText = 'Save Product';
-      document.getElementById('cancel-btn').classList.add('hidden');
-    }
-
-    // Logout
-    function handleLogout() {
-      document.getElementById('dashboard-section').classList.add('hidden');
-      document.getElementById('login-section').classList.remove('hidden');
+    // Delete Product from Supabase
+    async function deleteLiveProduct(id) {
+      if (!confirm("Are you sure you want to delete this from the live store?")) return;
+      const { error } = await supabaseClient.from('products').delete().eq('id', id);
+      if (error) alert("Error: " + error.message);
+      else fetchLiveProducts();
     }
   </script>
 </body>
