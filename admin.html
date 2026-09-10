@@ -116,108 +116,100 @@
     </div>
   </div>
   <script>
-    let supabaseClient = null;
+  // Live Website Supabase Credentials Direct Integration
+  const LIVE_SUPABASE_URL = 'https://dyktxqujiwmxnxsttwng.supabase.co';
+  const LIVE_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5a3R4cXVqaXdteG54c3R0d25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMzQ1NjcsImV4cCI6MjA1NjgxMDU2N30';
 
-    // Check if main site config exists or create from window
-    function initSupabase() {
-      if (window.supabaseClient) {
-        supabaseClient = window.supabaseClient;
-      } else if (window._supabase) {
-        supabaseClient = window._supabase;
-      } else if (window.supabase) {
-        // Fallback: Reading key directly from main website's saved config
-        const savedUrl = localStorage.getItem('supabase_url') || 'https://dyktxqujiwmxnxsttwng.supabase.co';
-        const savedKey = localStorage.getItem('supabase_key') || localStorage.getItem('sb-anon-key');
-        
-        if (savedKey) {
-          supabaseClient = window.supabase.createClient(savedUrl, savedKey);
-        }
-      }
+  let supabaseClient = null;
+
+  function initSupabase() {
+    if (window.supabase) {
+      supabaseClient = window.supabase.createClient(LIVE_SUPABASE_URL, LIVE_SUPABASE_KEY);
     }
+  }
 
-    document.getElementById('bypass-btn')?.addEventListener('click', () => {
-      document.getElementById('login-section').classList.add('hidden');
-      document.getElementById('dashboard-section').classList.remove('hidden');
+  document.getElementById('bypass-btn')?.addEventListener('click', () => {
+    document.getElementById('login-section').classList.add('hidden');
+    document.getElementById('dashboard-section').classList.remove('hidden');
+    initSupabase();
+    fetchLiveProducts();
+  });
+
+  // Fetch Live Products from Supabase Database
+  async function fetchLiveProducts() {
+    const tbody = document.getElementById('products-tbody');
+    
+    if (!supabaseClient) {
       initSupabase();
+    }
+
+    if (!supabaseClient) {
+      tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-400">Supabase library failed to load. Please check internet connection.</td></tr>`;
+      return;
+    }
+
+    const { data, error } = await supabaseClient.from('products').select('*');
+    
+    if (error) {
+      tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-400">Database Error: ${error.message}</td></tr>`;
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-400">No products found in live database table. Add your first product above!</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map(p => `
+      <tr class="hover:bg-gray-750">
+        <td class="p-3 font-medium text-white flex items-center gap-2">
+          ${p.image || p.image_url ? `<img src="${p.image || p.image_url}" class="w-8 h-8 rounded object-cover">` : '<i class="fa-solid fa-glasses text-gray-500"></i>'}
+          ${p.title || p.name || 'Unnamed Frame'}
+        </td>
+        <td class="p-3">${p.category || 'General'}</td>
+        <td class="p-3 text-yellow-400 font-semibold">Rs. ${p.price || 0}</td>
+        <td class="p-3 text-right">
+          <button onclick="deleteLiveProduct('${p.id}')" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Insert Product directly into Supabase Table
+  document.getElementById('product-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const name = document.getElementById('p-name').value;
+    const category = document.getElementById('p-category').value;
+    const price = parseFloat(document.getElementById('p-price').value);
+    const image = document.getElementById('p-image').value;
+
+    if (!supabaseClient) {
+      alert("❌ Supabase client not initialized.");
+      return;
+    }
+
+    const { data, error } = await supabaseClient.from('products').insert([
+      { title: name, category: category, price: price, image: image }
+    ]);
+
+    if (error) {
+      alert("❌ Error uploading to live site: " + error.message);
+    } else {
+      alert("✅ Product published live successfully!");
+      document.getElementById('product-form').reset();
       fetchLiveProducts();
-    });
-
-    // Fetch Live Products
-    async function fetchLiveProducts() {
-      const tbody = document.getElementById('products-tbody');
-      
-      if (!supabaseClient) {
-        // If client is still null, try finding Supabase config from index/main script
-        initSupabase();
-      }
-
-      if (!supabaseClient) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-amber-400">Please open main website (index.html) once to sync API Key, then refresh this page.</td></tr>`;
-        return;
-      }
-
-      const { data, error } = await supabaseClient.from('products').select('*');
-      
-      if (error) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-400">Error loading DB: ${error.message}</td></tr>`;
-        return;
-      }
-
-      if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-400">No products found in live database table.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = data.map(p => `
-        <tr class="hover:bg-gray-750">
-          <td class="p-3 font-medium text-white flex items-center gap-2">
-            ${p.image || p.image_url ? `<img src="${p.image || p.image_url}" class="w-8 h-8 rounded object-cover">` : '<i class="fa-solid fa-glasses text-gray-500"></i>'}
-            ${p.title || p.name || 'Unnamed Frame'}
-          </td>
-          <td class="p-3">${p.category || 'General'}</td>
-          <td class="p-3 text-yellow-400 font-semibold">Rs. ${p.price || 0}</td>
-          <td class="p-3 text-right">
-            <button onclick="deleteLiveProduct('${p.id}')" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button>
-          </td>
-        </tr>
-      `).join('');
     }
+  });
 
-    // Insert Product
-    document.getElementById('product-form')?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const name = document.getElementById('p-name').value;
-      const category = document.getElementById('p-category').value;
-      const price = parseFloat(document.getElementById('p-price').value);
-      const image = document.getElementById('p-image').value;
-
-      if (!supabaseClient) {
-        alert("❌ Supabase client not initialized.");
-        return;
-      }
-
-      const { data, error } = await supabaseClient.from('products').insert([
-        { title: name, category: category, price: price, image: image }
-      ]);
-
-      if (error) {
-        alert("❌ Error uploading to live site: " + error.message);
-      } else {
-        alert("✅ Product published live successfully!");
-        document.getElementById('product-form').reset();
-        fetchLiveProducts();
-      }
-    });
-
-    // Delete Product
-    async function deleteLiveProduct(id) {
-      if (!confirm("Are you sure you want to delete this from the live store?")) return;
-      const { error } = await supabaseClient.from('products').delete().eq('id', id);
-      if (error) alert("Error: " + error.message);
-      else fetchLiveProducts();
-    }
-  </script>
+  // Delete Product
+  async function deleteLiveProduct(id) {
+    if (!confirm("Are you sure you want to delete this from the live store?")) return;
+    const { error } = await supabaseClient.from('products').delete().eq('id', id);
+    if (error) alert("Error: " + error.message);
+    else fetchLiveProducts();
+  }
+</script>
 </body>
 </html>
 
