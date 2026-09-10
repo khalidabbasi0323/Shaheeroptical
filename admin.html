@@ -3,154 +3,331 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shaheer Opticals - Admin Panel</title>
+  <title>Shaheer Opticals - Management Dashboard</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Supabase JS Library -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-900 text-gray-100 min-h-screen">
 
-  <!-- 1. LOGIN SECTION -->
+  <!-- ================= 1. LOGIN SECTION (ONLY BYPASS) ================= -->
   <div id="login-section" class="flex items-center justify-center min-h-screen px-4">
-    <div class="max-w-md w-full bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-700">
-      <h2 class="text-3xl font-bold text-center text-yellow-500 mb-6">Shaheer Opticals</h2>
-      
-      <form id="login-form" class="space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1">Email Address</label>
-          <input type="email" id="login-email" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-yellow-500" placeholder="admin@shaheeroptical.com">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-300 mb-1">Password</label>
-          <input type="password" id="login-password" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-yellow-500" placeholder="••••••••">
-        </div>
-        
-        <button type="submit" class="w-full bg-yellow-600 hover:bg-yellow-500 text-black font-bold py-3 rounded-lg transition">
-          Login via Supabase
-        </button>
-      </form>
-
-      <div class="mt-6 pt-6 border-t border-gray-700 text-center">
-        <button id="demo-login-btn" type="button" class="w-full bg-gray-700 hover:bg-gray-600 text-yellow-400 font-semibold py-3 rounded-lg border border-yellow-500/30 transition">
-          ⚡ Direct Admin Bypass (Click Here)
-        </button>
+    <div class="max-w-md w-full bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-700 text-center">
+      <div class="w-16 h-16 bg-yellow-500/10 text-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-500/20">
+        <i class="fa-solid fa-glasses text-3xl"></i>
       </div>
+      <h2 class="text-3xl font-bold text-yellow-500 mb-2">Shaheer Opticals</h2>
+      <p class="text-gray-400 text-sm mb-6">Management Panel Access</p>
+      
+      <button id="bypass-btn" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3.5 px-4 rounded-lg shadow-lg transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-bolt text-lg"></i>
+        <span>Open Admin Dashboard</span>
+      </button>
     </div>
   </div>
 
-  <!-- 2. DASHBOARD SECTION (Initially Hidden) -->
-  <div id="dashboard-section" class="hidden min-h-screen p-6">
-    <!-- Top Navbar -->
-    <header class="flex justify-between items-center bg-gray-800 p-4 rounded-xl border border-gray-700 mb-6">
-      <h1 class="text-xl font-bold text-yellow-500"><i class="fa-solid fa-glasses mr-2"></i> Shaheer Opticals Admin</h1>
-      <button onclick="handleLogout()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
-        Logout
-      </button>
+  <!-- ================= 2. MAIN DASHBOARD SECTION ================= -->
+  <div id="dashboard-section" class="hidden min-h-screen p-4 md:p-8">
+    
+    <!-- Top Header -->
+    <header class="flex flex-col md:flex-row justify-between items-center bg-gray-800 p-4 rounded-xl border border-gray-700 mb-6 gap-4">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-glasses text-2xl text-yellow-500"></i>
+        <h1 class="text-xl font-bold text-white">Shaheer Opticals Portal</h1>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="bg-green-500/10 text-green-400 text-xs px-3 py-1.5 rounded-full border border-green-500/30 font-medium">
+          <i class="fa-solid fa-circle text-[8px] mr-1"></i> Admin Active
+        </span>
+        <button onclick="handleLogout()" class="bg-red-600/80 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
     </header>
 
-    <!-- Metrics Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <!-- Top KPI Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
       <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
         <p class="text-gray-400 text-sm">Total Products</p>
-        <h3 id="stat-products" class="text-2xl font-bold text-white mt-1">0</h3>
+        <h3 id="stat-total-products" class="text-3xl font-bold text-white mt-1">0</h3>
       </div>
       <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
-        <p class="text-gray-400 text-sm">System Status</p>
-        <h3 class="text-2xl font-bold text-green-400 mt-1">Active</h3>
+        <p class="text-gray-400 text-sm">Daily Revenue</p>
+        <h3 id="stat-daily-revenue" class="text-3xl font-bold text-green-400 mt-1">Rs. 0</h3>
       </div>
       <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
-        <p class="text-gray-400 text-sm">Database</p>
-        <h3 id="stat-db" class="text-2xl font-bold text-yellow-400 mt-1">Connected</h3>
+        <p class="text-gray-400 text-sm">Weekly Sales</p>
+        <h3 id="stat-weekly-sales" class="text-3xl font-bold text-yellow-400 mt-1">0 Frames</h3>
+      </div>
+      <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
+        <p class="text-gray-400 text-sm">Monthly Progress</p>
+        <h3 id="stat-monthly-progress" class="text-3xl font-bold text-blue-400 mt-1">0 Orders</h3>
       </div>
     </div>
 
-    <!-- Main Content Area -->
-    <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-      <h2 class="text-lg font-bold text-white mb-4">Admin Dashboard Loaded Successfully!</h2>
-      <p class="text-gray-400">Aap ka Dashboard ab live ho chuka hai. Yahan aap ke baqi sab modules render honge.</p>
+    <!-- MAIN GRID: Product Form & Table -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+      
+      <!-- Product Add / Edit Form -->
+      <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 h-fit">
+        <h2 id="form-title" class="text-lg font-bold text-yellow-500 mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-plus-circle"></i> Add New Product
+        </h2>
+        
+        <form id="product-form" class="space-y-4">
+          <input type="hidden" id="product-id">
+          
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Product Name / Title</label>
+            <input type="text" id="p-name" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2.5 text-white text-sm focus:border-yellow-500 focus:outline-none" placeholder="e.g. Ray-Ban Aviator Frame">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Category</label>
+              <select id="p-category" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2.5 text-white text-sm focus:border-yellow-500 focus:outline-none">
+                <option value="Eyeglasses">Eyeglasses</option>
+                <option value="Sunglasses">Sunglasses</option>
+                <option value="Contact Lenses">Contact Lenses</option>
+                <option value="Accessories">Accessories</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Price (PKR)</label>
+              <input type="number" id="p-price" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2.5 text-white text-sm focus:border-yellow-500 focus:outline-none" placeholder="2500">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Stock Quantity</label>
+              <input type="number" id="p-stock" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2.5 text-white text-sm focus:border-yellow-500 focus:outline-none" placeholder="10">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 mb-1">Image URL</label>
+              <input type="text" id="p-image" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2.5 text-white text-sm focus:border-yellow-500 focus:outline-none" placeholder="https://...">
+            </div>
+          </div>
+
+          <div class="pt-2 flex gap-2">
+            <button type="submit" id="save-btn" class="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2.5 rounded-lg transition text-sm">
+              Save Product
+            </button>
+            <button type="button" id="cancel-btn" onclick="resetForm()" class="hidden bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2.5 px-4 rounded-lg transition text-sm">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Products Inventory Table -->
+      <div class="lg:col-span-2 bg-gray-800 p-6 rounded-xl border border-gray-700">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+          <h2 class="text-lg font-bold text-white"><i class="fa-solid fa-boxes-stacked mr-2"></i> Products Inventory</h2>
+          <input type="text" id="search-input" oninput="renderProducts()" placeholder="Search products..." class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-yellow-500 w-full sm:w-48">
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-gray-300">
+            <thead class="bg-gray-700/50 text-xs text-gray-400 uppercase">
+              <tr>
+                <th class="p-3">Product</th>
+                <th class="p-3">Category</th>
+                <th class="p-3">Price</th>
+                <th class="p-3">Stock</th>
+                <th class="p-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-tbody" class="divide-y divide-gray-700">
+              <!-- JS Dynamic Rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
+
+    <!-- DAILY, WEEKLY & MONTHLY PROGRESS TABLE -->
+    <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-chart-line text-yellow-500"></i> Business Progress Summary
+          </h2>
+          <p class="text-xs text-gray-400">Track Daily, Weekly, and Monthly performance metrics</p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm text-gray-300">
+          <thead class="bg-gray-700/50 text-xs text-gray-400 uppercase">
+            <tr>
+              <th class="p-3">Timeline Period</th>
+              <th class="p-3">Orders Completed</th>
+              <th class="p-3">Frames Sold</th>
+              <th class="p-3">Gross Revenue</th>
+              <th class="p-3">Growth Rate</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-700">
+            <tr>
+              <td class="p-3 font-semibold text-yellow-400"><i class="fa-solid fa-calendar-day mr-2"></i> Today (Daily)</td>
+              <td class="p-3">12 Orders</td>
+              <td class="p-3">18 Frames</td>
+              <td class="p-3 text-green-400 font-bold">Rs. 45,000</td>
+              <td class="p-3"><span class="bg-green-500/10 text-green-400 px-2 py-0.5 rounded text-xs">+15% vs yesterday</span></td>
+            </tr>
+            <tr>
+              <td class="p-3 font-semibold text-yellow-400"><i class="fa-solid fa-calendar-week mr-2"></i> This Week</td>
+              <td class="p-3">84 Orders</td>
+              <td class="p-3">112 Frames</td>
+              <td class="p-3 text-green-400 font-bold">Rs. 310,000</td>
+              <td class="p-3"><span class="bg-green-500/10 text-green-400 px-2 py-0.5 rounded text-xs">+8% vs last week</span></td>
+            </tr>
+            <tr>
+              <td class="p-3 font-semibold text-yellow-400"><i class="fa-solid fa-calendar-days mr-2"></i> This Month</td>
+              <td class="p-3">340 Orders</td>
+              <td class="p-3">450 Frames</td>
+              <td class="p-3 text-green-400 font-bold">Rs. 1,250,000</td>
+              <td class="p-3"><span class="bg-green-500/10 text-green-400 px-2 py-0.5 rounded text-xs">+22% monthly growth</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
-  <!-- 3. JAVASCRIPT SYSTEM -->
+  <!-- ================= 3. JAVASCRIPT LOGIC ================= -->
   <script>
-    // Supabase Credentials
-    const SUPABASE_URL = 'https://dyktxqujiwmxnxsttwng.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5a3R4cXVqaXdteG54c3R0d25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMzQ1NjcsImV4cCI6MjA1NjgxMDU2N30';
+    // Initial Products Data Storage (LocalStorage Sync)
+    let products = JSON.parse(localStorage.getItem('shaheer_products')) || [
+      { id: 1, name: 'Ray-Ban Wayfarer Classic', category: 'Sunglasses', price: 4500, stock: 15, image: '' },
+      { id: 2, name: 'Titanium Blue Cut Glasses', category: 'Eyeglasses', price: 2800, stock: 24, image: '' },
+      { id: 3, name: 'Acuvue Soft Contact Lenses', category: 'Contact Lenses', price: 3500, stock: 10, image: '' }
+    ];
 
-    let supabaseClient = null;
-
-    // Initialize Supabase safely
-    try {
-      if (window.supabase) {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      }
-    } catch(e) {
-      console.warn("Supabase Init Warning:", e);
-    }
-
-    // Force Open Function (Instant Bypass)
-    function openDashboardDirectly() {
-      const loginSec = document.getElementById('login-section');
-      const dashSec = document.getElementById('dashboard-section');
-
-      if (loginSec) loginSec.classList.add('hidden');
-      if (dashSec) dashSec.classList.remove('hidden');
-    }
-
-    // DOM Ready Event Listeners
     document.addEventListener('DOMContentLoaded', () => {
-      const loginForm = document.getElementById('login-form');
-      const demoBtn = document.getElementById('demo-login-btn');
-
-      // Demo Bypass Click Event
-      if (demoBtn) {
-        demoBtn.addEventListener('click', () => {
-          alert("⚡ Direct Admin Bypass Activated!");
-          openDashboardDirectly();
+      // Direct Bypass Event
+      const bypassBtn = document.getElementById('bypass-btn');
+      if (bypassBtn) {
+        bypassBtn.addEventListener('click', () => {
+          document.getElementById('login-section').classList.add('hidden');
+          document.getElementById('dashboard-section').classList.remove('hidden');
+          renderProducts();
         });
       }
 
-      // Real Login Submission
-      if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
+      // Product Form Submit Handler (Add / Edit)
+      const productForm = document.getElementById('product-form');
+      if (productForm) {
+        productForm.addEventListener('submit', (e) => {
           e.preventDefault();
-          const email = document.getElementById('login-email').value;
-          const password = document.getElementById('login-password').value;
-
-          if (!supabaseClient) {
-            alert("⚠️ Supabase Client Connect Nahi Hua! Bypass Button Use Karein.");
-            openDashboardDirectly();
-            return;
-          }
-
-          try {
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) {
-              alert("❌ Supabase Auth Error: " + error.message + "\n\n(Bypass se Dashboard Khol Rahe Hain)");
-              openDashboardDirectly();
-            } else {
-              alert("✅ Login Successful!");
-              openDashboardDirectly();
-            }
-          } catch(err) {
-            alert("❌ Network Error! Bypass Mode Enabled.");
-            openDashboardDirectly();
-          }
+          saveProduct();
         });
       }
     });
 
-    // Logout Function
-    function handleLogout() {
-      const loginSec = document.getElementById('login-section');
-      const dashSec = document.getElementById('dashboard-section');
+    // Save Product Function
+    function saveProduct() {
+      const id = document.getElementById('product-id').value;
+      const name = document.getElementById('p-name').value;
+      const category = document.getElementById('p-category').value;
+      const price = parseFloat(document.getElementById('p-price').value);
+      const stock = parseInt(document.getElementById('p-stock').value);
+      const image = document.getElementById('p-image').value;
 
-      if (dashSec) dashSec.classList.add('hidden');
-      if (loginSec) loginSec.classList.remove('hidden');
-      alert("Logged out!");
+      if (id) {
+        // Edit Existing Product
+        const index = products.findIndex(p => p.id == id);
+        if (index !== -1) {
+          products[index] = { id: parseInt(id), name, category, price, stock, image };
+        }
+      } else {
+        // Add New Product
+        const newProduct = {
+          id: Date.now(),
+          name,
+          category,
+          price,
+          stock,
+          image
+        };
+        products.push(newProduct);
+      }
+
+      localStorage.setItem('shaheer_products', JSON.stringify(products));
+      resetForm();
+      renderProducts();
+    }
+
+    // Render Products Table & Update Stats
+    function renderProducts() {
+      const tbody = document.getElementById('products-tbody');
+      const search = document.getElementById('search-input')?.value.toLowerCase() || '';
+      
+      const filtered = products.filter(p => p.name.toLowerCase().includes(search) || p.category.toLowerCase().includes(search));
+
+      tbody.innerHTML = filtered.map(p => `
+        <tr class="hover:bg-gray-750">
+          <td class="p-3 font-medium text-white flex items-center gap-2">
+            ${p.image ? `<img src="${p.image}" class="w-8 h-8 rounded object-cover">` : '<i class="fa-solid fa-glasses text-gray-500"></i>'}
+            ${p.name}
+          </td>
+          <td class="p-3">${p.category}</td>
+          <td class="p-3 text-yellow-400 font-semibold">Rs. ${p.price.toLocaleString()}</td>
+          <td class="p-3">${p.stock}</td>
+          <td class="p-3 text-right">
+            <button onclick="editProduct(${p.id})" class="text-blue-400 hover:text-blue-300 mr-3"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="deleteProduct(${p.id})" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>
+      `).join('');
+
+      // Update KPI Cards
+      document.getElementById('stat-total-products').innerText = products.length;
+    }
+
+    // Edit Product Setup
+    function editProduct(id) {
+      const p = products.find(item => item.id == id);
+      if (!p) return;
+
+      document.getElementById('product-id').value = p.id;
+      document.getElementById('p-name').value = p.name;
+      document.getElementById('p-category').value = p.category;
+      document.getElementById('p-price').value = p.price;
+      document.getElementById('p-stock').value = p.stock;
+      document.getElementById('p-image').value = p.image || '';
+
+      document.getElementById('form-title').innerHTML = '<i class="fa-solid fa-pen"></i> Edit Product';
+      document.getElementById('save-btn').innerText = 'Update Product';
+      document.getElementById('cancel-btn').classList.remove('hidden');
+    }
+
+    // Delete Product
+    function deleteProduct(id) {
+      if (confirm('Kya aap waqai is product ko delete karna chahte hain?')) {
+        products = products.filter(p => p.id != id);
+        localStorage.setItem('shaheer_products', JSON.stringify(products));
+        renderProducts();
+      }
+    }
+
+    // Reset Form
+    function resetForm() {
+      document.getElementById('product-id').value = '';
+      document.getElementById('product-form').reset();
+      document.getElementById('form-title').innerHTML = '<i class="fa-solid fa-plus-circle"></i> Add New Product';
+      document.getElementById('save-btn').innerText = 'Save Product';
+      document.getElementById('cancel-btn').classList.add('hidden');
+    }
+
+    // Logout
+    function handleLogout() {
+      document.getElementById('dashboard-section').classList.add('hidden');
+      document.getElementById('login-section').classList.remove('hidden');
     }
   </script>
 </body>
