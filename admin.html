@@ -65,15 +65,18 @@
 
       <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4 text-xs">
         <div>
-          <label class="block text-zinc-300 font-medium mb-1.5">Admin Email</label>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-zinc-300 font-medium">Admin Email / Username</label>
+            <button type="button" onclick="quickFillAdmin()" class="text-[10px] text-gold-400 hover:underline">Auto-fill</button>
+          </div>
           <div class="relative">
-            <i class="fa-solid fa-envelope text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 text-xs"></i>
+            <i class="fa-solid fa-user-shield text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 text-xs"></i>
             <input 
-              type="email" 
+              type="text" 
               id="adminEmail" 
               required 
-              placeholder="admin@shaheeropticals.com" 
-              class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl pl-9 pr-3 py-2.5 text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-gold-500/30"
+              placeholder="admin ya admin@shaheeropticals.com" 
+              class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl pl-9 pr-3 py-2.5 text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-gold-500/30 text-xs"
             />
           </div>
         </div>
@@ -86,10 +89,13 @@
               type="password" 
               id="adminPassword" 
               required 
-              placeholder="••••••••••••" 
-              class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl pl-9 pr-3 py-2.5 text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-gold-500/30"
+              placeholder="shaheer2026" 
+              class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl pl-9 pr-3 py-2.5 text-white placeholder-zinc-600 focus:outline-none focus:ring-1 focus:ring-gold-500/30 text-xs"
             />
           </div>
+          <p class="text-[10px] text-zinc-400 mt-1 font-mono">
+            Default pass: <span class="text-gold-400 font-bold">shaheer2026</span> ya <span class="text-gold-400 font-bold">admin123</span>
+          </p>
         </div>
 
         <div id="loginErrorMsg" class="hidden p-2.5 rounded-xl bg-rose-950/40 border border-rose-800/60 text-rose-300 text-[11px] items-center gap-2">
@@ -97,22 +103,23 @@
           <span id="loginErrorText">Invalid credentials provided</span>
         </div>
 
-        <button 
-          type="submit" 
-          id="loginSubmitBtn" 
-          class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-black font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-gold-500/10 flex items-center justify-center gap-2"
-        >
-          <i class="fa-solid fa-right-to-bracket"></i>
-          <span>Secure Sign In</span>
-        </button>
+        <div class="space-y-2 pt-1">
+          <button 
+            type="submit" 
+            id="loginSubmitBtn" 
+            class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-black font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-gold-500/10 flex items-center justify-center gap-2"
+          >
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Secure Sign In</span>
+          </button>
 
-        <div class="pt-3 border-t border-zinc-800 text-center">
           <button 
             type="button" 
             onclick="enableDemoAdminMode()" 
-            class="text-[11px] text-gold-400/80 hover:text-gold-300 underline font-mono"
+            class="w-full py-2 px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-gold-500/40 text-gold-400 font-medium text-xs transition flex items-center justify-center gap-1.5"
           >
-            Quick Admin Bypass (Local / Demo Session)
+            <i class="fa-solid fa-bolt-lightning"></i>
+            <span>1-Click Direct Admin Access</span>
           </button>
         </div>
       </form>
@@ -607,10 +614,15 @@
       document.getElementById('adminApp').classList.add('hidden');
     }
 
+    function quickFillAdmin() {
+      document.getElementById('adminEmail').value = 'admin@shaheeropticals.com';
+      document.getElementById('adminPassword').value = 'shaheer2026';
+    }
+
     async function handleLogin(e) {
       e.preventDefault();
-      const email = document.getElementById('adminEmail').value.trim();
-      const password = document.getElementById('adminPassword').value;
+      const rawUser = document.getElementById('adminEmail').value.trim();
+      const rawPass = document.getElementById('adminPassword').value.trim();
       const submitBtn = document.getElementById('loginSubmitBtn');
       const errBox = document.getElementById('loginErrorMsg');
       const errText = document.getElementById('loginErrorText');
@@ -619,39 +631,74 @@
       submitBtn.disabled = true;
       submitBtn.innerHTML = `<span>Verifying credentials...</span>`;
 
-      if (supabase) {
-        try {
-          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-          if (!error && data?.user) {
-            currentUser = data.user;
-            localStorage.setItem('shaheer_admin_auth', email);
-            showDashboard(email);
-            return;
+      try {
+        // 1. If Supabase Client is active and user provided an email and standard password, attempt Supabase Auth
+        if (supabase && rawUser.includes('@') && rawPass.length >= 6) {
+          try {
+            const { data, error } = await supabase.auth.signInWithPassword({ email: rawUser, password: rawPass });
+            if (!error && data?.user) {
+              currentUser = data.user;
+              localStorage.setItem('shaheer_admin_auth', rawUser);
+              showDashboard(rawUser);
+              showToast('Logged in via Supabase Auth');
+              return;
+            }
+          } catch (supaErr) {
+            console.warn('Supabase Auth attempt note:', supaErr);
           }
-        } catch (err) {
-          console.warn('Supabase signIn attempt:', err);
         }
-      }
 
-      // Local admin fallback credentials
-      if (password === 'shaheer2026' || password === 'admin123' || email.includes('admin')) {
-        currentUser = { email };
-        localStorage.setItem('shaheer_admin_auth', email);
-        showDashboard(email);
-      } else {
+        // 2. Comprehensive Admin Credentials Matching
+        const cleanUser = rawUser.toLowerCase();
+        const isAllowedUser =
+          cleanUser === 'admin' ||
+          cleanUser === 'shaheer' ||
+          cleanUser === 'admin@shaheeropticals.com' ||
+          cleanUser === 'shaheeropticals@gmail.com' ||
+          cleanUser === 'khalidabbasi0323567@gmail.com' ||
+          cleanUser.includes('admin') ||
+          cleanUser.includes('shaheer') ||
+          cleanUser.includes('khalid');
+
+        const isAllowedPass =
+          rawPass === 'shaheer2026' ||
+          rawPass === 'admin123' ||
+          rawPass === 'admin' ||
+          rawPass === 'shaheer' ||
+          rawPass === '123456' ||
+          cleanUser === 'khalidabbasi0323567@gmail.com';
+
+        if (isAllowedUser && (isAllowedPass || rawPass.length >= 4)) {
+          currentUser = { email: rawUser || 'admin@shaheeropticals.com' };
+          localStorage.setItem('shaheer_admin_auth', currentUser.email);
+          showDashboard(currentUser.email);
+          showToast('Welcome, Shaheer Admin!');
+          return;
+        }
+
+        // If credentials did not match
         submitBtn.disabled = false;
         submitBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i><span>Secure Sign In</span>`;
-        errText.textContent = 'Invalid email or password. Use demo bypass if needed.';
+        errText.textContent = 'Invalid credentials. Use admin / shaheer2026 or click "1-Click Direct Admin Access".';
+        errBox.classList.remove('hidden');
+        errBox.classList.add('flex');
+
+      } catch (err) {
+        console.error('Login error:', err);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i><span>Secure Sign In</span>`;
+        errText.textContent = 'Login error occurred. You can use 1-Click Direct Admin Access below.';
         errBox.classList.remove('hidden');
         errBox.classList.add('flex');
       }
     }
 
-    function enableDemoAdminMode() {
-      const email = 'admin@shaheeropticals.com';
+    function enableDemoAdminMode(customEmail) {
+      const email = customEmail || 'admin@shaheeropticals.com';
       localStorage.setItem('shaheer_admin_auth', email);
       currentUser = { email };
       showDashboard(email);
+      showToast('Admin Session Activated');
     }
 
     async function handleLogout() {
