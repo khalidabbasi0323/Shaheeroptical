@@ -1181,7 +1181,146 @@
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
     }
-  </script>
+// =================================================================
+// LOGIN & DEMO BYPASS SYSTEM (Paste before closing </script> tag)
+// =================================================================
+
+// User state
+let currentUser = null;
+
+// Initialize event listeners when DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+  const loginForm = document.getElementById('login-form');
+  const demoLoginBtn = document.getElementById('demo-login-btn');
+
+  // 1. Real Supabase Login
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const emailInput = document.getElementById('login-email');
+      const passwordInput = document.getElementById('login-password');
+      
+      const email = emailInput ? emailInput.value.trim() : '';
+      const password = passwordInput ? passwordInput.value.trim() : '';
+
+      if (!email || !password) {
+        alert("⚠️ Mehrebaani karke Email aur Password dono darj karein.");
+        return;
+      }
+
+      await handleSupabaseLogin(email, password);
+    });
+  }
+
+  // 2. Quick Demo Bypass Button
+  if (demoLoginBtn) {
+    demoLoginBtn.addEventListener('click', () => {
+      handleDemoBypass();
+    });
+  }
+
+  // Auto-restore active session if present
+  checkExistingSession();
+});
+
+// Real Supabase Login Function with Mobile Alert
+async function handleSupabaseLogin(email, password) {
+  if (!supabase) {
+    alert("❌ Supabase connection client initialize nahi hua. Credentials check karein.");
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (error) {
+      alert("❌ Login Failed: " + error.message);
+      console.error("Supabase Auth Error:", error);
+      return;
+    }
+
+    if (data && data.user) {
+      currentUser = data.user;
+      alert("✅ Login Successful! Welcome " + (currentUser.email || "Admin"));
+      
+      localStorage.setItem('shaheer_admin_session', JSON.stringify({ 
+        email: currentUser.email, 
+        role: 'admin' 
+      }));
+      
+      showDashboardView();
+    }
+  } catch (err) {
+    alert("❌ Unexpected Error: " + err.message);
+  }
+}
+
+// Demo Bypass Function (Offline / Immediate Testing)
+function handleDemoBypass() {
+  currentUser = {
+    id: 'demo-admin-id',
+    email: 'admin@shaheeroptical.com',
+    user_metadata: { role: 'demo_admin' }
+  };
+
+  localStorage.setItem('shaheer_admin_session', JSON.stringify({ 
+    email: currentUser.email, 
+    isDemo: true 
+  }));
+  
+  alert("⚡ Quick Bypass Active! Logged in as Demo Admin.");
+  showDashboardView();
+}
+
+// Restore saved session on refresh
+function checkExistingSession() {
+  const savedSession = localStorage.getItem('shaheer_admin_session');
+  if (savedSession) {
+    try {
+      const parsed = JSON.parse(savedSession);
+      if (parsed && parsed.email) {
+        currentUser = parsed;
+        showDashboardView();
+      }
+    } catch (e) {
+      localStorage.removeItem('shaheer_admin_session');
+    }
+  }
+}
+
+// Show Dashboard & Hide Login Screen
+function showDashboardView() {
+  const loginSection = document.getElementById('login-section');
+  const dashboardSection = document.getElementById('dashboard-section');
+
+  if (loginSection) loginSection.classList.add('hidden');
+  if (dashboardSection) dashboardSection.classList.remove('hidden');
+
+  // Trigger data load if function exists
+  if (typeof fetchProducts === 'function') fetchProducts();
+  if (typeof fetchOrders === 'function') fetchOrders();
+}
+
+// Logout Handler
+function handleLogout() {
+  if (supabase && supabase.auth) {
+    supabase.auth.signOut();
+  }
+  localStorage.removeItem('shaheer_admin_session');
+  currentUser = null;
+
+  alert("👋 Logged out successfully.");
+
+  const loginSection = document.getElementById('login-section');
+  const dashboardSection = document.getElementById('dashboard-section');
+
+  if (dashboardSection) dashboardSection.classList.add('hidden');
+  if (loginSection) loginSection.classList.remove('hidden');
+}  </script>
 
 </body>
 </html>
