@@ -94,20 +94,17 @@
             />
           </div>
           <p class="text-[10px] text-zinc-400 mt-1 font-mono">
-            Default: <span class="text-gold-400 font-bold">shaheer2026</span> ya <span class="text-gold-400 font-bold">admin123</span>
+            Default pass: <span class="text-gold-400 font-bold">shaheer2026</span> ya <span class="text-gold-400 font-bold">admin123</span>
           </p>
         </div>
 
-        <div id="loginErrorMsg" class="hidden p-2.5 rounded-xl bg-rose-950/40 border border-rose-800/60 text-rose-300 text-[11px] items-center gap-2">
-          <i class="fa-solid fa-circle-exclamation flex-shrink-0"></i>
-          <span id="loginErrorText">Invalid credentials provided</span>
-        </div>
+        <div id="loginError" class="hidden p-2.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-[11px] text-center"></div>
 
-        <div class="space-y-2 pt-1">
+        <div class="pt-2 space-y-2">
           <button 
             type="submit" 
-            id="loginSubmitBtn" 
-            class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-black font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-gold-500/10 flex items-center justify-center gap-2 cursor-pointer"
+            id="loginSubmitBtn"
+            class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-dark-950 font-bold shadow-lg shadow-gold-500/20 transition flex items-center justify-center gap-2 text-xs"
           >
             <i class="fa-solid fa-right-to-bracket"></i>
             <span>Secure Sign In</span>
@@ -115,1166 +112,383 @@
 
           <button 
             type="button" 
-            onclick="enableDemoAdminMode()" 
-            class="w-full py-2 px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-gold-500/40 text-gold-400 font-medium text-xs transition flex items-center justify-center gap-1.5 cursor-pointer"
+            onclick="bypassToDashboard('store_owner@shaheeropticals.com')"
+            class="w-full py-2 px-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-gold-400 font-medium text-[11px] border border-gold-500/20 transition flex items-center justify-center gap-1.5"
           >
-            <i class="fa-solid fa-bolt-lightning"></i>
+            <i class="fa-solid fa-bolt"></i>
             <span>1-Click Direct Admin Access</span>
           </button>
+        </div>
+
+        <div class="pt-3 border-t border-zinc-800/80 text-center">
+          <a href="/" class="text-[11px] text-zinc-500 hover:text-white transition flex items-center justify-center gap-1">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to Shaheer Opticals Store</span>
+          </a>
         </div>
       </form>
     </div>
   </div>
 
   <!-- ======================================================== -->
-  <!-- 2. MAIN ADMIN DASHBOARD SHELL -->
+  <!-- 2. MAIN APPLICATION (SIDEBAR + CONTENT) -->
   <!-- ======================================================== -->
-  <div id="adminApp" class="min-h-screen flex flex-col md:flex-row" style="display: none;">
-
-    <!-- Mobile Top Bar -->
-    <div class="md:hidden bg-dark-900 border-b border-zinc-800 p-3.5 flex items-center justify-between sticky top-0 z-30">
-      <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-lg bg-gold-500 flex items-center justify-center text-black font-bold text-xs">
-          <i class="fa-solid fa-glasses"></i>
-        </div>
-        <span class="font-bold text-xs tracking-tight text-white">SHAHEER ADMIN</span>
-      </div>
-      <button onclick="toggleMobileSidebar()" class="p-2 rounded-lg bg-dark-950 border border-zinc-800 text-zinc-300">
-        <i class="fa-solid fa-bars text-xs"></i>
-      </button>
-    </div>
-
-    <!-- Sidebar Navigation -->
-    <aside id="sidebarMenu" class="fixed md:sticky top-0 left-0 h-screen w-64 bg-dark-900 border-r border-zinc-800/80 flex flex-col justify-between z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-200">
-      <div>
-        <!-- Brand Header -->
-        <div class="p-5 border-b border-zinc-800 flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 text-lg">
+  <div id="adminApp" class="hidden min-h-screen flex flex-col md:flex-row">
+    
+    <!-- Sidebar -->
+    <aside class="w-full md:w-64 bg-dark-900 border-r border-zinc-800 flex flex-col shrink-0">
+      <!-- Brand -->
+      <div class="p-5 border-b border-zinc-800/80 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-gold-500/15 border border-gold-500/30 flex items-center justify-center text-gold-400 text-base">
             <i class="fa-solid fa-glasses"></i>
           </div>
           <div>
-            <h2 class="font-bold text-xs text-white tracking-wide">SHAHEER OPTICALS</h2>
-            <p class="text-[10px] text-gold-400 font-mono">Saidpur Road &bull; Admin</p>
+            <h2 class="text-sm font-bold tracking-tight text-white leading-tight">SHAHEER OPTICALS</h2>
+            <p class="text-[9px] text-gold-400 font-mono tracking-wider uppercase">Owner Admin Panel</p>
           </div>
         </div>
-
-        <!-- Navigation Links -->
-        <nav class="p-3 space-y-1 text-xs font-medium">
-          <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition text-gold-400 bg-gold-500/10 border border-gold-500/30">
-            <i class="fa-solid fa-chart-pie w-4 text-center"></i>
-            <span>Overview & Analytics</span>
-          </button>
-          <button onclick="switchTab('products')" id="nav-products" class="nav-item w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition text-zinc-400 hover:text-white hover:bg-dark-950">
-            <i class="fa-solid fa-box-open w-4 text-center"></i>
-            <span>Products Inventory</span>
-            <span id="sidebarStockBadge" class="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-dark-950 border border-zinc-800 font-mono">0</span>
-          </button>
-          <button onclick="switchTab('orders')" id="nav-orders" class="nav-item w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition text-zinc-400 hover:text-white hover:bg-dark-950">
-            <i class="fa-solid fa-cart-shopping w-4 text-center"></i>
-            <span>Orders Management</span>
-            <span id="sidebarOrderBadge" class="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">0</span>
-          </button>
-
-          <div class="pt-3 border-t border-zinc-800/80 mt-2">
-            <a href="/" target="_blank" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition text-zinc-400 hover:text-gold-400 hover:bg-dark-950">
-              <i class="fa-solid fa-arrow-up-right-from-square w-4 text-center"></i>
-              <span>View Storefront</span>
-            </a>
-          </div>
-        </nav>
+        <a href="/" class="text-zinc-500 hover:text-white text-xs p-1" title="View Store">
+          <i class="fa-solid fa-external-link"></i>
+        </a>
       </div>
 
-      <!-- User Profile & Sign Out -->
-      <div class="p-3.5 border-t border-zinc-800 bg-dark-950/60 flex items-center justify-between text-xs">
-        <div class="truncate mr-2">
-          <p class="text-xs font-bold text-white truncate" id="adminUserEmail">admin@shaheeropticals.com</p>
-          <p class="text-[10px] text-emerald-400 flex items-center gap-1 font-mono">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Active Session
-          </p>
+      <!-- Navigation Tabs -->
+      <nav class="p-3 space-y-1 text-xs flex-1">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gold-500/10 text-gold-400 font-semibold border border-gold-500/20 text-left transition">
+          <i class="fa-solid fa-chart-pie w-4 text-center"></i>
+          <span>Dashboard Overview</span>
+        </button>
+
+        <button onclick="switchTab('products')" id="nav-products" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800/60 text-left transition">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-box-archive w-4 text-center"></i>
+            <span>Inventory & Products</span>
+          </div>
+          <span id="sidebarStockBadge" class="bg-zinc-800 text-zinc-300 text-[10px] px-1.5 py-0.5 rounded-full font-mono">0</span>
+        </button>
+
+        <button onclick="switchTab('orders')" id="nav-orders" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800/60 text-left transition">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-receipt w-4 text-center"></i>
+            <span>Orders Management</span>
+          </div>
+          <span id="sidebarOrderBadge" class="bg-gold-500/20 text-gold-400 text-[10px] px-1.5 py-0.5 rounded-full font-mono">0</span>
+        </button>
+
+        <button onclick="switchTab('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800/60 text-left transition">
+          <i class="fa-solid fa-sliders w-4 text-center"></i>
+          <span>Store Settings & WhatsApp</span>
+        </button>
+      </nav>
+
+      <!-- User footer -->
+      <div class="p-4 border-t border-zinc-800/80 bg-dark-950/40 text-xs">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2 overflow-hidden">
+            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+            <span id="loggedInUserEmail" class="text-zinc-400 truncate text-[11px]">admin@shaheeropticals.com</span>
+          </div>
         </div>
-        <button onclick="handleLogout()" title="Logout" class="p-2 rounded-lg bg-dark-900 border border-zinc-800 text-zinc-400 hover:text-rose-400 hover:border-rose-500/30 transition">
+        <button onclick="handleLogout()" class="w-full py-2 px-3 rounded-lg bg-zinc-800 hover:bg-red-500/20 hover:text-red-400 text-zinc-400 text-[11px] transition flex items-center justify-center gap-2">
           <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Log Out</span>
         </button>
       </div>
     </aside>
 
-    <!-- Main Content Container -->
-    <main class="flex-1 flex flex-col min-w-0 bg-dark-950 overflow-y-auto">
-
-      <!-- Top Header -->
-      <header class="h-14 border-b border-zinc-800/80 bg-dark-900/60 backdrop-blur-md px-5 flex items-center justify-between sticky top-0 z-20">
-        <div class="flex items-center gap-2.5">
-          <h1 id="topPageTitle" class="text-xs sm:text-sm font-bold text-white">Overview & Analytics</h1>
-          <span class="hidden sm:inline text-zinc-600">|</span>
-          <span class="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-mono text-zinc-400">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Supabase Connected
-          </span>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <button onclick="refreshAllData()" class="px-2.5 py-1.5 rounded-lg bg-dark-950 border border-zinc-800 text-zinc-300 hover:text-gold-400 text-xs transition flex items-center gap-1.5">
-            <i class="fa-solid fa-rotate"></i>
-            <span class="hidden sm:inline">Sync DB</span>
-          </button>
-          <button onclick="openProductModal()" class="px-3 py-1.5 rounded-lg bg-gold-500 hover:bg-gold-400 text-black font-bold text-xs transition flex items-center gap-1.5 shadow-md shadow-gold-500/10">
-            <i class="fa-solid fa-plus"></i>
-            <span>Add Eyewear</span>
-          </button>
-        </div>
-      </header>
-
-      <div class="p-5 sm:p-7 space-y-6">
-
-        <!-- ==================================================== -->
-        <!-- TAB 1: OVERVIEW DASHBOARD -->
-        <!-- ==================================================== -->
-        <div id="page-dashboard" class="tab-content space-y-6">
-
-          <!-- 4 Stats Cards Grid -->
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <div class="bg-dark-900 border border-zinc-800/90 rounded-2xl p-4 relative overflow-hidden">
-              <div class="flex items-center justify-between text-zinc-400 mb-2">
-                <span class="text-[11px] font-medium uppercase tracking-wider">Total Sales</span>
-                <i class="fa-solid fa-sack-dollar text-gold-400 text-xs"></i>
-              </div>
-              <p class="text-xl sm:text-2xl font-bold text-white font-mono tracking-tight" id="metricTotalRevenue">PKR 0</p>
-              <p class="text-[10px] text-emerald-400 mt-1 font-mono flex items-center gap-1">
-                <i class="fa-solid fa-arrow-trend-up"></i> Confirmed & Delivered
-              </p>
-            </div>
-
-            <div class="bg-dark-900 border border-zinc-800/90 rounded-2xl p-4 relative overflow-hidden">
-              <div class="flex items-center justify-between text-zinc-400 mb-2">
-                <span class="text-[11px] font-medium uppercase tracking-wider">Pending Orders</span>
-                <i class="fa-solid fa-clock text-amber-400 text-xs"></i>
-              </div>
-              <p class="text-xl sm:text-2xl font-bold text-amber-400 font-mono tracking-tight" id="metricPendingOrders">0</p>
-              <p class="text-[10px] text-zinc-400 mt-1 font-mono">Requires verification</p>
-            </div>
-
-            <div class="bg-dark-900 border border-zinc-800/90 rounded-2xl p-4 relative overflow-hidden">
-              <div class="flex items-center justify-between text-zinc-400 mb-2">
-                <span class="text-[11px] font-medium uppercase tracking-wider">Catalog Inventory</span>
-                <i class="fa-solid fa-glasses text-sky-400 text-xs"></i>
-              </div>
-              <p class="text-xl sm:text-2xl font-bold text-white font-mono tracking-tight" id="metricTotalProducts">0</p>
-              <p class="text-[10px] text-zinc-400 mt-1 font-mono" id="metricInStockCount">0 In Stock</p>
-            </div>
-
-            <div class="bg-dark-900 border border-zinc-800/90 rounded-2xl p-4 relative overflow-hidden">
-              <div class="flex items-center justify-between text-zinc-400 mb-2">
-                <span class="text-[11px] font-medium uppercase tracking-wider">Total Orders</span>
-                <i class="fa-solid fa-truck-fast text-emerald-400 text-xs"></i>
-              </div>
-              <p class="text-xl sm:text-2xl font-bold text-white font-mono tracking-tight" id="metricTotalOrders">0</p>
-              <p class="text-[10px] text-zinc-400 mt-1 font-mono" id="metricCompletedOrders">0 Completed</p>
-            </div>
-          </div>
-
-          <!-- Quick Action & Recent Orders Section -->
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            <!-- Recent Orders Summary (2 Cols) -->
-            <div class="lg:col-span-2 bg-dark-900 border border-zinc-800/90 rounded-2xl p-5">
-              <div class="flex items-center justify-between mb-4">
-                <h2 class="text-sm font-bold text-white flex items-center gap-2">
-                  <i class="fa-solid fa-receipt text-gold-400"></i>
-                  <span>Recent Customer Orders</span>
-                </h2>
-                <button onclick="switchTab('orders')" class="text-xs text-gold-400 hover:underline">View All &rarr;</button>
-              </div>
-              <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
-                  <thead>
-                    <tr class="border-b border-zinc-800 text-[10px] font-mono uppercase text-zinc-500 tracking-wider">
-                      <th class="pb-2.5 font-medium">Order ID</th>
-                      <th class="pb-2.5 font-medium">Customer</th>
-                      <th class="pb-2.5 font-medium">Amount</th>
-                      <th class="pb-2.5 font-medium">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody id="overviewRecentOrdersTable" class="divide-y divide-zinc-800/60">
-                    <tr>
-                      <td colspan="4" class="py-6 text-center text-zinc-500 font-mono">Loading recent orders...</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- Store Quick Controls & Owner Info (1 Col) -->
-            <div class="space-y-4">
-              <div class="bg-dark-900 border border-zinc-800/90 rounded-2xl p-5 space-y-3">
-                <h3 class="text-xs font-bold text-white uppercase tracking-wider text-zinc-400 flex items-center gap-2">
-                  <i class="fa-solid fa-store text-gold-400"></i>
-                  <span>Store Contact Details</span>
-                </h3>
-                <div class="text-xs space-y-2 text-zinc-300 font-mono">
-                  <div class="p-2.5 rounded-xl bg-dark-950 border border-zinc-800/80">
-                    <p class="text-[10px] text-zinc-400 uppercase">WhatsApp & Call</p>
-                    <p class="text-white font-bold text-xs mt-0.5">+92 323 5676767</p>
-                  </div>
-                  <div class="p-2.5 rounded-xl bg-dark-950 border border-zinc-800/80">
-                    <p class="text-[10px] text-zinc-400 uppercase">Store Location</p>
-                    <p class="text-white text-xs mt-0.5">Shop #1, Saidpur Road, Rawalpindi</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ==================================================== -->
-        <!-- TAB 2: PRODUCTS INVENTORY -->
-        <!-- ==================================================== -->
-        <div id="page-products" class="tab-content hidden space-y-4">
-          <div class="bg-dark-900 border border-zinc-800/90 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-            <div class="relative flex-1 max-w-md">
-              <i class="fa-solid fa-magnifying-glass text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 text-xs"></i>
-              <input 
-                type="text" 
-                id="productSearchInput" 
-                oninput="filterProductsList()" 
-                placeholder="Search by title, brand, model or frame type..." 
-                class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl pl-9 pr-3 py-2 text-white placeholder-zinc-500 text-xs focus:outline-none"
-              />
-            </div>
-            <div class="flex items-center gap-2">
-              <select 
-                id="productCategoryFilter" 
-                onchange="filterProductsList()" 
-                class="bg-dark-950 border border-zinc-800 text-zinc-300 text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-gold-500"
-              >
-                <option value="all">All Categories</option>
-                <option value="Glasses">Eyeglasses</option>
-                <option value="Sunglasses">Sunglasses</option>
-                <option value="Contact Lenses">Contact Lenses</option>
-                <option value="Accessories">Accessories</option>
-              </select>
-              <button 
-                onclick="openProductModal()" 
-                class="px-3.5 py-2 rounded-xl bg-gold-500 hover:bg-gold-400 text-black font-bold text-xs transition flex items-center gap-1.5 shadow-md shadow-gold-500/10 cursor-pointer whitespace-nowrap"
-              >
-                <i class="fa-solid fa-plus"></i>
-                <span>Add Product</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Products Table -->
-          <div class="bg-dark-900 border border-zinc-800/90 rounded-2xl overflow-hidden shadow-xl">
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs">
-                <thead class="bg-dark-950/80 border-b border-zinc-800 text-[10px] font-mono uppercase text-zinc-400 tracking-wider">
-                  <tr>
-                    <th class="py-3 px-4 font-medium">Eyewear / Brand</th>
-                    <th class="py-3 px-4 font-medium">Category</th>
-                    <th class="py-3 px-4 font-medium">Price (PKR)</th>
-                    <th class="py-3 px-4 font-medium">Availability</th>
-                    <th class="py-3 px-4 font-medium text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="productsTableBody" class="divide-y divide-zinc-800/60">
-                  <tr>
-                    <td colspan="5" class="py-8 text-center text-zinc-500 font-mono">Loading eyewear catalog...</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ==================================================== -->
-        <!-- TAB 3: ORDERS MANAGEMENT -->
-        <!-- ==================================================== -->
-        <div id="page-orders" class="tab-content hidden space-y-4">
-          <div class="bg-dark-900 border border-zinc-800/90 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-            <div class="relative flex-1 max-w-md">
-              <i class="fa-solid fa-magnifying-glass text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 text-xs"></i>
-              <input 
-                type="text" 
-                id="orderSearchInput" 
-                oninput="filterOrdersList()" 
-                placeholder="Search orders by customer, phone, ID or city..." 
-                class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl pl-9 pr-3 py-2 text-white placeholder-zinc-500 text-xs focus:outline-none"
-              />
-            </div>
-            <div class="flex items-center gap-2">
-              <select 
-                id="orderStatusFilter" 
-                onchange="filterOrdersList()" 
-                class="bg-dark-950 border border-zinc-800 text-zinc-300 text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-gold-500"
-              >
-                <option value="all">All Order Statuses</option>
-                <option value="Pending">Pending Verification</option>
-                <option value="Processing">Processing / Assembling</option>
-                <option value="Shipped">Dispatched / Shipped</option>
-                <option value="Completed">Completed / Delivered</option>
-                <option value="Cancelled">Cancelled</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Orders Table -->
-          <div class="bg-dark-900 border border-zinc-800/90 rounded-2xl overflow-hidden shadow-xl">
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs">
-                <thead class="bg-dark-950/80 border-b border-zinc-800 text-[10px] font-mono uppercase text-zinc-400 tracking-wider">
-                  <tr>
-                    <th class="py-3 px-4 font-medium">Order Reference</th>
-                    <th class="py-3 px-4 font-medium">Customer Details</th>
-                    <th class="py-3 px-4 font-medium">Prescription / Items</th>
-                    <th class="py-3 px-4 font-medium">Amount & Method</th>
-                    <th class="py-3 px-4 font-medium">Status</th>
-                    <th class="py-3 px-4 font-medium text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="ordersTableBody" class="divide-y divide-zinc-800/60">
-                  <tr>
-                    <td colspan="6" class="py-8 text-center text-zinc-500 font-mono">Loading orders...</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </main>
-  </div>
-
-  <!-- ======================================================== -->
-  <!-- 3. PRODUCT CREATE / EDIT MODAL -->
-  <!-- ======================================================== -->
-  <div id="productModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="w-full max-w-lg bg-dark-900 border border-zinc-800 rounded-2xl p-5 sm:p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between pb-3 border-b border-zinc-800 mb-4">
-        <h3 id="productModalTitle" class="text-sm font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-glasses text-gold-400"></i>
-          <span>Add New Eyewear Item</span>
-        </h3>
-        <button onclick="closeProductModal()" class="text-zinc-500 hover:text-white p-1">
-          <i class="fa-solid fa-xmark text-sm"></i>
-        </button>
-      </div>
-
-      <form id="productForm" onsubmit="handleSaveProduct(event)" class="space-y-3.5 text-xs">
-        <input type="hidden" id="editProductId" value="" />
-
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto max-h-screen p-4 sm:p-8">
+      
+      <!-- Top Bar -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-zinc-800/80 mb-6">
         <div>
-          <label class="block text-zinc-300 font-medium mb-1">Product Title *</label>
-          <input 
-            type="text" 
-            id="pTitle" 
-            required 
-            placeholder="e.g. Ray-Ban Aviator Classic Gold" 
-            class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl px-3 py-2 text-white focus:outline-none"
-          />
+          <h1 id="pageTitle" class="text-xl sm:text-2xl font-bold text-white">Dashboard Overview</h1>
+          <p id="pageSubtitle" class="text-xs text-zinc-400 mt-1">Live analytics, sales data, and store inventory status</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="refreshAllData()" class="px-3 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <span>Sync Supabase</span>
+          </button>
+          <button onclick="openAddProductModal()" class="px-3.5 py-2 rounded-xl bg-gold-500 hover:bg-gold-400 text-dark-950 font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-gold-500/20 transition">
+            <i class="fa-solid fa-plus"></i>
+            <span>Add New Frame</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TAB 1: DASHBOARD OVERVIEW -->
+      <section id="tab-dashboard" class="space-y-6">
+        <!-- Metric Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-4 rounded-2xl bg-dark-900 border border-zinc-800">
+            <p class="text-[11px] text-zinc-400 font-medium">Total Orders</p>
+            <h3 id="statTotalOrders" class="text-2xl font-bold text-white mt-1">0</h3>
+            <span class="text-[10px] text-emerald-400 mt-1 inline-block">Online + WhatsApp</span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-dark-900 border border-zinc-800">
+            <p class="text-[11px] text-zinc-400 font-medium">Total Revenue</p>
+            <h3 id="statTotalRevenue" class="text-2xl font-bold text-gold-400 mt-1">Rs. 0</h3>
+            <span class="text-[10px] text-zinc-500 mt-1 inline-block">Gross sales</span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-dark-900 border border-zinc-800">
+            <p class="text-[11px] text-zinc-400 font-medium">Pending Orders</p>
+            <h3 id="statPendingOrders" class="text-2xl font-bold text-amber-400 mt-1">0</h3>
+            <span class="text-[10px] text-amber-400/80 mt-1 inline-block">Awaiting fulfillment</span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-dark-900 border border-zinc-800">
+            <p class="text-[11px] text-zinc-400 font-medium">Total Frames in Stock</p>
+            <h3 id="statTotalProducts" class="text-2xl font-bold text-white mt-1">0</h3>
+            <span class="text-[10px] text-zinc-500 mt-1 inline-block">Active inventory</span>
+          </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-zinc-300 font-medium mb-1">Brand *</label>
+        <!-- Recent Orders Preview -->
+        <div class="bg-dark-900 border border-zinc-800 rounded-2xl p-5">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-sm text-white flex items-center gap-2">
+              <i class="fa-solid fa-clock-rotate-left text-gold-400"></i>
+              <span>Recent Customer Orders</span>
+            </h3>
+            <button onclick="switchTab('orders')" class="text-xs text-gold-400 hover:underline">View All Orders</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="border-b border-zinc-800 text-zinc-400">
+                  <th class="pb-3 font-semibold">Order ID</th>
+                  <th class="pb-3 font-semibold">Customer</th>
+                  <th class="pb-3 font-semibold">Contact</th>
+                  <th class="pb-3 font-semibold">Total Amount</th>
+                  <th class="pb-3 font-semibold">Status</th>
+                  <th class="pb-3 font-semibold text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="recentOrdersTableBody" class="divide-y divide-zinc-800/60">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: PRODUCTS & INVENTORY -->
+      <section id="tab-products" class="hidden space-y-4">
+        <div class="flex flex-col sm:flex-row gap-3 items-center justify-between bg-dark-900 border border-zinc-800 p-3.5 rounded-2xl">
+          <div class="relative w-full sm:w-72">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-xs"></i>
             <input 
               type="text" 
-              id="pBrand" 
-              required 
-              placeholder="Ray-Ban, Gucci, Oakley..." 
-              class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl px-3 py-2 text-white focus:outline-none"
+              id="productSearchInput" 
+              oninput="renderProductsTable()" 
+              placeholder="Search by title, brand, model..." 
+              class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl pl-9 pr-3 py-2 text-xs text-white focus:outline-none"
             />
           </div>
-          <div>
-            <label class="block text-zinc-300 font-medium mb-1">Category *</label>
-            <select id="pCategory" class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl px-3 py-2 text-white focus:outline-none">
-              <option value="Glasses">Glasses</option>
-              <option value="Sunglasses">Sunglasses</option>
-              <option value="Contact Lenses">Contact Lenses</option>
-              <option value="Accessories">Accessories</option>
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <select id="productFilterCategory" onchange="renderProductsTable()" class="bg-dark-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-300 focus:outline-none">
+              <option value="all">All Categories</option>
+              <option value="eyeglasses">Eyeglasses</option>
+              <option value="sunglasses">Sunglasses</option>
+              <option value="reading">Reading</option>
+              <option value="kids">Kids</option>
             </select>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-zinc-300 font-medium mb-1">Price in PKR *</label>
-            <input 
-              type="number" 
-              id="pPrice" 
-              required 
-              min="0" 
-              placeholder="e.g. 7500" 
-              class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl px-3 py-2 text-white font-mono focus:outline-none"
-            />
-          </div>
-          <div>
-            <label class="block text-zinc-300 font-medium mb-1">Frame Type / Material</label>
-            <input 
-              type="text" 
-              id="pFrameType" 
-              placeholder="e.g. Full Rim Titanium" 
-              class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl px-3 py-2 text-white focus:outline-none"
-            />
+        <div class="bg-dark-900 border border-zinc-800 rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-dark-950/60 text-zinc-400 border-b border-zinc-800">
+                <tr>
+                  <th class="p-3.5 font-semibold">Product</th>
+                  <th class="p-3.5 font-semibold">Model #</th>
+                  <th class="p-3.5 font-semibold">Category</th>
+                  <th class="p-3.5 font-semibold">Price (PKR)</th>
+                  <th class="p-3.5 font-semibold">Stock</th>
+                  <th class="p-3.5 font-semibold text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody" class="divide-y divide-zinc-800/60">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
           </div>
         </div>
+      </section>
 
-        <div>
-          <label class="block text-zinc-300 font-medium mb-1">Image URL (Unsplash or direct image link)</label>
-          <input 
-            type="url" 
-            id="pImage" 
-            placeholder="https://images.unsplash.com/..." 
-            class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl px-3 py-2 text-white text-[11px] focus:outline-none"
-          />
+      <!-- TAB 3: ORDERS MANAGEMENT -->
+      <section id="tab-orders" class="hidden space-y-4">
+        <div class="bg-dark-900 border border-zinc-800 rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-dark-950/60 text-zinc-400 border-b border-zinc-800">
+                <tr>
+                  <th class="p-3.5 font-semibold">Order ID</th>
+                  <th class="p-3.5 font-semibold">Date</th>
+                  <th class="p-3.5 font-semibold">Customer</th>
+                  <th class="p-3.5 font-semibold">Phone / WhatsApp</th>
+                  <th class="p-3.5 font-semibold">Items</th>
+                  <th class="p-3.5 font-semibold">Total (PKR)</th>
+                  <th class="p-3.5 font-semibold">Status</th>
+                  <th class="p-3.5 font-semibold text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="fullOrdersTableBody" class="divide-y divide-zinc-800/60">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
         </div>
+      </section>
 
-        <div>
-          <label class="block text-zinc-300 font-medium mb-1">Description</label>
-          <textarea 
-            id="pDescription" 
-            rows="2" 
-            placeholder="Key features, temple length, lens width..." 
-            class="w-full bg-dark-950 border border-zinc-800 focus:border-gold-500 rounded-xl px-3 py-2 text-white focus:outline-none resize-none"
-          ></textarea>
-        </div>
-
-        <div class="flex items-center gap-2 pt-1">
-          <input type="checkbox" id="pInStock" class="rounded bg-dark-950 border-zinc-800 text-gold-500 focus:ring-0" checked />
-          <label for="pInStock" class="text-zinc-300">Available In Stock for Purchase</label>
-        </div>
-
-        <div class="pt-3 border-t border-zinc-800 flex justify-end gap-2">
-          <button 
-            type="button" 
-            onclick="closeProductModal()" 
-            class="px-3.5 py-2 rounded-xl bg-dark-950 border border-zinc-800 text-zinc-400 hover:text-white"
-          >
-            Cancel
+      <!-- TAB 4: STORE SETTINGS -->
+      <section id="tab-settings" class="hidden space-y-4 max-w-2xl">
+        <div class="bg-dark-900 border border-zinc-800 rounded-2xl p-6 space-y-4 text-xs">
+          <h3 class="font-bold text-sm text-white">Official Store Contact Info</h3>
+          <div>
+            <label class="block text-zinc-400 mb-1">Official WhatsApp & Mobile</label>
+            <input type="text" id="settingsPhone" value="0334-5514480" class="w-full bg-dark-950 border border-zinc-800 rounded-xl px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-zinc-400 mb-1">Store Address</label>
+            <input type="text" id="settingsAddress" value="Shop #2, Al-Rehman Shopping Mall, Sector G-11/3, Islamabad" class="w-full bg-dark-950 border border-zinc-800 rounded-xl px-3 py-2 text-white" />
+          </div>
+          <div>
+            <label class="block text-zinc-400 mb-1">Free Delivery Minimum (PKR)</label>
+            <input type="number" id="settingsFreeDelivery" value="3000" class="w-full bg-dark-950 border border-zinc-800 rounded-xl px-3 py-2 text-white" />
+          </div>
+          <button onclick="saveStoreSettings()" class="px-5 py-2.5 rounded-xl bg-gold-500 hover:bg-gold-400 text-dark-950 font-bold text-xs transition">
+            Save Settings
           </button>
-          <button 
-            type="submit" 
-            id="saveProductBtn" 
-            class="px-4 py-2 rounded-xl bg-gold-500 hover:bg-gold-400 text-black font-bold flex items-center gap-1.5 shadow-md shadow-gold-500/10 cursor-pointer"
-          >
-            <i class="fa-solid fa-check"></i>
-            <span>Save Eyewear</span>
-          </button>
         </div>
-      </form>
-    </div>
+      </section>
+
+    </main>
   </div>
 
   <!-- Toast Notification -->
-  <div id="adminToast" class="fixed bottom-5 right-5 z-50 bg-dark-900 border border-gold-500/40 text-gold-400 px-4 py-2.5 rounded-xl shadow-2xl text-xs hidden items-center gap-2 font-mono">
-    <i class="fa-solid fa-circle-check text-gold-400"></i>
-    <span id="adminToastMsg">Changes saved</span>
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="bg-zinc-800 border border-gold-500/30 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-xs">
+      <i class="fa-solid fa-circle-check text-gold-400 text-sm"></i>
+      <span id="toastMsg">Operation successful</span>
+    </div>
   </div>
 
-  <!-- ======================================================== -->
-  <!-- 4. CORE JAVASCRIPT & SUPABASE SYNC LOGIC -->
-  <!-- ======================================================== -->
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
+  <!-- ========================================== -->
   <script>
-    // Supabase Credentials
-    const SUPABASE_URL = "https://aezsffxptwwhxepoxnxy.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlenNmZnhwdHd3aHhlcG94bnh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNTU2MjksImV4cCI6MjA4ODkzMTYyOX0.p3aF94a6qT68L_T84Bq_W0F0uD1JqL6qN4Q4W0F0uD1";
+    // Supabase Configuration
+    const SUPABASE_URL = 'https://lffkigxhycbmhskvjexd.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmZmtpZ3hoeWNibWhza3ZqZXhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MDc4NjYsImV4cCI6MjA4ODk4Mzg2Nn0.89uIvhJd5402n4F-G6Z_48U9P98Hq2g_kRkP2fVwK8g';
 
     let supabase = null;
     try {
       if (window.supabase) {
         supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       }
-    } catch (err) {
-      console.warn("Supabase initialization note:", err);
+    } catch (e) {
+      console.warn('Supabase initialization fallback:', e);
     }
 
+    // Initial state
     let currentUser = null;
-    let productsList = [];
-    let ordersList = [];
+    let products = [];
+    let orders = [];
 
-    // Fallback Initial Data
-    const DEFAULT_PRODUCTS = [
-      {
-        id: '1',
-        title: 'Ray-Ban Aviator Classic',
-        brand: 'Ray-Ban',
-        category: 'Glasses',
-        price: 8500,
-        frame_type: 'Full Rim Metal',
-        image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=800',
-        in_stock: true,
-        description: 'Timeless tear-drop shaped pilot design with high-clarity lenses.'
-      },
-      {
-        id: '2',
-        title: 'Gucci Square Obsidian',
-        brand: 'Gucci',
-        category: 'Glasses',
-        price: 18500,
-        frame_type: 'Acetate Luxury',
-        image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&q=80&w=800',
-        in_stock: true,
-        description: 'Statement Italian acetate optical frame with signature gold temples.'
-      },
-      {
-        id: '3',
-        title: 'Carrera Vintage Navigator',
-        brand: 'Carrera',
-        category: 'Sunglasses',
-        price: 9800,
-        frame_type: 'Aviator Composite',
-        image: 'https://images.unsplash.com/photo-1508296695146-257a814070b4?auto=format&fit=crop&q=80&w=800',
-        in_stock: true,
-        description: 'Heritage motorsport inspired aesthetic with polarized UV400 lenses.'
-      }
-    ];
-
-    const DEFAULT_ORDERS = [
-      {
-        id: 'ORD-1001',
-        customer_name: 'Muhammad Shaheer',
-        phone_number: '0323-5676767',
-        address: 'Main Shop, Saidpur Road',
-        city: 'Rawalpindi',
-        items: 'Ray-Ban Aviator Classic (1x)',
-        total_price: 8500,
-        payment_method: 'JazzCash',
-        transaction_id: 'JC98124508',
-        status: 'Pending',
-        created_at: new Date(Date.now() - 3600000 * 2).toISOString()
-      },
-      {
-        id: 'ORD-1002',
-        customer_name: 'Dr. Usman Tariq',
-        phone_number: '0300-9876543',
-        address: 'House 42, Street 10, Sector F-8/2',
-        city: 'Islamabad',
-        items: 'Gucci Square Obsidian (1x)',
-        total_price: 18500,
-        payment_method: 'EasyPaisa',
-        transaction_id: 'EP77321094',
-        status: 'Processing',
-        created_at: new Date(Date.now() - 3600000 * 18).toISOString()
-      }
-    ];
-
-    document.addEventListener('DOMContentLoaded', () => {
+    // Check login state on load
+    window.addEventListener('DOMContentLoaded', () => {
       checkAuthSession();
     });
 
-    // ==========================================
-    // AUTHENTICATION GUARD & SCREEN SWITCHING
-    // ==========================================
-    function showDashboard(email) {
-      const authScreen = document.getElementById('authScreen');
-      const adminApp = document.getElementById('adminApp');
-      
-      if (authScreen) {
-        authScreen.style.setProperty('display', 'none', 'important');
-        authScreen.classList.add('hidden');
-        authScreen.classList.remove('flex');
-      }
-      if (adminApp) {
-        adminApp.style.setProperty('display', 'flex', 'important');
-        adminApp.classList.remove('hidden');
-        adminApp.classList.add('flex');
-      }
-
-      const emailElem = document.getElementById('adminUserEmail');
-      if (emailElem) {
-        emailElem.textContent = email || 'admin@shaheeropticals.com';
-      }
-
-      try {
-        refreshAllData();
-      } catch (err) {
-        console.warn('Dashboard data refresh note:', err);
-      }
-    }
-
-    function showAuthScreen() {
-      const authScreen = document.getElementById('authScreen');
-      const adminApp = document.getElementById('adminApp');
-      
-      if (authScreen) {
-        authScreen.style.setProperty('display', 'flex', 'important');
-        authScreen.classList.remove('hidden');
-        authScreen.classList.add('flex');
-      }
-      if (adminApp) {
-        adminApp.style.setProperty('display', 'none', 'important');
-        adminApp.classList.add('hidden');
-        adminApp.classList.remove('flex');
-      }
-    }
-
-    async function checkAuthSession() {
-      // 1. Check local session
-      const localSession = localStorage.getItem('shaheer_admin_auth');
-      if (localSession) {
-        currentUser = { email: localSession };
-        showDashboard(localSession);
+    function checkAuthSession() {
+      const local = localStorage.getItem('shaheer_admin_auth');
+      if (local) {
+        currentUser = { email: local };
+        showDashboard(local);
         return;
       }
-
-      // 2. Check Supabase Auth session with timeout protection
-      if (supabase) {
-        try {
-          const sessionPromise = supabase.auth.getSession();
-          const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 2000));
-          const { data: { session } } = await Promise.race([sessionPromise, timeoutPromise]);
-          if (session && session.user) {
-            currentUser = session.user;
-            showDashboard(currentUser.email);
-            return;
-          }
-        } catch (err) {
-          console.warn('Supabase session skipped:', err);
-        }
-      }
-
       showAuthScreen();
     }
 
-    function quickFillAdmin() {
-      const u = document.getElementById('adminEmail');
-      const p = document.getElementById('adminPassword');
-      if (u) u.value = 'admin@shaheeropticals.com';
-      if (p) p.value = 'shaheer2026';
+    function showDashboard(email) {
+      const auth = document.getElementById('authScreen');
+      const app = document.getElementById('adminApp');
+      if (auth) auth.classList.add('hidden');
+      if (app) app.classList.remove('hidden');
+      document.getElementById('loggedInUserEmail').textContent = email || 'admin@shaheeropticals.com';
+      renderInitialData();
     }
 
-    async function handleLogin(e) {
-      if (e) e.preventDefault();
-      const userField = document.getElementById('adminEmail');
-      const passField = document.getElementById('adminPassword');
-      const rawUser = (userField ? userField.value : '').trim();
-      const rawPass = (passField ? passField.value : '').trim();
-      const submitBtn = document.getElementById('loginSubmitBtn');
-      const errBox = document.getElementById('loginErrorMsg');
-
-      if (errBox) errBox.classList.add('hidden');
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i><span>Verifying...</span>`;
-      }
-
-      try {
-        if (supabase && rawUser.includes('@') && rawPass.length >= 6) {
-          try {
-            const authPromise = supabase.auth.signInWithPassword({ email: rawUser, password: rawPass });
-            const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 2500));
-            const { data, error } = await Promise.race([authPromise, timeoutPromise]);
-            if (!error && data?.user) {
-              currentUser = data.user;
-              const email = currentUser.email || rawUser;
-              localStorage.setItem('shaheer_admin_auth', email);
-              showDashboard(email);
-              showToast('Logged in via Supabase Auth');
-              return;
-            }
-          } catch (supaErr) {
-            console.warn('Supabase Auth skipped or timed out:', supaErr);
-          }
-        }
-
-        // Direct Admin Access
-        const adminEmail = rawUser || 'admin@shaheeropticals.com';
-        currentUser = { email: adminEmail };
-        localStorage.setItem('shaheer_admin_auth', adminEmail);
-        showDashboard(adminEmail);
-        showToast('Welcome to Shaheer Opticals Admin!');
-      } catch (err) {
-        console.error('Login error:', err);
-        const fallbackEmail = rawUser || 'admin@shaheeropticals.com';
-        currentUser = { email: fallbackEmail };
-        localStorage.setItem('shaheer_admin_auth', fallbackEmail);
-        showDashboard(fallbackEmail);
-        showToast('Admin Access Activated');
-      } finally {
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i><span>Secure Sign In</span>`;
-        }
-      }
+    function showAuthScreen() {
+      const auth = document.getElementById('authScreen');
+      const app = document.getElementById('adminApp');
+      if (auth) auth.classList.remove('hidden');
+      if (app) app.classList.add('hidden');
     }
 
-    function enableDemoAdminMode() {
-      currentUser = { email: 'admin@shaheeropticals.com' };
-      localStorage.setItem('shaheer_admin_auth', currentUser.email);
-      showDashboard(currentUser.email);
+    function bypassToDashboard(email) {
+      currentUser = { email };
+      localStorage.setItem('shaheer_admin_auth', email);
+      showDashboard(email);
       showToast('1-Click Direct Admin Access Granted!');
     }
 
-    async function handleLogout() {
-      if (supabase) {
-        try {
-          await supabase.auth.signOut();
-        } catch (err) {
-          console.warn('Signout note:', err);
-        }
-      }
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value || 'admin@shaheeropticals.com';
+      bypassToDashboard(email);
+    }
+
+    function handleLogout() {
       localStorage.removeItem('shaheer_admin_auth');
       currentUser = null;
       showAuthScreen();
       showToast('Logged out successfully');
     }
 
-    // ==========================================
-    // DATA FETCHING & SYNCHRONIZATION
-    // ==========================================
-    async function refreshAllData() {
-      await Promise.all([fetchProducts(), fetchOrders()]);
-      updateMetrics();
-    }
-
-    async function fetchProducts() {
-      let fetched = null;
-      if (supabase) {
-        try {
-          const { data, error } = await supabase.from('products').select('*').order('id', { ascending: false });
-          if (!error && data && data.length > 0) {
-            fetched = data;
-          }
-        } catch (err) {
-          console.warn('Supabase products fetch note:', err);
-        }
-      }
-
-      if (!fetched) {
-        const local = localStorage.getItem('shaheer_admin_products');
-        if (local) {
-          try { fetched = JSON.parse(local); } catch (e) {}
-        }
-      }
-
-      productsList = fetched && fetched.length > 0 ? fetched : DEFAULT_PRODUCTS;
-      localStorage.setItem('shaheer_admin_products', JSON.stringify(productsList));
-      renderProductsTable();
-    }
-
-    async function fetchOrders() {
-      let fetched = null;
-      if (supabase) {
-        try {
-          const { data, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
-          if (!error && data && data.length > 0) {
-            fetched = data;
-          }
-        } catch (err) {
-          console.warn('Supabase orders fetch note:', err);
-        }
-      }
-
-      if (!fetched) {
-        const local = localStorage.getItem('shaheer_admin_orders');
-        if (local) {
-          try { fetched = JSON.parse(local); } catch (e) {}
-        }
-      }
-
-      ordersList = fetched && fetched.length > 0 ? fetched : DEFAULT_ORDERS;
-      localStorage.setItem('shaheer_admin_orders', JSON.stringify(ordersList));
-      renderOrdersTable();
-    }
-
-    function updateMetrics() {
-      const totalRev = ordersList
-        .filter(o => o.status === 'Completed' || o.status === 'Delivered' || o.status === 'Processing')
-        .reduce((sum, o) => sum + (Number(o.total_price) || 0), 0);
-
-      const pendingCount = ordersList.filter(o => o.status === 'Pending').length;
-      const completedCount = ordersList.filter(o => o.status === 'Completed' || o.status === 'Delivered').length;
-      const inStockCount = productsList.filter(p => p.in_stock).length;
-
-      document.getElementById('metricTotalRevenue').textContent = `PKR ${totalRev.toLocaleString()}`;
-      document.getElementById('metricPendingOrders').textContent = pendingCount;
-      document.getElementById('metricTotalProducts').textContent = productsList.length;
-      document.getElementById('metricInStockCount').textContent = `${inStockCount} In Stock`;
-      document.getElementById('metricTotalOrders').textContent = ordersList.length;
-      document.getElementById('metricCompletedOrders').textContent = `${completedCount} Completed`;
-
-      document.getElementById('sidebarStockBadge').textContent = productsList.length;
-      document.getElementById('sidebarOrderBadge').textContent = pendingCount;
-
-      renderOverviewRecentOrders();
-    }
-
-    function renderOverviewRecentOrders() {
-      const tbody = document.getElementById('overviewRecentOrdersTable');
-      if (!tbody) return;
-
-      const recents = ordersList.slice(0, 5);
-      if (recents.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-zinc-500 font-mono">No orders placed yet.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = recents.map(order => {
-        const statusColors = {
-          Pending: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-          Processing: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
-          Shipped: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
-          Completed: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-          Cancelled: 'bg-rose-500/20 text-rose-300 border-rose-500/30'
-        };
-        const badgeStyle = statusColors[order.status] || 'bg-zinc-800 text-zinc-300 border-zinc-700';
-
-        return `
-          <tr class="hover:bg-dark-950/40 transition">
-            <td class="py-2.5 font-mono text-zinc-300 font-bold">#${escapeHtml(String(order.id).slice(-6))}</td>
-            <td class="py-2.5 text-white">${escapeHtml(order.customer_name || 'Walk-in Guest')}</td>
-            <td class="py-2.5 font-mono text-gold-400">PKR ${Number(order.total_price || 0).toLocaleString()}</td>
-            <td class="py-2.5">
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-mono border ${badgeStyle}">
-                ${escapeHtml(order.status || 'Pending')}
-              </span>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    // ==========================================
-    // PRODUCTS MANAGEMENT (CRUD)
-    // ==========================================
-    function renderProductsTable(filtered = null) {
-      const tbody = document.getElementById('productsTableBody');
-      if (!tbody) return;
-
-      const items = filtered || productsList;
-      if (items.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-zinc-500 font-mono">No eyewear products found.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = items.map(p => `
-        <tr class="hover:bg-dark-950/40 transition">
-          <td class="py-3 px-4">
-            <div class="flex items-center gap-3">
-              <img src="${p.image || 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=200'}" alt="" class="w-10 h-10 object-cover rounded-lg border border-zinc-800 bg-dark-950 flex-shrink-0" onerror="this.src='https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=200'" />
-              <div class="min-w-0">
-                <p class="font-bold text-white text-xs truncate">${escapeHtml(p.title)}</p>
-                <p class="text-[10px] text-gold-400 font-mono">${escapeHtml(p.brand || 'Shaheer')} &bull; ${escapeHtml(p.frame_type || 'Standard')}</p>
-              </div>
-            </div>
-          </td>
-          <td class="py-3 px-4 font-mono text-zinc-300">${escapeHtml(p.category)}</td>
-          <td class="py-3 px-4 font-mono font-bold text-gold-400">PKR ${Number(p.price || 0).toLocaleString()}</td>
-          <td class="py-3 px-4">
-            <button onclick="toggleProductStock('${p.id}')" class="px-2 py-0.5 rounded-full text-[10px] font-mono border cursor-pointer ${p.in_stock ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border-rose-500/30'}">
-              ${p.in_stock ? '<i class="fa-solid fa-check mr-1"></i>In Stock' : '<i class="fa-solid fa-xmark mr-1"></i>Out of Stock'}
-            </button>
-          </td>
-          <td class="py-3 px-4 text-right">
-            <div class="flex items-center justify-end gap-1.5">
-              <button onclick="openEditProductModal('${p.id}')" title="Edit" class="p-1.5 rounded-lg bg-dark-950 hover:bg-zinc-800 text-zinc-400 hover:text-white transition">
-                <i class="fa-solid fa-pen-to-square text-xs"></i>
-              </button>
-              <button onclick="deleteProduct('${p.id}')" title="Delete" class="p-1.5 rounded-lg bg-dark-950 hover:bg-rose-950/50 text-zinc-400 hover:text-rose-400 transition">
-                <i class="fa-solid fa-trash-can text-xs"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    function filterProductsList() {
-      const q = (document.getElementById('productSearchInput').value || '').toLowerCase();
-      const cat = document.getElementById('productCategoryFilter').value;
-
-      const filtered = productsList.filter(p => {
-        const matchesQuery = !q || 
-          p.title.toLowerCase().includes(q) || 
-          p.brand.toLowerCase().includes(q) || 
-          (p.frame_type && p.frame_type.toLowerCase().includes(q));
-        const matchesCat = cat === 'all' || p.category === cat;
-        return matchesQuery && matchesCat;
-      });
-
-      renderProductsTable(filtered);
-    }
-
-    function openProductModal() {
-      document.getElementById('editProductId').value = '';
-      document.getElementById('productModalTitle').innerHTML = `<i class="fa-solid fa-glasses text-gold-400"></i><span>Add New Eyewear Item</span>`;
-      document.getElementById('productForm').reset();
-      document.getElementById('pInStock').checked = true;
-      document.getElementById('productModal').classList.remove('hidden');
-      document.getElementById('productModal').classList.add('flex');
-    }
-
-    function openEditProductModal(id) {
-      const p = productsList.find(item => String(item.id) === String(id));
-      if (!p) return;
-
-      document.getElementById('editProductId').value = p.id;
-      document.getElementById('productModalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square text-gold-400"></i><span>Edit Eyewear Item</span>`;
-      document.getElementById('pTitle').value = p.title || '';
-      document.getElementById('pBrand').value = p.brand || '';
-      document.getElementById('pCategory').value = p.category || 'Glasses';
-      document.getElementById('pPrice').value = p.price || 0;
-      document.getElementById('pFrameType').value = p.frame_type || '';
-      document.getElementById('pImage').value = p.image || '';
-      document.getElementById('pDescription').value = p.description || '';
-      document.getElementById('pInStock').checked = p.in_stock !== false;
-
-      document.getElementById('productModal').classList.remove('hidden');
-      document.getElementById('productModal').classList.add('flex');
-    }
-
-    function closeProductModal() {
-      document.getElementById('productModal').classList.remove('flex');
-      document.getElementById('productModal').classList.add('hidden');
-    }
-
-    async function handleSaveProduct(e) {
-      e.preventDefault();
-      const editId = document.getElementById('editProductId').value;
-      const title = document.getElementById('pTitle').value.trim();
-      const brand = document.getElementById('pBrand').value.trim();
-      const category = document.getElementById('pCategory').value;
-      const price = Number(document.getElementById('pPrice').value) || 0;
-      const frame_type = document.getElementById('pFrameType').value.trim();
-      const image = document.getElementById('pImage').value.trim() || 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800';
-      const description = document.getElementById('pDescription').value.trim();
-      const in_stock = document.getElementById('pInStock').checked;
-
-      const itemPayload = {
-        title,
-        brand,
-        category,
-        price,
-        frame_type,
-        image,
-        description,
-        in_stock
-      };
-
-      if (editId) {
-        // Edit existing
-        const idx = productsList.findIndex(p => String(p.id) === String(editId));
-        if (idx !== -1) {
-          productsList[idx] = { ...productsList[idx], ...itemPayload };
-        }
-        if (supabase) {
-          try {
-            await supabase.from('products').update(itemPayload).eq('id', editId);
-          } catch (err) {
-            console.warn('Supabase product update note:', err);
-          }
-        }
-        showToast('Product updated successfully');
-      } else {
-        // Create new
-        const newId = 'PROD-' + Date.now().toString().slice(-6);
-        const newProduct = { id: newId, ...itemPayload };
-        productsList.unshift(newProduct);
-        if (supabase) {
-          try {
-            await supabase.from('products').insert([itemPayload]);
-          } catch (err) {
-            console.warn('Supabase product insert note:', err);
-          }
-        }
-        showToast('New product added to catalog');
-      }
-
-      localStorage.setItem('shaheer_admin_products', JSON.stringify(productsList));
-      closeProductModal();
-      renderProductsTable();
-      updateMetrics();
-    }
-
-    async function toggleProductStock(id) {
-      const p = productsList.find(item => String(item.id) === String(id));
-      if (!p) return;
-
-      p.in_stock = !p.in_stock;
-      localStorage.setItem('shaheer_admin_products', JSON.stringify(productsList));
-
-      if (supabase) {
-        try {
-          await supabase.from('products').update({ in_stock: p.in_stock }).eq('id', id);
-        } catch (err) {}
-      }
-
-      renderProductsTable();
-      updateMetrics();
-      showToast(`Stock updated: ${p.in_stock ? 'In Stock' : 'Out of Stock'}`);
-    }
-
-    async function deleteProduct(id) {
-      if (!confirm('Are you sure you want to remove this item from your catalog?')) return;
-
-      productsList = productsList.filter(p => String(p.id) !== String(id));
-      localStorage.setItem('shaheer_admin_products', JSON.stringify(productsList));
-
-      if (supabase) {
-        try {
-          await supabase.from('products').delete().eq('id', id);
-        } catch (err) {}
-      }
-
-      renderProductsTable();
-      updateMetrics();
-      showToast('Product deleted from catalog');
-    }
-
-    // ==========================================
-    // ORDERS MANAGEMENT
-    // ==========================================
-    function renderOrdersTable(filtered = null) {
-      const tbody = document.getElementById('ordersTableBody');
-      if (!tbody) return;
-
-      const items = filtered || ordersList;
-      if (items.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-zinc-500 font-mono">No customer orders matching search.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = items.map(order => {
-        const statusColors = {
-          Pending: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-          Processing: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
-          Shipped: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
-          Completed: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-          Cancelled: 'bg-rose-500/20 text-rose-300 border-rose-500/30'
-        };
-        const badgeStyle = statusColors[order.status] || 'bg-zinc-800 text-zinc-300 border-zinc-700';
-
-        return `
-          <tr class="hover:bg-dark-950/40 transition">
-            <td class="py-3 px-4 font-mono">
-              <p class="text-white font-bold">#${escapeHtml(String(order.id).slice(-6))}</p>
-              <p class="text-[10px] text-zinc-500">${new Date(order.created_at || Date.now()).toLocaleDateString()}</p>
-            </td>
-            <td class="py-3 px-4">
-              <p class="text-white font-bold text-xs">${escapeHtml(order.customer_name || 'Guest Customer')}</p>
-              <p class="text-[11px] text-gold-400 font-mono">${escapeHtml(order.phone_number || 'N/A')}</p>
-              <p class="text-[10px] text-zinc-400 truncate max-w-xs">${escapeHtml(order.city || '')} &bull; ${escapeHtml(order.address || '')}</p>
-            </td>
-            <td class="py-3 px-4">
-              <p class="text-xs text-zinc-200 line-clamp-2">${escapeHtml(order.items || 'Standard Eyewear')}</p>
-            </td>
-            <td class="py-3 px-4 font-mono">
-              <p class="text-gold-400 font-bold">PKR ${Number(order.total_price || 0).toLocaleString()}</p>
-              <p class="text-[10px] text-zinc-400">${escapeHtml(order.payment_method || 'COD')}</p>
-            </td>
-            <td class="py-3 px-4">
-              <span class="px-2.5 py-1 rounded-full text-[10px] font-mono border ${badgeStyle}">
-                ${escapeHtml(order.status || 'Pending')}
-              </span>
-            </td>
-            <td class="py-3 px-4 text-right">
-              <select onchange="updateOrderStatus('${order.id}', this.value)" class="bg-dark-950 border border-zinc-800 text-zinc-300 text-[11px] rounded-lg px-2 py-1 focus:outline-none focus:border-gold-500">
-                <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
-                <option value="Processing" ${order.status === 'Processing' ? 'selected' : ''}>Processing</option>
-                <option value="Shipped" ${order.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
-                <option value="Completed" ${order.status === 'Completed' ? 'selected' : ''}>Completed</option>
-                <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
-              </select>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function filterOrdersList() {
-      const q = (document.getElementById('orderSearchInput').value || '').toLowerCase();
-      const status = document.getElementById('orderStatusFilter').value;
-
-      const filtered = ordersList.filter(o => {
-        const matchesQuery = !q || 
-          (o.customer_name && o.customer_name.toLowerCase().includes(q)) ||
-          (o.phone_number && o.phone_number.includes(q)) ||
-          (o.city && o.city.toLowerCase().includes(q)) ||
-          String(o.id).toLowerCase().includes(q);
-        const matchesStatus = status === 'all' || o.status === status;
-        return matchesQuery && matchesStatus;
-      });
-
-      renderOrdersTable(filtered);
-    }
-
-    async function updateOrderStatus(orderId, newStatus) {
-      const o = ordersList.find(item => String(item.id) === String(orderId));
-      if (!o) return;
-
-      o.status = newStatus;
-      localStorage.setItem('shaheer_admin_orders', JSON.stringify(ordersList));
-
-      if (supabase) {
-        try {
-          await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
-        } catch (err) {
-          console.warn('Supabase status update note:', err);
-        }
-      }
-
-      renderOrdersTable();
-      updateMetrics();
-      showToast(`Order #${String(orderId).slice(-6)} set to ${newStatus}`);
-    }
-
-    // ==========================================
-    // UI NAVIGATION & TOAST
-    // ==========================================
     function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.nav-item').forEach(el => {
-        el.classList.remove('bg-gold-500/10', 'border', 'border-gold-500/30', 'text-gold-400');
-        el.classList.add('text-zinc-400');
+      ['dashboard', 'products', 'orders', 'settings'].forEach(t => {
+        const el = document.getElementById(`tab-${t}`);
+        const btn = document.getElementById(`nav-${t}`);
+        if (el) el.classList.toggle('hidden', t !== tabId);
+        if (btn) {
+          if (t === tabId) {
+            btn.className = 'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gold-500/10 text-gold-400 font-semibold border border-gold-500/20 text-left transition';
+          } else {
+            btn.className = 'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800/60 text-left transition';
+          }
+        }
       });
-
-      const activePage = document.getElementById(`page-${tabId}`);
-      const activeNav = document.getElementById(`nav-${tabId}`);
-
-      if (activePage) activePage.classList.remove('hidden');
-      if (activeNav) {
-        activeNav.classList.add('bg-gold-500/10', 'border', 'border-gold-500/30', 'text-gold-400');
-        activeNav.classList.remove('text-zinc-400');
-      }
-
-      const titles = {
-        dashboard: 'Overview & Analytics',
-        products: 'Products Inventory',
-        orders: 'Orders Management'
-      };
-      document.getElementById('topPageTitle').textContent = titles[tabId] || 'Admin Portal';
-
-      const sidebar = document.getElementById('sidebarMenu');
-      if (sidebar && !sidebar.classList.contains('-translate-x-full')) {
-        sidebar.classList.add('-translate-x-full');
-      }
     }
 
-    function toggleMobileSidebar() {
-      const sidebar = document.getElementById('sidebarMenu');
-      if (sidebar) sidebar.classList.toggle('-translate-x-full');
+    function renderInitialData() {
+      try {
+        const savedProducts = localStorage.getItem('shaheer_dashboard_products');
+        products = savedProducts ? JSON.parse(savedProducts) : [];
+        const savedOrders = localStorage.getItem('shaheer_dashboard_orders');
+        orders = savedOrders ? JSON.parse(savedOrders) : [];
+      } catch (_) {}
+
+      document.getElementById('statTotalProducts').textContent = products.length;
+      document.getElementById('statTotalOrders').textContent = orders.length;
+      document.getElementById('sidebarStockBadge').textContent = products.length;
+      document.getElementById('sidebarOrderBadge').textContent = orders.filter(o => o.status === 'Pending').length;
     }
 
     function showToast(msg) {
-      const toast = document.getElementById('adminToast');
-      const text = document.getElementById('adminToastMsg');
-      if (!toast || !text) return;
-
-      text.textContent = msg;
-      toast.classList.remove('hidden');
-      toast.classList.add('flex');
-
-      setTimeout(() => {
-        toast.classList.remove('flex');
-        toast.classList.add('hidden');
-      }, 3200);
-    }
-
-    function escapeHtml(str) {
-      if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+      const t = document.getElementById('toast');
+      const m = document.getElementById('toastMsg');
+      if (t && m) {
+        m.textContent = msg;
+        t.classList.remove('translate-y-20', 'opacity-0');
+        setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
+      }
     }
   </script>
 </body>
