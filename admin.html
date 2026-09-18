@@ -879,50 +879,50 @@
 
   async function handleProductSubmit(e) {
   e.preventDefault();
-  const name = document.getElementById('form-product-name').value.trim();
-  const brand = document.getElementById('form-product-brand').value.trim();
-  const category = document.getElementById('form-product-category').value;
-  const price = Number(document.getElementById('form-product-price').value);
-  const stock = Number(document.getElementById('form-product-stock').value);
-  const image = document.getElementById('form-product-image').value.trim();
-  const sku = document.getElementById('form-product-sku').value.trim();
-  const desc = document.getElementById('form-product-desc').value.trim();
   const id = document.getElementById('form-product-id').value;
+  const name = document.getElementById('form-product-name').value.trim();
+  const price = Number(document.getElementById('form-product-price').value);
+  const image = document.getElementById('form-product-image').value.trim();
+  const category = document.getElementById('form-product-category').value;
 
   if(!supabaseClient){
-    alert('Supabase Connect nahi hai! Pehle Settings me URL aur Key Save karo');
-    showToast('Settings me ja kar Supabase Connect karo', true);
+    alert('Settings me Supabase URL/Key save nahi hai!');
     return;
   }
 
-  const payload = {
-    name: name,
-    price: price,
-    category: category,
-    brand: brand,
-    sku: sku,
-    description: desc,
-    image_url: image,
-    stock_quantity: stock,
-    is_active: true
-  };
-
   try {
-    showToast('Supabase me saving...');
-    let result;
-    if(id &&!String(id).startsWith('prod_')){
-      result = await supabaseClient.from('products').update(payload).eq('id', id);
+    // Sirf 3 zaroori fields bhejenge taake error na aaye
+    const payload = {
+      name: name,
+      price: price,
+      image_url: image,
+      category: category
+    };
+
+    let res;
+    if(id && id.length > 5 &&!id.startsWith('prod_')){
+      res = await supabaseClient.from('products').update(payload).eq('id', id);
     } else {
-      result = await supabaseClient.from('products').insert([payload]).select();
+      res = await supabaseClient.from('products').insert([payload]).select();
     }
-    if(result.error) throw result.error;
-    showToast('✅ Live Website par Save ho gaya!');
+
+    console.log('Supabase Response:', res);
+
+    if(res.error){
+      alert('Supabase Error: ' + res.error.message + '\n\nHint: Supabase > Table Editor > products > RLS OFF karo');
+      throw res.error;
+    }
+
+    alert('SUCCESS! Product Supabase me save ho gaya ✅');
     closeProductModal();
     await loadAllData();
-  } catch(err){
+
+  } catch(err) {
     console.error(err);
-    alert('Supabase Error: ' + err.message);
-    showToast('Error: ' + err.message, true);
+    alert('Error: ' + err.message);
+    // Button wapis normal karo
+    const btn = document.querySelector('#product-modal button[type=\"submit\"]');
+    if(btn) btn.innerText = 'Save Product';
   }
 }
 
