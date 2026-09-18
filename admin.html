@@ -877,57 +877,65 @@
       document.getElementById('product-modal').classList.add('hidden');
     }
 
-    function handleProductSubmit(e) {
-      e.preventDefault();
-      const id = document.getElementById('form-product-id').value;
-      const name = document.getElementById('form-product-name').value;
-      const brand = document.getElementById('form-product-brand').value;
-      const category = document.getElementById('form-product-category').value;
-      const price = Number(document.getElementById('form-product-price').value);
-      const stock = Number(document.getElementById('form-product-stock').value);
-      const image = document.getElementById('form-product-image').value;
-      const sku = document.getElementById('form-product-sku').value;
-      const shape = document.getElementById('form-product-shape').value;
-      const color = document.getElementById('form-product-color').value;
-      const desc = document.getElementById('form-product-desc').value;
+    // ===== FIXED CODE - PASTE THIS =====
+async function handleProductSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('btn-save-product') || e.target.querySelector('button[type="submit"]');
+  if(btn){ btn.innerText = 'Saving to Supabase...'; btn.disabled = true; }
 
-      if (id) {
-        state.products = state.products.map(p => p.id === id ? {
-          ...p, name, brand, category, price, stockCount: stock, image, modelNumber: sku, frameShape: shape, frameColor: color, description: desc
-        } : p);
-        showToast('Product updated');
-      } else {
-        state.products.unshift({
-          id: 'prod_' + Date.now(),
-          name, brand, category, price, originalPrice: price, stockCount: stock, image, modelNumber: sku, frameShape: shape, frameColor: color, description: desc, isActive: true, discount: 0
-        });
-        showToast('Product added');
-      }
+  const id = document.getElementById('form-product-id').value;
+  const name = document.getElementById('form-product-name').value.trim();
+  const brand = document.getElementById('form-product-brand').value.trim();
+  const category = document.getElementById('form-product-category').value;
+  const price = Number(document.getElementById('form-product-price').value);
+  const stock = Number(document.getElementById('form-product-stock').value);
+  const image = document.getElementById('form-product-image').value.trim();
+  const sku = document.getElementById('form-product-sku').value.trim();
+  const desc = document.getElementById('form-product-desc').value.trim();
 
-      saveProductsLocal();
-      closeProductModal();
-      renderProductsTable();
-      renderStockTable();
-      renderOffersTable();
-      updateDashboardKPIs();
+  // Check Supabase Connected?
+  if(!supabaseClient){
+    showToast('Supabase Connect nahi hai! Settings > Save & Connect karo', true);
+    if(btn){ btn.innerText = 'Save Product'; btn.disabled = false; }
+    return;
+  }
+
+  // Ye payload Supabase me jayega - har column ka naam cover kiya hai
+  const payload = {
+    name: name,
+    price: price,
+    category: category,
+    brand: brand,
+    sku: sku,
+    description: desc,
+    image_url: image,
+    stock_quantity: stock,
+    stock: stock,
+    is_active: true
+  };
+
+  try {
+    if(id &&!String(id).startsWith('prod_') &&!String(id).startsWith('so-')){
+      // Edit case
+      const { error } = await supabaseClient.from('products').update(payload).eq('id', id);
+      if(error) throw error;
+      showToast('Product Updated - Live Website par update ho gaya ✅');
+    } else {
+      // New product case
+      const { error } = await supabaseClient.from('products').insert([payload]);
+      if(error) throw error;
+      showToast('Product Added - Ab Live par nazar aayega ✅');
     }
-
-    function editProduct(id) {
-      const prod = state.products.find(p => p.id === id);
-      if (prod) openProductModal(prod);
-    }
-
-    function deleteProduct(id) {
-      if (confirm('Delete this product?')) {
-        state.products = state.products.filter(p => p.id !== id);
-        saveProductsLocal();
-        renderProductsTable();
-        renderStockTable();
-        renderOffersTable();
-        updateDashboardKPIs();
-        showToast('Product deleted');
-      }
-    }
+    closeProductModal();
+    await loadAllData(); // Table refresh
+  } catch(err){
+    console.error(err);
+    showToast('Supabase Error: ' + err.message, true);
+  } finally {
+    if(btn){ btn.innerText = 'Save Product'; btn.disabled = false; }
+  }
+}
+// ===== FIXED CODE END =====
 
     function toggleProductActive(id) {
       state.products = state.products.map(p => p.id === id ? { ...p, isActive: p.isActive === false } : p);
