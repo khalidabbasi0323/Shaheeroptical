@@ -1,499 +1,1246 @@
-You are working on my existing Shaheer Opticals website.
-
-IMPORTANT FIRST INSTRUCTION:
-Completely remove and replace the OLD admin panel code and OLD admin-panel logic from the project. Do NOT keep the old admin panel alongside the new one. Remove obsolete admin routes, components, pages, hooks, mock data, duplicate admin logic, and old admin UI that is no longer needed.
-
-Then build ONE new, clean, professional and fully functional Admin Panel using the existing project technology and my Supabase backend.
-
-Do NOT unnecessarily redesign or break the existing customer-facing website. Keep the existing premium Shaheer Opticals website design and functionality unless a change is specifically required for the new admin system.
-
-==================================================
-
-1. SUPABASE
-   ==================================================
-
-Connect the new admin panel directly to my Supabase project.
-
-Use Supabase for:
-
-- Database
-- Product data
-- Categories
-- Stock/inventory
-- Discounts/offers
-- Lens options
-- Product images/storage
-- Orders
-- Admin authentication
-
-Do NOT use temporary/mock/local product data for the actual production admin system.
-
-Create the required database tables, relationships, indexes and Row Level Security policies.
-
-Use environment variables for Supabase URL and anon/public key. Never expose a Supabase service-role key in frontend code.
-
-==================================================<br />2. ADMIN AUTHENTICATION
-
-Create a secure Admin Login page.
-
-Admin should be able to log in using Supabase Authentication.
-
-Only authenticated/authorized admins can access:
-
-- Dashboard
-- Products
-- Categories
-- Stock
-- Offers
-- Lens Options
-- Orders
-- Settings
-
-Unauthenticated users must be redirected to the Admin Login page.
-
-Do not allow normal website customers to access the admin panel.
-
-==================================================<br />3. ADMIN DASHBOARD
-
-Create a simple premium dashboard showing:
-
-- Total Products
-- Active Products
-- Low Stock Products
-- Out of Stock Products
-- Active Offers
-- Total Orders
-- Pending Orders
-- Recent Orders
-
-Use clean cards and a professional responsive design matching Shaheer Opticals' black, white and gold premium theme.
-
-==================================================<br />4. PRODUCT MANAGEMENT
-
-Create a complete Products section.
-
-Admin must be able to:
-
-- Add product
-- Edit product
-- Delete product
-- Activate/deactivate product
-- Upload product images
-- Delete/replace product images
-- Set product name
-- Set description
-- Set brand
-- Select category
-- Set price
-- Set stock quantity
-- Set SKU/product code
-- Set discount
-- Enable/disable discount
-- Enable/disable product
-- Add/select lens options when applicable
-
-Product images must be uploaded to Supabase Storage, not stored as base64 inside the database.
-
-When an admin adds or edits a product, the customer-facing website must automatically use the updated database information.
-
-==================================================<br />5. CATEGORIES
-
-Create a Categories management section.
-
-Default categories:
-
-- Frames
-- Glasses
-- Sunglasses
-- Contact Lenses
-- Accessories
-
-Admin can:
-
-- Add category
-- Edit category
-- Delete category
-- Activate/deactivate category
-
-Products must be linked to categories using a proper database relationship.
-
-Do not allow deletion of a category if products are still assigned to it unless the system safely handles reassignment.
-
-==================================================<br />6. STOCK / INVENTORY
-
-Create a simple Stock Management section.
-
-Every product must have:
-
-- Stock quantity
-- Low-stock threshold
-- Stock status
-
-Statuses:
-
-- In Stock
-- Low Stock
-- Out of Stock
-
-Admin can increase/decrease stock easily using + and − controls.
-
-Example:
-
-Product stock = 10
-
-After customer purchases 1:
-
-Stock automatically becomes 9.
-
-If stock reaches 0:
-
-Automatically show "Out of Stock".
-
-Prevent customers from purchasing more quantity than available stock.
-
-Add a low-stock warning in the admin dashboard.
-
-==================================================<br />7. DISCOUNTS / OFFERS
-
-Create an Offers/Discount system.
-
-Admin should be able to set:
-
-- Discount percentage
-  OR
-- Fixed discount amount
-
-Example:
-
-Original Price: Rs. 8,000
-Discount: 20%
-Final Price: Rs. 6,400
-
-Show on the customer website:
-
-- Original price
-- Sale price
-- Discount badge
-
-Admin can activate/deactivate an offer.
-
-The final price must be calculated safely and consistently.
-
-Do not allow negative prices.
-
-==================================================<br />8. LENS OPTIONS
-
-Create a Lens Options management section.
-
-Default lens options:
-
-1. Frame Only
-2. Basic Lens
-3. Blue Cut Lens
-4. Anti-Glare Lens
-5. Photochromic Lens
-6. Progressive Lens
-
-Admin can:
-
-- Add lens option
-- Edit lens option
-- Delete lens option
-- Activate/deactivate lens option
-- Set additional price
-
-Example:
-
-Frame = Rs. 5,000
-
-Frame Only = +Rs. 0
-Basic Lens = +Rs. 1,500
-Blue Cut Lens = +Rs. 2,500
-Photochromic Lens = +Rs. 3,500
-
-On a frame product page, customers should be able to select a lens option.
-
-Automatically calculate:
-
-Final Price = Frame Price + Selected Lens Additional Price - Applicable Discount
-
-Show the updated total price immediately when the customer changes the lens.
-
-==================================================<br />9. CUSTOMER PURCHASE FLOW
-
-Keep the customer purchase process simple.
-
-For frame products:
-
-Product
-→ Select Lens Option
-→ Select Quantity
-→ Add to Cart / Buy Now
-→ Checkout
-→ Customer Details
-→ Order Confirmation
-
-For products that do not require lenses:
-
-Product
-→ Quantity
-→ Add to Cart / Buy Now
-→ Checkout
-
-At checkout collect:
-
-- Customer name
-- Phone number
-- WhatsApp number if different
-- Address
-- City
-- Notes
-
-Support Cash on Delivery as the initial payment method.
-
-Structure the payment system so JazzCash/Easypaisa can be integrated later without rebuilding the entire checkout system.
-
-==================================================<br />10. ORDERS
-
-Create an Orders section in Admin.
-
-Admin can see:
-
-- Order number
-- Customer name
-- Phone
-- WhatsApp
-- Address
-- Products
-- Selected lens option
-- Quantity
-- Subtotal
-- Discount
-- Final total
-- Payment method
-- Order date
-- Order status
-
-Order statuses:
-
-- Pending
-- Confirmed
-- Processing
-- Shipped
-- Delivered
-- Cancelled
-
-Admin can update order status.
-
-When an order is successfully created, stock must be reduced safely.
-
-Prevent duplicate stock reduction if an order status is edited multiple times.
-
-==================================================<br />11. WHATSAPP INQUIRIES
-
-Add a WhatsApp button to product pages.
-
-Use this WhatsApp number:
-
-03345514480
-
-Convert it to the correct WhatsApp international format for the link.
-
-When customer clicks WhatsApp on a product, automatically create a pre-filled message containing:
-
-- Product name
-- Product price
-- Selected lens option, if applicable
-- Quantity
-
-Example message:
-
-Assalam-o-Alaikum, I am interested in:
-Product: Ray-Ban Frame
-Price: Rs. 8,000
-Lens: Blue Cut Lens
-Quantity: 1
-
-Please provide more information.
-
-Also keep a WhatsApp inquiry option in the footer.
-
-==================================================<br />12. PRODUCT SEARCH AND FILTERS
-
-Customer website must support:
-
-- Product search
-- Category filter
-- Brand filter where applicable
-- Price filtering where applicable
-- Availability/stock filtering
-- Discount/offer filtering
-
-Products should be loaded from Supabase.
-
-==================================================<br />13. IMAGE STORAGE
-
-Create a Supabase Storage bucket for product images.
-
-Admin can:
-
-- Upload multiple images
-- Preview images
-- Delete images
-- Replace images
-
-Store image URLs/references in the Products database.
-
-Optimize image display for mobile and desktop.
-
-Do not store large image files directly inside database rows.
-
-==================================================<br />14. CUSTOMER-FACING WEBSITE
-
-The existing website should automatically display the latest database information.
-
-When admin:
-
-- Adds product → product appears on website
-- Edits price → website shows updated price
-- Changes stock → website shows updated availability
-- Adds discount → website shows offer
-- Adds category → category becomes available
-- Adds lens option → frame product can use it
-- Disables product → product is hidden/unavailable
-
-No manual code editing should be required for normal product management.
-
-==================================================<br />15. MOBILE ADMIN PANEL
-
-The Admin Panel must work properly on mobile phones.
-
-I may manage the website from an Android phone.
-
-Use:
-
-- Responsive tables/cards
-- Large touch-friendly buttons
-- Simple navigation
-- Mobile-friendly image upload
-- Easy + / − stock controls
-
-Do not create a desktop-only admin panel.
-
-==================================================<br />16. DATABASE STRUCTURE
-
-Use a clean relational structure similar to:
-
-profiles/users
-categories
-products
-product_images
-lens_options
-product_lens_options
-offers OR product discount fields
-orders
-order_items
-inventory/stock_movements if required
-inquiries if required
-
-Use proper foreign keys.
-
-Use timestamps such as created_at and updated_at.
-
-Use indexes for frequently searched fields.
-
-Use Row Level Security appropriately.
-
-==================================================<br />17. DATA SAFETY
-
-Do NOT delete production data unnecessarily.
-
-Before changing database structure, inspect the existing Supabase/database integration.
-
-If old admin tables are obsolete, migrate or remove only what is necessary.
-
-Do not delete existing customer/order/product data simply because the old admin panel is being replaced.
-
-Do not hard-code product data that should come from Supabase.
-
-Handle loading states, empty states and errors properly.
-
-==================================================<br />18. OLD ADMIN PANEL CLEANUP
-
-This is extremely important:
-
-FIRST inspect the existing project and identify all old admin-panel files/components/routes/hooks/services.
-
-Then completely replace the old admin panel with the new system described above.
-
-Remove unused old admin-panel code after the replacement is working.
-
-There must be only ONE Admin Panel in the final project.
-
-Do not create:
-
-- AdminPanelOld
-- AdminPanelNew
-- duplicate admin routes
-- duplicate dashboards
-- duplicate product managers
-
-The final project must have one clean admin system.
-
-==================================================<br />19. EXISTING WEBSITE DETAILS
-
-Business name:
-
-Shaheer Opticals
-
-Address:
-
-Shaheer Optical, Kali Tanki, Saidpur Road, Rawalpindi
-
-Business hours:
-
-10 AM to 10 PM
-Open every day
-
-Email:
-
-shaheeropticals@gmail.com
-
-WhatsApp:
-
-03345514480
-
-Keep the existing premium black, white and gold visual identity.
-
-==================================================<br />20. IMPORTANT DEVELOPMENT RULE
-
-Do not just generate a design/mockup.
-
-Implement the actual working functionality.
-
-Before finishing:
-
-1. Check Supabase connection.
-2. Check authentication.
-3. Check database queries.
-4. Check Storage image upload.
-5. Check product CRUD.
-6. Check categories.
-7. Check stock updates.
-8. Check discounts.
-9. Check lens selection and price calculation.
-10. Check cart.
-11. Check checkout.
-12. Check order creation.
-13. Check automatic stock deduction.
-14. Check WhatsApp links.
-15. Check mobile responsiveness.
-16. Check that old admin-panel code has been removed/replaced.
-17. Check for broken imports and build errors.
-18. Make sure the customer website reads products from Supabase.
-
-If Supabase environment variables are missing, clearly tell me exactly which variables I need to add. Do not invent credentials.
-
-Do not ask me to manually edit dozens of files. Make the required changes in the project wherever possible.
-
-The final result should be a simple, professional, mobile-friendly Shaheer Opticals Admin Panel that allows me to manage the entire store without manually editing website code for normal product, stock, category, offer or lens changes.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shaheer Opticals - Admin Control Panel</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: {
+              300: '#F3E5AB',
+              400: '#E5C158',
+              500: '#D4AF37',
+              600: '#AA820A',
+              700: '#806208',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #050505;
+      color: #f4f4f5;
+    }
+    .font-serif { font-family: 'Cinzel', serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0d; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+  </style>
+</head>
+<body class="min-h-screen bg-[#050505] text-zinc-100 antialiased selection:bg-[#D4AF37] selection:text-black">
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div id="toast-content" class="px-4 py-3 rounded-xl border border-[#D4AF37]/40 bg-zinc-900/95 backdrop-blur-md shadow-2xl text-xs font-semibold flex items-center gap-2.5 text-[#D4AF37]">
+      <i data-lucide="check-circle" class="w-4 h-4"></i>
+      <span id="toast-message">Action successful</span>
+    </div>
+  </div>
+
+  <!-- AUTH / LOGIN SCREEN -->
+  <div id="auth-screen" class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-[#0a0a0d] border border-zinc-800/80 rounded-2xl p-6 sm:p-8 shadow-2xl relative">
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-[#D4AF37] to-[#806208] p-0.5 shadow-lg shadow-[#D4AF37]/20 mb-4">
+          <div class="w-full h-full bg-black rounded-[14px] flex items-center justify-center text-[#D4AF37]">
+            <i data-lucide="shield-check" class="w-7 h-7"></i>
+          </div>
+        </div>
+        <h1 class="text-xl font-bold font-serif text-white tracking-wide">Shaheer Opticals</h1>
+        <p class="text-xs text-gold-500 font-mono mt-1 tracking-wider uppercase">Admin Control Center</p>
+      </div>
+
+      <form id="login-form" class="space-y-4" onsubmit="handleLogin(event)">
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Admin Email</label>
+          <div class="relative">
+            <i data-lucide="mail" class="w-4 h-4 text-zinc-500 absolute left-3.5 top-3"></i>
+            <input 
+              type="email" 
+              id="login-email" 
+              required 
+              value="admin@shaheeropticals.com"
+              class="w-full bg-zinc-900 border border-zinc-800 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#D4AF37]"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Password</label>
+          <div class="relative">
+            <i data-lucide="lock" class="w-4 h-4 text-zinc-500 absolute left-3.5 top-3"></i>
+            <input 
+              type="password" 
+              id="login-password" 
+              required 
+              value="admin123456"
+              class="w-full bg-zinc-900 border border-zinc-800 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#D4AF37]"
+            />
+          </div>
+        </div>
+
+        <button 
+          type="submit" 
+          class="w-full py-3 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#aa820a] hover:from-[#e5c158] hover:to-[#D4AF37] text-black font-bold text-xs shadow-lg shadow-[#D4AF37]/20 transition flex items-center justify-center gap-2"
+        >
+          <i data-lucide="log-in" class="w-4 h-4"></i>
+          <span>Secure Sign In</span>
+        </button>
+
+        <button 
+          type="button" 
+          onclick="bypassLogin()"
+          class="w-full py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700 text-xs font-semibold transition"
+        >
+          Quick Demo Bypass
+        </button>
+      </form>
+
+      <div class="mt-6 pt-4 border-t border-zinc-800/80 text-center">
+        <a href="/" class="text-xs text-zinc-400 hover:text-[#D4AF37] inline-flex items-center gap-1.5 transition">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Return to Storefront</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN ADMIN APP -->
+  <div id="admin-app" class="hidden min-h-screen flex flex-col">
+    <!-- TOP HEADER -->
+    <header class="sticky top-0 z-40 bg-[#0a0a0d]/95 backdrop-blur-md border-b border-zinc-800/80 px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleMobileSidebar()" class="lg:hidden p-2 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#806208] p-0.5 flex items-center justify-center">
+            <div class="w-full h-full bg-black rounded-[10px] flex items-center justify-center text-[#D4AF37]">
+              <i data-lucide="shield-check" class="w-5 h-5"></i>
+            </div>
+          </div>
+          <div>
+            <span class="font-serif font-bold text-white text-base tracking-wide block leading-none">Shaheer Opticals</span>
+            <span class="text-[10px] font-mono text-[#D4AF37] uppercase tracking-wider">Admin Control Panel</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <span id="backend-badge" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-[11px] font-mono text-zinc-300">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Supabase Ready</span>
+        </span>
+
+        <a href="/" class="px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white hover:border-[#D4AF37] text-xs font-semibold flex items-center gap-1.5 transition">
+          <i data-lucide="store" class="w-3.5 h-3.5 text-[#D4AF37]"></i>
+          <span class="hidden md:inline">Storefront</span>
+        </a>
+
+        <button onclick="handleLogout()" class="p-2 sm:px-3 sm:py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-red-400 hover:border-red-900/50 text-xs font-semibold flex items-center gap-1.5 transition">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          <span class="hidden md:inline">Logout</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- BODY: SIDEBAR + CONTENT -->
+    <div class="flex-1 flex overflow-hidden">
+      <!-- SIDEBAR (DESKTOP) -->
+      <aside class="hidden lg:flex flex-col w-64 border-r border-zinc-800/80 bg-[#08080a] p-4 space-y-1.5 overflow-y-auto">
+        <div class="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider px-3 py-2">Management</div>
+        
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition bg-[#D4AF37] text-black font-bold">
+          <div class="flex items-center gap-3">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+            <span>Dashboard</span>
+          </div>
+        </button>
+        <button onclick="switchTab('products')" id="nav-products" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition text-zinc-400 hover:text-white hover:bg-zinc-900">
+          <div class="flex items-center gap-3">
+            <i data-lucide="package" class="w-4 h-4"></i>
+            <span>Products</span>
+          </div>
+          <span id="badge-products" class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-zinc-800 text-zinc-300">0</span>
+        </button>
+        <button onclick="switchTab('categories')" id="nav-categories" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition text-zinc-400 hover:text-white hover:bg-zinc-900">
+          <div class="flex items-center gap-3">
+            <i data-lucide="layers" class="w-4 h-4"></i>
+            <span>Categories</span>
+          </div>
+          <span id="badge-categories" class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-zinc-800 text-zinc-300">0</span>
+        </button>
+        <button onclick="switchTab('stock')" id="nav-stock" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition text-zinc-400 hover:text-white hover:bg-zinc-900">
+          <div class="flex items-center gap-3">
+            <i data-lucide="boxes" class="w-4 h-4"></i>
+            <span>Stock & Inventory</span>
+          </div>
+        </button>
+        <button onclick="switchTab('offers')" id="nav-offers" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition text-zinc-400 hover:text-white hover:bg-zinc-900">
+          <div class="flex items-center gap-3">
+            <i data-lucide="tag" class="w-4 h-4"></i>
+            <span>Offers & Discounts</span>
+          </div>
+        </button>
+        <button onclick="switchTab('lenses')" id="nav-lenses" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition text-zinc-400 hover:text-white hover:bg-zinc-900">
+          <div class="flex items-center gap-3">
+            <i data-lucide="glasses" class="w-4 h-4"></i>
+            <span>Lens Options</span>
+          </div>
+          <span id="badge-lenses" class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-zinc-800 text-zinc-300">0</span>
+        </button>
+        <button onclick="switchTab('orders')" id="nav-orders" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition text-zinc-400 hover:text-white hover:bg-zinc-900">
+          <div class="flex items-center gap-3">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+            <span>Orders</span>
+          </div>
+          <span id="badge-orders" class="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-500 text-black font-bold">0</span>
+        </button>
+        <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition text-zinc-400 hover:text-white hover:bg-zinc-900">
+          <div class="flex items-center gap-3">
+            <i data-lucide="settings" class="w-4 h-4"></i>
+            <span>Supabase Settings</span>
+          </div>
+        </button>
+      </aside>
+
+      <!-- MOBILE SIDEBAR OVERLAY -->
+      <div id="mobile-sidebar" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm lg:hidden flex">
+        <div class="w-64 bg-[#08080a] border-r border-zinc-800 p-4 space-y-2 flex flex-col justify-between h-full">
+          <div class="space-y-1">
+            <div class="flex items-center justify-between pb-3 mb-2 border-b border-zinc-800">
+              <span class="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Admin Menu</span>
+              <button onclick="toggleMobileSidebar()" class="p-1 rounded-lg text-zinc-400 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+              </button>
+            </div>
+            <button onclick="switchTab('dashboard'); toggleMobileSidebar()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-zinc-300 hover:bg-zinc-900">
+              <i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Dashboard</span>
+            </button>
+            <button onclick="switchTab('products'); toggleMobileSidebar()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-zinc-300 hover:bg-zinc-900">
+              <i data-lucide="package" class="w-4 h-4"></i><span>Products</span>
+            </button>
+            <button onclick="switchTab('categories'); toggleMobileSidebar()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-zinc-300 hover:bg-zinc-900">
+              <i data-lucide="layers" class="w-4 h-4"></i><span>Categories</span>
+            </button>
+            <button onclick="switchTab('stock'); toggleMobileSidebar()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-zinc-300 hover:bg-zinc-900">
+              <i data-lucide="boxes" class="w-4 h-4"></i><span>Stock</span>
+            </button>
+            <button onclick="switchTab('offers'); toggleMobileSidebar()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-zinc-300 hover:bg-zinc-900">
+              <i data-lucide="tag" class="w-4 h-4"></i><span>Offers</span>
+            </button>
+            <button onclick="switchTab('lenses'); toggleMobileSidebar()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-zinc-300 hover:bg-zinc-900">
+              <i data-lucide="glasses" class="w-4 h-4"></i><span>Lenses</span>
+            </button>
+            <button onclick="switchTab('orders'); toggleMobileSidebar()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-zinc-300 hover:bg-zinc-900">
+              <i data-lucide="shopping-bag" class="w-4 h-4"></i><span>Orders</span>
+            </button>
+            <button onclick="switchTab('settings'); toggleMobileSidebar()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-zinc-300 hover:bg-zinc-900">
+              <i data-lucide="settings" class="w-4 h-4"></i><span>Settings</span>
+            </button>
+          </div>
+          <div class="pt-4 border-t border-zinc-800">
+            <button onclick="handleLogout()" class="w-full py-2 px-3 rounded-xl bg-red-950/40 border border-red-900/50 text-red-300 text-xs font-semibold flex items-center justify-center gap-2">
+              <i data-lucide="log-out" class="w-4 h-4"></i><span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+        <div class="flex-1" onclick="toggleMobileSidebar()"></div>
+      </div>
+
+      <!-- MAIN CONTENT CONTAINER -->
+      <main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto max-w-7xl mx-auto w-full">
+        
+        <!-- 1. DASHBOARD TAB -->
+        <div id="tab-dashboard" class="tab-pane space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold font-serif text-white">Store Overview</h2>
+              <p class="text-xs text-zinc-400">Real-time store metrics, inventory warnings and customer orders</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="loadAllData()" class="px-3.5 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-semibold hover:border-[#D4AF37] transition flex items-center gap-2">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-[#D4AF37]"></i>
+                <span>Sync Data</span>
+              </button>
+              <button onclick="openProductModal()" class="px-4 py-2 rounded-xl bg-[#D4AF37] text-black text-xs font-bold shadow-lg shadow-[#D4AF37]/20 flex items-center gap-2">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                <span>Add Product</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- KPI Cards Grid -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div class="p-4 rounded-2xl bg-[#0a0a0d] border border-zinc-800/80">
+              <div class="flex items-center justify-between text-zinc-400 mb-2">
+                <span class="text-xs font-medium">Total Products</span>
+                <i data-lucide="package" class="w-4 h-4 text-[#D4AF37]"></i>
+              </div>
+              <div id="stat-products" class="text-2xl font-bold font-mono text-white">0</div>
+              <span class="text-[11px] text-zinc-500">Live in catalog</span>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-[#0a0a0d] border border-zinc-800/80">
+              <div class="flex items-center justify-between text-zinc-400 mb-2">
+                <span class="text-xs font-medium">Pending Orders</span>
+                <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+              </div>
+              <div id="stat-pending-orders" class="text-2xl font-bold font-mono text-amber-400">0</div>
+              <span class="text-[11px] text-zinc-500">Awaiting confirmation</span>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-[#0a0a0d] border border-zinc-800/80">
+              <div class="flex items-center justify-between text-zinc-400 mb-2">
+                <span class="text-xs font-medium">Low Stock Alerts</span>
+                <i data-lucide="alert-triangle" class="w-4 h-4 text-red-400"></i>
+              </div>
+              <div id="stat-low-stock" class="text-2xl font-bold font-mono text-red-400">0</div>
+              <span class="text-[11px] text-zinc-500">&le; 5 units remaining</span>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-[#0a0a0d] border border-zinc-800/80">
+              <div class="flex items-center justify-between text-zinc-400 mb-2">
+                <span class="text-xs font-medium">Total Orders Value</span>
+                <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i>
+              </div>
+              <div id="stat-revenue" class="text-2xl font-bold font-mono text-emerald-400">Rs 0</div>
+              <span class="text-[11px] text-zinc-500">Total gross sales</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. PRODUCTS TAB -->
+        <div id="tab-products" class="tab-pane hidden space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 class="text-xl font-bold font-serif text-white">Products Catalog</h2>
+              <p class="text-xs text-zinc-400">Add, edit, remove products and manage specifications</p>
+            </div>
+            <button onclick="openProductModal()" class="px-4 py-2 rounded-xl bg-[#D4AF37] text-black text-xs font-bold flex items-center gap-2 shadow-lg shadow-[#D4AF37]/20">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              <span>Add New Product</span>
+            </button>
+          </div>
+
+          <!-- Filter & Search Bar -->
+          <div class="flex flex-col sm:flex-row gap-3">
+            <div class="relative flex-1">
+              <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3 top-3"></i>
+              <input 
+                type="text" 
+                id="product-search" 
+                oninput="renderProductsTable()" 
+                placeholder="Search by name, SKU, brand..." 
+                class="w-full bg-[#0a0a0d] border border-zinc-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]"
+              />
+            </div>
+            <select id="product-category-filter" onchange="renderProductsTable()" class="bg-[#0a0a0d] border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-300 focus:outline-none focus:border-[#D4AF37]">
+              <option value="all">All Categories</option>
+            </select>
+          </div>
+
+          <!-- Products Table -->
+          <div class="bg-[#0a0a0d] border border-zinc-800/80 rounded-2xl overflow-x-auto">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-zinc-900/60 border-b border-zinc-800 text-[11px] text-zinc-400 uppercase font-semibold">
+                <tr>
+                  <th class="p-3.5">Product</th>
+                  <th class="p-3.5">Category</th>
+                  <th class="p-3.5">Price (PKR)</th>
+                  <th class="p-3.5">Stock</th>
+                  <th class="p-3.5">Status</th>
+                  <th class="p-3.5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="products-table-body" class="divide-y divide-zinc-800/60"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 3. CATEGORIES TAB -->
+        <div id="tab-categories" class="tab-pane hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-bold font-serif text-white">Categories</h2>
+              <p class="text-xs text-zinc-400">Organize optical collections and product groups</p>
+            </div>
+            <button onclick="openCategoryModal()" class="px-4 py-2 rounded-xl bg-[#D4AF37] text-black text-xs font-bold flex items-center gap-2">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              <span>New Category</span>
+            </button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="categories-grid"></div>
+        </div>
+
+        <!-- 4. STOCK TAB -->
+        <div id="tab-stock" class="tab-pane hidden space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 class="text-xl font-bold font-serif text-white">Stock & Inventory</h2>
+              <p class="text-xs text-zinc-400">Fast quantity adjustments with low-stock warnings</p>
+            </div>
+            <button onclick="loadAllData()" class="px-3.5 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-semibold flex items-center gap-2">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-[#D4AF37]"></i>
+              <span>Refresh</span>
+            </button>
+          </div>
+          <div class="bg-[#0a0a0d] border border-zinc-800/80 rounded-2xl overflow-x-auto">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-zinc-900/60 border-b border-zinc-800 text-[11px] text-zinc-400 uppercase font-semibold">
+                <tr>
+                  <th class="p-3.5">Product</th>
+                  <th class="p-3.5">SKU</th>
+                  <th class="p-3.5">Current Stock</th>
+                  <th class="p-3.5">Quick Adjust</th>
+                  <th class="p-3.5 text-right">Status Badge</th>
+                </tr>
+              </thead>
+              <tbody id="stock-table-body" class="divide-y divide-zinc-800/60"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 5. OFFERS TAB -->
+        <div id="tab-offers" class="tab-pane hidden space-y-4">
+          <div>
+            <h2 class="text-xl font-bold font-serif text-white">Discounts & Promotions</h2>
+            <p class="text-xs text-zinc-400">Apply percentage price cuts and instant sale tags</p>
+          </div>
+          <div class="bg-[#0a0a0d] border border-zinc-800/80 rounded-2xl overflow-x-auto">
+            <table class="w-full text-left text-xs text-zinc-300">
+              <thead class="bg-zinc-900/60 border-b border-zinc-800 text-[11px] text-zinc-400 uppercase font-semibold">
+                <tr>
+                  <th class="p-3.5">Product</th>
+                  <th class="p-3.5">Original</th>
+                  <th class="p-3.5">Discount %</th>
+                  <th class="p-3.5">Sale Price</th>
+                  <th class="p-3.5 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="offers-table-body" class="divide-y divide-zinc-800/60"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 6. LENSES TAB -->
+        <div id="tab-lenses" class="tab-pane hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-bold font-serif text-white">Prescription Lens Upgrades</h2>
+              <p class="text-xs text-zinc-400">Manage optical lens packages and add-on pricing</p>
+            </div>
+            <button onclick="openLensModal()" class="px-4 py-2 rounded-xl bg-[#D4AF37] text-black text-xs font-bold flex items-center gap-2">
+              <i data-lucide="plus" class="w-4 h-4"></i>
+              <span>Add Lens Package</span>
+            </button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="lenses-grid"></div>
+        </div>
+
+        <!-- 7. ORDERS TAB -->
+        <div id="tab-orders" class="tab-pane hidden space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 class="text-xl font-bold font-serif text-white">Customer Orders</h2>
+              <p class="text-xs text-zinc-400">Manage orders, dispatch status, and 1-click WhatsApp customer receipts</p>
+            </div>
+            <select id="order-status-filter" onchange="renderOrdersList()" class="bg-[#0a0a0d] border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-300">
+              <option value="all">All Orders</option>
+              <option value="Pending">Pending</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Processing">Processing</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div class="space-y-3" id="orders-container"></div>
+        </div>
+
+        <!-- 8. SETTINGS TAB -->
+        <div id="tab-settings" class="tab-pane hidden space-y-6">
+          <div>
+            <h2 class="text-xl font-bold font-serif text-white">Supabase Cloud Settings</h2>
+            <p class="text-xs text-zinc-400">Connect your Supabase project for real-time cloud database storage</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-[#0a0a0d] border border-zinc-800/80 space-y-4 max-w-2xl">
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Supabase Project URL</label>
+              <input type="text" id="cfg-supabase-url" placeholder="https://xyzprojectid.supabase.co" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-zinc-300 mb-1">Supabase Anon Key</label>
+              <input type="password" id="cfg-supabase-key" placeholder="eyJhbGciOiJIUzI1NiIsIn..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#D4AF37]" />
+            </div>
+            <div class="flex items-center gap-3 pt-2">
+              <button onclick="saveSupabaseSettings()" class="px-5 py-2.5 rounded-xl bg-[#D4AF37] text-black text-xs font-bold shadow-lg shadow-[#D4AF37]/20 transition">Save & Connect</button>
+              <button onclick="testSupabaseConnection()" class="px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-semibold text-zinc-300 hover:text-white transition">Test Connection</button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- PRODUCT MODAL -->
+  <div id="product-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-xl bg-[#0a0a0d] border border-zinc-800 rounded-2xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-4 mb-4 border-b border-zinc-800">
+        <h3 id="modal-product-title" class="text-base font-bold font-serif text-white">Add Product</h3>
+        <button onclick="closeProductModal()" class="text-zinc-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <form id="product-form" onsubmit="handleProductSubmit(event)" class="space-y-3.5">
+        <input type="hidden" id="form-product-id" />
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Product Name *</label>
+            <input type="text" id="form-product-name" required class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="Shaheer Royal Aviator" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Brand</label>
+            <input type="text" id="form-product-brand" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="Shaheer Royal" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Category *</label>
+            <select id="form-product-category" required class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]"></select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Price (PKR) *</label>
+            <input type="number" id="form-product-price" required min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="14500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Stock Quantity *</label>
+            <input type="number" id="form-product-stock" required min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="10" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 mb-1">Image URL *</label>
+          <input type="url" id="form-product-image" required class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Model / SKU</label>
+            <input type="text" id="form-product-sku" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="SO-2025" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Frame Shape</label>
+            <input type="text" id="form-product-shape" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="Square / Aviator" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-zinc-300 mb-1">Frame Color</label>
+            <input type="text" id="form-product-color" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="Obsidian Black" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-300 mb-1">Description</label>
+          <textarea id="form-product-desc" rows="2" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37]" placeholder="Product specifications, frame material, UV protection..."></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-zinc-800">
+          <button type="button" onclick="closeProductModal()" class="px-4 py-2 rounded-xl bg-zinc-900 text-zinc-300 text-xs font-semibold">Cancel</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-[#D4AF37] text-black text-xs font-bold">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- STATE & LOGIC -->
+  <script>
+    let state = {
+      isAuthenticated: false,
+      activeTab: 'dashboard',
+      products: [],
+      categories: [
+        { id: '1', name: 'Glasses', slug: 'glasses' },
+        { id: '2', name: 'Sunglasses', slug: 'sunglasses' },
+        { id: '3', name: 'Frames', slug: 'frames' },
+        { id: '4', name: 'Contact Lenses', slug: 'contact-lenses' },
+        { id: '5', name: 'Accessories', slug: 'accessories' }
+      ],
+      lensOptions: [
+        { id: 'l1', name: 'Frame Only', price: 0, description: 'Standard demo optical lenses' },
+        { id: 'l2', name: 'Basic CR39 Lens', price: 1500, description: 'Clear single-vision optical lenses' },
+        { id: 'l3', name: 'Blue Cut Filter', price: 2500, description: 'Blocks harmful screen blue-light' },
+        { id: 'l4', name: 'Anti-Glare / Anti-Reflective', price: 2000, description: 'Enhanced night-driving clarity' },
+        { id: 'l5', name: 'Photochromic Transition', price: 3500, description: 'Darkens automatically in sunlight' },
+        { id: 'l6', name: 'Progressive Bifocal Lens', price: 5000, description: 'Multi-focal reading & distance' }
+      ],
+      orders: []
+    };
+
+    let supabaseClient = null;
+
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toast-message');
+      const content = document.getElementById('toast-content');
+      
+      text.innerText = msg;
+      if (isError) {
+        content.className = "px-4 py-3 rounded-xl border border-red-800 bg-red-950/95 backdrop-blur-md shadow-2xl text-xs font-semibold flex items-center gap-2.5 text-red-200";
+      } else {
+        content.className = "px-4 py-3 rounded-xl border border-[#D4AF37]/40 bg-zinc-900/95 backdrop-blur-md shadow-2xl text-xs font-semibold flex items-center gap-2.5 text-[#D4AF37]";
+      }
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
+    }
+
+    function initSupabase() {
+      const savedUrl = localStorage.getItem('shaheer_supabase_url');
+      const savedKey = localStorage.getItem('shaheer_supabase_key');
+      
+      if (savedUrl) document.getElementById('cfg-supabase-url').value = savedUrl;
+      if (savedKey) document.getElementById('cfg-supabase-key').value = savedKey;
+
+      if (savedUrl && savedKey && window.supabase) {
+        try {
+          supabaseClient = window.supabase.createClient(savedUrl, savedKey);
+          document.getElementById('backend-badge').innerHTML = `
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Supabase Cloud</span>
+          `;
+        } catch (e) {
+          console.warn('Supabase init:', e);
+        }
+      }
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      state.isAuthenticated = true;
+      localStorage.setItem('shaheer_admin_auth', 'true');
+      document.getElementById('auth-screen').classList.add('hidden');
+      document.getElementById('admin-app').classList.remove('hidden');
+      showToast('Signed in successfully');
+      loadAllData();
+    }
+
+    function bypassLogin() {
+      state.isAuthenticated = true;
+      localStorage.setItem('shaheer_admin_auth', 'true');
+      document.getElementById('auth-screen').classList.add('hidden');
+      document.getElementById('admin-app').classList.remove('hidden');
+      showToast('Admin mode enabled');
+      loadAllData();
+    }
+
+    function handleLogout() {
+      state.isAuthenticated = false;
+      localStorage.removeItem('shaheer_admin_auth');
+      document.getElementById('admin-app').classList.add('hidden');
+      document.getElementById('auth-screen').classList.remove('hidden');
+      showToast('Logged out');
+    }
+
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(el => {
+        el.className = "nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition text-zinc-400 hover:text-white hover:bg-zinc-900";
+      });
+
+      const activePane = document.getElementById(`tab-${tabId}`);
+      if (activePane) activePane.classList.remove('hidden');
+
+      const activeNav = document.getElementById(`nav-${tabId}`);
+      if (activeNav) {
+        activeNav.className = "nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition bg-[#D4AF37] text-black font-bold shadow-lg shadow-[#D4AF37]/20";
+      }
+
+      lucide.createIcons();
+    }
+
+    function toggleMobileSidebar() {
+      document.getElementById('mobile-sidebar').classList.toggle('hidden');
+    }
+
+    async function loadAllData() {
+      const localProducts = localStorage.getItem('shaheer_products');
+      if (localProducts) {
+        try { state.products = JSON.parse(localProducts); } catch(e){}
+      }
+
+      if (!state.products || state.products.length === 0) {
+        state.products = [
+          {
+            id: 'so-01',
+            name: 'Shaheer Royal Obsidian Aviator',
+            brand: 'Shaheer Royal',
+            category: 'Glasses',
+            price: 14500,
+            originalPrice: 16500,
+            stockCount: 8,
+            modelNumber: 'SO-RA101',
+            image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800',
+            isActive: true,
+            discount: 12
+          },
+          {
+            id: 'so-02',
+            name: 'Artisan Titanium Gold Square',
+            brand: 'Shaheer Artisan',
+            category: 'Frames',
+            price: 18500,
+            originalPrice: 18500,
+            stockCount: 3,
+            modelNumber: 'SO-TG202',
+            image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=800',
+            isActive: true,
+            discount: 0
+          }
+        ];
+        saveProductsLocal();
+      }
+
+      const localOrders = localStorage.getItem('shaheer_orders');
+      if (localOrders) {
+        try { state.orders = JSON.parse(localOrders); } catch(e){}
+      } else {
+        state.orders = [
+          {
+            id: 'ord-1001',
+            orderNumber: 'SO-8831',
+            customerName: 'Muhammad Ali',
+            phoneNumber: '03345514480',
+            shippingAddress: 'House 42, Street 8, F-7/2',
+            city: 'Islamabad',
+            totalAmount: 14500,
+            status: 'Pending',
+            createdAt: new Date().toLocaleDateString(),
+            items: [{ name: 'Shaheer Royal Obsidian Aviator', quantity: 1, price: 14500 }]
+          }
+        ];
+        localStorage.setItem('shaheer_orders', JSON.stringify(state.orders));
+      }
+
+      if (supabaseClient) {
+        try {
+          const { data } = await supabaseClient.from('products').select('*');
+          if (data && data.length > 0) {
+            state.products = data.map(p => ({
+              id: p.id,
+              name: p.name,
+              brand: p.brand || 'Shaheer Opticals',
+              category: p.category,
+              price: p.price,
+              originalPrice: p.price,
+              stockCount: p.stock_quantity ?? 10,
+              modelNumber: p.sku || p.id,
+              image: p.image_url,
+              isActive: p.is_active ?? true,
+              discount: 0
+            }));
+          }
+        } catch(err) {
+          console.warn('Supabase note:', err);
+        }
+      }
+
+      updateCategoryDropdowns();
+      updateDashboardKPIs();
+      renderProductsTable();
+      renderCategoriesGrid();
+      renderStockTable();
+      renderOffersTable();
+      renderLensGrid();
+      renderOrdersList();
+
+      lucide.createIcons();
+    }
+
+    function saveProductsLocal() {
+      localStorage.setItem('shaheer_products', JSON.stringify(state.products));
+    }
+
+    function updateCategoryDropdowns() {
+      const filterSelect = document.getElementById('product-category-filter');
+      const formSelect = document.getElementById('form-product-category');
+      filterSelect.innerHTML = '<option value="all">All Categories</option>';
+      formSelect.innerHTML = '';
+      state.categories.forEach(c => {
+        filterSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+        formSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+      });
+    }
+
+    function updateDashboardKPIs() {
+      const totalProducts = state.products.length;
+      const pendingOrders = state.orders.filter(o => o.status === 'Pending').length;
+      const lowStock = state.products.filter(p => (p.stockCount || 0) <= 5).length;
+      const totalRevenue = state.orders.reduce((acc, o) => acc + (o.totalAmount || 0), 0);
+
+      document.getElementById('stat-products').innerText = totalProducts;
+      document.getElementById('stat-pending-orders').innerText = pendingOrders;
+      document.getElementById('stat-low-stock').innerText = lowStock;
+      document.getElementById('stat-revenue').innerText = 'Rs ' + totalRevenue.toLocaleString();
+
+      document.getElementById('badge-products').innerText = totalProducts;
+      document.getElementById('badge-categories').innerText = state.categories.length;
+      document.getElementById('badge-lenses').innerText = state.lensOptions.length;
+      document.getElementById('badge-orders').innerText = pendingOrders;
+    }
+
+    function renderProductsTable() {
+      const tbody = document.getElementById('products-table-body');
+      const query = document.getElementById('product-search').value.toLowerCase();
+      const cat = document.getElementById('product-category-filter').value;
+
+      const filtered = state.products.filter(p => {
+        const matchesQuery = p.name.toLowerCase().includes(query) || (p.modelNumber && p.modelNumber.toLowerCase().includes(query));
+        const matchesCat = cat === 'all' || p.category === cat;
+        return matchesQuery && matchesCat;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-zinc-500">No products found</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p => `
+        <tr class="hover:bg-zinc-900/40 transition">
+          <td class="p-3.5">
+            <div class="flex items-center gap-3">
+              <img src="${p.image}" alt="${p.name}" class="w-10 h-10 rounded-lg object-cover bg-zinc-900 border border-zinc-800" onerror="this.src='https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=200'" />
+              <div>
+                <div class="font-bold text-white">${p.name}</div>
+                <div class="text-[10px] text-zinc-500 font-mono">${p.modelNumber || 'NO-SKU'} • ${p.brand || 'Shaheer'}</div>
+              </div>
+            </div>
+          </td>
+          <td class="p-3.5"><span class="px-2 py-0.5 rounded-md bg-zinc-900 text-zinc-300 text-[10px] font-medium border border-zinc-800">${p.category}</span></td>
+          <td class="p-3.5 font-mono font-bold text-white">Rs ${Number(p.price).toLocaleString()}</td>
+          <td class="p-3.5">
+            <span class="font-mono text-xs ${p.stockCount <= 3 ? 'text-red-400 font-bold' : p.stockCount <= 5 ? 'text-amber-400' : 'text-emerald-400'}">${p.stockCount} in stock</span>
+          </td>
+          <td class="p-3.5">
+            <button onclick="toggleProductActive('${p.id}')" class="px-2 py-0.5 rounded-full text-[10px] font-bold ${p.isActive !== false ? 'bg-emerald-950 text-emerald-400 border border-emerald-800/60' : 'bg-zinc-800 text-zinc-400'}">
+              ${p.isActive !== false ? 'Active' : 'Hidden'}
+            </button>
+          </td>
+          <td class="p-3.5 text-right space-x-2">
+            <button onclick="editProduct('${p.id}')" class="p-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-[#D4AF37] transition"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
+            <button onclick="deleteProduct('${p.id}')" class="p-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-red-400 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+          </td>
+        </tr>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    function openProductModal(prod = null) {
+      document.getElementById('product-modal').classList.remove('hidden');
+      document.getElementById('modal-product-title').innerText = prod ? 'Edit Product' : 'Add New Product';
+      document.getElementById('form-product-id').value = prod ? prod.id : '';
+      document.getElementById('form-product-name').value = prod ? prod.name : '';
+      document.getElementById('form-product-brand').value = prod ? (prod.brand || '') : 'Shaheer Royal';
+      document.getElementById('form-product-category').value = prod ? prod.category : state.categories[0].name;
+      document.getElementById('form-product-price').value = prod ? prod.price : '';
+      document.getElementById('form-product-stock').value = prod ? prod.stockCount : 10;
+      document.getElementById('form-product-image').value = prod ? prod.image : '';
+      document.getElementById('form-product-sku').value = prod ? (prod.modelNumber || '') : `SO-${Math.floor(1000 + Math.random() * 9000)}`;
+      document.getElementById('form-product-shape').value = prod ? (prod.frameShape || '') : 'Square';
+      document.getElementById('form-product-color').value = prod ? (prod.frameColor || '') : 'Obsidian Black';
+      document.getElementById('form-product-desc').value = prod ? (prod.description || '') : '';
+    }
+
+    function closeProductModal() {
+      document.getElementById('product-modal').classList.add('hidden');
+    }
+
+    function handleProductSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('form-product-id').value;
+      const name = document.getElementById('form-product-name').value;
+      const brand = document.getElementById('form-product-brand').value;
+      const category = document.getElementById('form-product-category').value;
+      const price = Number(document.getElementById('form-product-price').value);
+      const stock = Number(document.getElementById('form-product-stock').value);
+      const image = document.getElementById('form-product-image').value;
+      const sku = document.getElementById('form-product-sku').value;
+      const shape = document.getElementById('form-product-shape').value;
+      const color = document.getElementById('form-product-color').value;
+      const desc = document.getElementById('form-product-desc').value;
+
+      if (id) {
+        state.products = state.products.map(p => p.id === id ? {
+          ...p, name, brand, category, price, stockCount: stock, image, modelNumber: sku, frameShape: shape, frameColor: color, description: desc
+        } : p);
+        showToast('Product updated');
+      } else {
+        state.products.unshift({
+          id: 'prod_' + Date.now(),
+          name, brand, category, price, originalPrice: price, stockCount: stock, image, modelNumber: sku, frameShape: shape, frameColor: color, description: desc, isActive: true, discount: 0
+        });
+        showToast('Product added');
+      }
+
+      saveProductsLocal();
+      closeProductModal();
+      renderProductsTable();
+      renderStockTable();
+      renderOffersTable();
+      updateDashboardKPIs();
+    }
+
+    function editProduct(id) {
+      const prod = state.products.find(p => p.id === id);
+      if (prod) openProductModal(prod);
+    }
+
+    function deleteProduct(id) {
+      if (confirm('Delete this product?')) {
+        state.products = state.products.filter(p => p.id !== id);
+        saveProductsLocal();
+        renderProductsTable();
+        renderStockTable();
+        renderOffersTable();
+        updateDashboardKPIs();
+        showToast('Product deleted');
+      }
+    }
+
+    function toggleProductActive(id) {
+      state.products = state.products.map(p => p.id === id ? { ...p, isActive: p.isActive === false } : p);
+      saveProductsLocal();
+      renderProductsTable();
+    }
+
+    function renderCategoriesGrid() {
+      const grid = document.getElementById('categories-grid');
+      grid.innerHTML = state.categories.map(c => {
+        const count = state.products.filter(p => p.category === c.name).length;
+        return `
+          <div class="p-4 rounded-2xl bg-[#0a0a0d] border border-zinc-800/80 flex items-center justify-between">
+            <div>
+              <h4 class="text-sm font-bold text-white">${c.name}</h4>
+              <p class="text-[11px] text-zinc-500 font-mono">${count} Products listed</p>
+            </div>
+            <button onclick="deleteCategory('${c.id}')" class="p-2 rounded-xl bg-zinc-900 text-zinc-400 hover:text-red-400 transition">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function openCategoryModal() {
+      const name = prompt('New category name:');
+      if (name && name.trim()) {
+        state.categories.push({
+          id: 'cat_' + Date.now(),
+          name: name.trim(),
+          slug: name.trim().toLowerCase().replace(/\s+/g, '-')
+        });
+        updateCategoryDropdowns();
+        renderCategoriesGrid();
+        updateDashboardKPIs();
+        showToast('Category created');
+      }
+    }
+
+    function deleteCategory(id) {
+      if (confirm('Delete this category?')) {
+        state.categories = state.categories.filter(c => c.id !== id);
+        updateCategoryDropdowns();
+        renderCategoriesGrid();
+        updateDashboardKPIs();
+        showToast('Category deleted');
+      }
+    }
+
+    function renderStockTable() {
+      const tbody = document.getElementById('stock-table-body');
+      tbody.innerHTML = state.products.map(p => `
+        <tr class="hover:bg-zinc-900/40 transition">
+          <td class="p-3.5 font-semibold text-white">${p.name}</td>
+          <td class="p-3.5 font-mono text-zinc-400">${p.modelNumber || 'N/A'}</td>
+          <td class="p-3.5">
+            <input 
+              type="number" 
+              value="${p.stockCount}" 
+              onchange="updateStockDirect('${p.id}', this.value)" 
+              class="w-20 bg-zinc-900 border border-zinc-800 rounded-lg px-2 py-1 text-xs text-white font-mono text-center focus:border-[#D4AF37]"
+            />
+          </td>
+          <td class="p-3.5 space-x-1.5">
+            <button onclick="adjustStock('${p.id}', -1)" class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-300 hover:text-white font-mono">-1</button>
+            <button onclick="adjustStock('${p.id}', 1)" class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-300 hover:text-white font-mono">+1</button>
+            <button onclick="adjustStock('${p.id}', 5)" class="px-2.5 py-1 bg-zinc-900 border border-zinc-800 rounded-lg text-[#D4AF37] hover:text-white font-mono font-bold">+5</button>
+          </td>
+          <td class="p-3.5 text-right">
+            ${p.stockCount <= 0 ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-950 text-red-400 border border-red-800/60">Out of Stock</span>' :
+              p.stockCount <= 5 ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-950 text-amber-400 border border-amber-800/60">Low Stock</span>' :
+              '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800/60">In Stock</span>'}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function adjustStock(id, diff) {
+      state.products = state.products.map(p => {
+        if (p.id === id) {
+          return { ...p, stockCount: Math.max(0, (p.stockCount || 0) + diff) };
+        }
+        return p;
+      });
+      saveProductsLocal();
+      renderStockTable();
+      renderProductsTable();
+      updateDashboardKPIs();
+      showToast('Stock updated');
+    }
+
+    function updateStockDirect(id, val) {
+      const num = Math.max(0, parseInt(val) || 0);
+      adjustStock(id, num - (state.products.find(p => p.id === id)?.stockCount || 0));
+    }
+
+    function renderOffersTable() {
+      const tbody = document.getElementById('offers-table-body');
+      tbody.innerHTML = state.products.map(p => {
+        const orig = p.originalPrice || p.price;
+        const discount = p.discount || 0;
+        const salePrice = discount > 0 ? Math.round(orig * (1 - discount / 100)) : orig;
+
+        return `
+          <tr class="hover:bg-zinc-900/40 transition">
+            <td class="p-3.5 font-semibold text-white">${p.name}</td>
+            <td class="p-3.5 font-mono text-zinc-400">Rs ${orig.toLocaleString()}</td>
+            <td class="p-3.5">
+              <input 
+                type="number" min="0" max="90" value="${discount}" 
+                onchange="setProductDiscount('${p.id}', this.value)" 
+                class="w-16 bg-zinc-900 border border-zinc-800 rounded-lg px-2 py-1 text-xs text-[#D4AF37] font-mono text-center"
+              /> %
+            </td>
+            <td class="p-3.5 font-mono font-bold ${discount > 0 ? 'text-[#D4AF37]' : 'text-zinc-300'}">Rs ${salePrice.toLocaleString()}</td>
+            <td class="p-3.5 text-right">
+              <button onclick="toggleQuickSale('${p.id}')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold ${discount > 0 ? 'bg-amber-500 text-black' : 'bg-zinc-900 border border-zinc-800 text-zinc-400'}">
+                ${discount > 0 ? 'On Sale' : 'Add Sale'}
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function setProductDiscount(id, percent) {
+      const pNum = Math.max(0, Math.min(90, parseInt(percent) || 0));
+      state.products = state.products.map(p => {
+        if (p.id === id) {
+          const orig = p.originalPrice || p.price;
+          const newPrice = pNum > 0 ? Math.round(orig * (1 - pNum / 100)) : orig;
+          return { ...p, originalPrice: orig, discount: pNum, price: newPrice };
+        }
+        return p;
+      });
+      saveProductsLocal();
+      renderOffersTable();
+      renderProductsTable();
+      showToast('Discount applied');
+    }
+
+    function toggleQuickSale(id) {
+      const prod = state.products.find(p => p.id === id);
+      if (prod) setProductDiscount(id, prod.discount > 0 ? 0 : 15);
+    }
+
+    function renderLensGrid() {
+      const grid = document.getElementById('lenses-grid');
+      grid.innerHTML = state.lensOptions.map(l => `
+        <div class="p-4 rounded-2xl bg-[#0a0a0d] border border-zinc-800/80 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <h4 class="text-sm font-bold text-white">${l.name}</h4>
+              <span class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30">
+                +Rs ${l.price.toLocaleString()}
+              </span>
+            </div>
+            <p class="text-xs text-zinc-400 mb-3">${l.description || 'Prescription lens option'}</p>
+          </div>
+          <div class="flex items-center justify-end gap-2 pt-2 border-t border-zinc-800">
+            <button onclick="deleteLensOption('${l.id}')" class="p-1 rounded-lg bg-zinc-900 text-zinc-400 hover:text-red-400 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function openLensModal() {
+      const name = prompt('Lens Package Name:');
+      if (!name) return;
+      const price = prompt('Price in PKR:', '2000');
+      const desc = prompt('Description:', 'UV & Anti-glare optical coatings');
+
+      state.lensOptions.push({
+        id: 'lens_' + Date.now(),
+        name,
+        price: parseInt(price) || 0,
+        description: desc
+      });
+      renderLensGrid();
+      updateDashboardKPIs();
+      showToast('Lens package added');
+    }
+
+    function deleteLensOption(id) {
+      if (confirm('Delete this lens package?')) {
+        state.lensOptions = state.lensOptions.filter(l => l.id !== id);
+        renderLensGrid();
+        updateDashboardKPIs();
+        showToast('Lens package deleted');
+      }
+    }
+
+    function renderOrdersList() {
+      const container = document.getElementById('orders-container');
+      const filter = document.getElementById('order-status-filter').value;
+      const filtered = state.orders.filter(o => filter === 'all' || o.status === filter);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-zinc-500 bg-[#0a0a0d] border border-zinc-800/80 rounded-2xl">No orders found</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(o => `
+        <div class="p-5 rounded-2xl bg-[#0a0a0d] border border-zinc-800/80 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div class="space-y-1.5 flex-1">
+            <div class="flex items-center gap-3">
+              <span class="font-mono text-sm font-bold text-[#D4AF37]">${o.orderNumber || o.id}</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                o.status === 'Pending' ? 'bg-amber-950 text-amber-400 border border-amber-800' :
+                o.status === 'Confirmed' ? 'bg-sky-950 text-sky-400 border border-sky-800' :
+                o.status === 'Shipped' ? 'bg-purple-950 text-purple-400 border border-purple-800' :
+                o.status === 'Delivered' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' :
+                'bg-zinc-800 text-zinc-400'
+              }">${o.status}</span>
+              <span class="text-[11px] text-zinc-500">${o.createdAt || 'Recent'}</span>
+            </div>
+            <div class="text-xs text-white font-semibold">
+              ${o.customerName} • <span class="text-[#D4AF37] font-mono">${o.phoneNumber}</span>
+            </div>
+            <div class="text-xs text-zinc-400">
+              📍 ${o.shippingAddress}, ${o.city}
+            </div>
+            <div class="text-[11px] text-zinc-500">
+              Items: ${o.items ? o.items.map(i => `${i.name} (x${i.quantity || 1})`).join(', ') : 'Eyewear Frame'}
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+            <div class="text-right sm:mr-4">
+              <div class="text-[10px] text-zinc-500 uppercase">Total Amount</div>
+              <div class="text-lg font-mono font-bold text-white">Rs ${Number(o.totalAmount).toLocaleString()}</div>
+            </div>
+
+            <select onchange="updateOrderStatus('${o.id}', this.value)" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-200">
+              <option value="Pending" ${o.status === 'Pending' ? 'selected' : ''}>Pending</option>
+              <option value="Confirmed" ${o.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+              <option value="Processing" ${o.status === 'Processing' ? 'selected' : ''}>Processing</option>
+              <option value="Shipped" ${o.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+              <option value="Delivered" ${o.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+              <option value="Cancelled" ${o.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+            </select>
+
+            <button onclick="sendOrderWhatsApp('${o.id}')" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-emerald-900/30 transition">
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+              <span>WhatsApp</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    function updateOrderStatus(id, newStatus) {
+      state.orders = state.orders.map(o => o.id === id ? { ...o, status: newStatus } : o);
+      localStorage.setItem('shaheer_orders', JSON.stringify(state.orders));
+      renderOrdersList();
+      updateDashboardKPIs();
+      showToast(`Order status set to ${newStatus}`);
+    }
+
+    function sendOrderWhatsApp(id) {
+      const order = state.orders.find(o => o.id === id);
+      if (!order) return;
+
+      const phone = order.phoneNumber.replace(/\D/g, '');
+      const targetPhone = phone.length >= 10 ? (phone.startsWith('0') ? '92' + phone.slice(1) : phone) : '923345514480';
+
+      const msg = `Salam ${order.customerName}!\n\nThis is Shaheer Opticals regarding your order #${order.orderNumber || order.id}.\n*Total Amount:* Rs ${Number(order.totalAmount).toLocaleString()}\n*Status:* ${order.status}\n*Address:* ${order.shippingAddress}, ${order.city}\n\nOur Official Helpline: 0334-5514480. Thank you for choosing Shaheer Opticals!`;
+      
+      window.open(`https://wa.me/${targetPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function saveSupabaseSettings() {
+      const url = document.getElementById('cfg-supabase-url').value.trim();
+      const key = document.getElementById('cfg-supabase-key').value.trim();
+      localStorage.setItem('shaheer_supabase_url', url);
+      localStorage.setItem('shaheer_supabase_key', key);
+      initSupabase();
+      showToast('Supabase settings saved');
+      loadAllData();
+    }
+
+    async function testSupabaseConnection() {
+      const url = document.getElementById('cfg-supabase-url').value.trim();
+      const key = document.getElementById('cfg-supabase-key').value.trim();
+      if (!url || !key) {
+        showToast('Enter both Supabase URL & Key', true);
+        return;
+      }
+      try {
+        const client = window.supabase.createClient(url, key);
+        const { error } = await client.from('products').select('id', { count: 'exact', head: true });
+        if (error) showToast(`Error: ${error.message}`, true);
+        else showToast('Connected to Supabase successfully!');
+      } catch(err) {
+        showToast('Connection failed', true);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initSupabase();
+      lucide.createIcons();
+      if (localStorage.getItem('shaheer_admin_auth') === 'true') {
+        state.isAuthenticated = true;
+        document.getElementById('auth-screen').classList.add('hidden');
+        document.getElementById('admin-app').classList.remove('hidden');
+        loadAllData();
+      }
+    });
+  </script>
+</body>
+</html>
