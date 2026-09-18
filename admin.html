@@ -877,13 +877,8 @@
       document.getElementById('product-modal').classList.add('hidden');
     }
 
-    // ===== FIXED CODE - PASTE THIS =====
-async function handleProductSubmit(e) {
+  async function handleProductSubmit(e) {
   e.preventDefault();
-  const btn = document.getElementById('btn-save-product') || e.target.querySelector('button[type="submit"]');
-  if(btn){ btn.innerText = 'Saving to Supabase...'; btn.disabled = true; }
-
-  const id = document.getElementById('form-product-id').value;
   const name = document.getElementById('form-product-name').value.trim();
   const brand = document.getElementById('form-product-brand').value.trim();
   const category = document.getElementById('form-product-category').value;
@@ -892,15 +887,14 @@ async function handleProductSubmit(e) {
   const image = document.getElementById('form-product-image').value.trim();
   const sku = document.getElementById('form-product-sku').value.trim();
   const desc = document.getElementById('form-product-desc').value.trim();
+  const id = document.getElementById('form-product-id').value;
 
-  // Check Supabase Connected?
   if(!supabaseClient){
-    showToast('Supabase Connect nahi hai! Settings > Save & Connect karo', true);
-    if(btn){ btn.innerText = 'Save Product'; btn.disabled = false; }
+    alert('Supabase Connect nahi hai! Pehle Settings me URL aur Key Save karo');
+    showToast('Settings me ja kar Supabase Connect karo', true);
     return;
   }
 
-  // Ye payload Supabase me jayega - har column ka naam cover kiya hai
   const payload = {
     name: name,
     price: price,
@@ -910,32 +904,27 @@ async function handleProductSubmit(e) {
     description: desc,
     image_url: image,
     stock_quantity: stock,
-    stock: stock,
     is_active: true
   };
 
   try {
-    if(id &&!String(id).startsWith('prod_') &&!String(id).startsWith('so-')){
-      // Edit case
-      const { error } = await supabaseClient.from('products').update(payload).eq('id', id);
-      if(error) throw error;
-      showToast('Product Updated - Live Website par update ho gaya ✅');
+    showToast('Supabase me saving...');
+    let result;
+    if(id &&!String(id).startsWith('prod_')){
+      result = await supabaseClient.from('products').update(payload).eq('id', id);
     } else {
-      // New product case
-      const { error } = await supabaseClient.from('products').insert([payload]);
-      if(error) throw error;
-      showToast('Product Added - Ab Live par nazar aayega ✅');
+      result = await supabaseClient.from('products').insert([payload]).select();
     }
+    if(result.error) throw result.error;
+    showToast('✅ Live Website par Save ho gaya!');
     closeProductModal();
-    await loadAllData(); // Table refresh
+    await loadAllData();
   } catch(err){
     console.error(err);
-    showToast('Supabase Error: ' + err.message, true);
-  } finally {
-    if(btn){ btn.innerText = 'Save Product'; btn.disabled = false; }
+    alert('Supabase Error: ' + err.message);
+    showToast('Error: ' + err.message, true);
   }
 }
-// ===== FIXED CODE END =====
 
     function toggleProductActive(id) {
       state.products = state.products.map(p => p.id === id ? { ...p, isActive: p.isActive === false } : p);
