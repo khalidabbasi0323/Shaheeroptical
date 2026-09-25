@@ -9,10 +9,15 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
-<!-- Supabase CDN Script -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase CDN Script -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <script>
-    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5a3R4cXVqaXdteG54c3R0d25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5MTAzODYsImV4cCI6MjEwMzQ4NjM4Nn0.ph94foTBafg02zJojYA9RjLFoxq-d4OlcuhnWjAwvbA
+    // Supabase Credentials
+    const SUPABASE_URL = 'https://dyktxqujiwmxnxsttwng.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5a3R4cXVqaXdteG54c3R0d25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5MTAzODYsImV4cCI6MjEwMzQ4NjM4Nn0.ph94foTBafg02zJojYA9RjLFoxq-d4OlcuhnWjAwvbA';
+    const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
     tailwind.config = {
       theme: {
         extend: {
@@ -158,6 +163,16 @@
       </button>
     </div>
   </header>
+
+  <!-- MOBILE MENU DROPDOWN -->
+  <div id="mobile-menu" class="hidden lg:hidden bg-zinc-950 border-b border-zinc-800 px-6 py-4 space-y-3 text-xs font-semibold text-zinc-300">
+    <a href="#collection" onclick="filterCategory('All'); toggleMobileMenu()" class="block hover:text-[#D4AF37]">Eyewear Collection</a>
+    <a href="#collection" onclick="filterCategory('Sunglasses'); toggleMobileMenu()" class="block hover:text-[#D4AF37]">Sunglasses</a>
+    <a href="#collection" onclick="filterCategory('Blue Cut'); toggleMobileMenu()" class="block hover:text-[#D4AF37]">Blue-Cut Computer Lenses</a>
+    <button onclick="openBookingModal(); toggleMobileMenu()" class="block w-full text-left hover:text-[#D4AF37]">Book Eye Exam</button>
+    <button onclick="openTryOnModal(); toggleMobileMenu()" class="block w-full text-left text-gold-400 hover:text-[#D4AF37]">Virtual Try-On</button>
+    <a href="#location" onclick="toggleMobileMenu()" class="block hover:text-[#D4AF37]">Visit Store</a>
+  </div>
 
   <!-- STOREFRONT WRAPPER -->
   <div id="storefront-view" class="space-y-16 sm:space-y-24">
@@ -373,7 +388,7 @@
       </div>
 
       <div class="max-w-7xl mx-auto pt-6 border-t border-zinc-900 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-zinc-600">
-        <div>© 2026 Shaheer Opticals. All Rights Reserved. Kali Tanki, Saidpur Road, Rawalpindi.</div>
+        <div>©️ 2026 Shaheer Opticals. All Rights Reserved. Kali Tanki, Saidpur Road, Rawalpindi.</div>
         <div class="flex items-center gap-4">
           <a href="tel:03345514480" class="hover:text-zinc-400">0334-5514480</a>
           <span>•</span>
@@ -622,7 +637,7 @@
   <!-- CART SLIDE-OVER DRAWER -->
   <div id="cart-drawer" class="hidden fixed inset-0 z-50 flex justify-end">
     <div onclick="closeCartDrawer()" class="fixed inset-0 bg-black/75 backdrop-blur-sm"></div>
-    <div class="relative w-full max-w-md bg-[#0a0a0d] border-l border-zinc-800 h-full p-6 flex flex-col justify-between overflow-y-auto">
+    <div class="relative w-full max-w-md bg-[#0a0a0d] border-l border-zinc-800 h-full p-6 flex flex-col justify-between overflow-y-auto z-10">
       <div>
         <div class="flex items-center justify-between pb-4 border-b border-zinc-800">
           <div class="flex items-center gap-2">
@@ -826,7 +841,7 @@
       { name: 'Accessories', icon: 'box', count: 'Cases & Sprays' }
     ];
 
-    // State
+    // State Store
     let products = JSON.parse(localStorage.getItem('shaheer_store_products')) || INITIAL_PRODUCTS;
     let cart = JSON.parse(localStorage.getItem('shaheer_store_cart')) || [];
     let orders = JSON.parse(localStorage.getItem('shaheer_store_orders')) || [
@@ -854,6 +869,12 @@
       setTimeout(() => {
         toast.classList.add('translate-y-20', 'opacity-0');
       }, 3000);
+    }
+
+    // Toggle Mobile Navigation Menu
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
     }
 
     // View Switcher (Storefront <-> Admin)
@@ -900,25 +921,45 @@
       lucide.createIcons();
     }
 
+    // Fetch Products from Supabase DB or LocalStorage
+    async function loadProductsFromSupabase() {
+      if (!supabase) return;
+      try {
+        const { data, error } = await supabase.from('products').select('*');
+        if (!error && data && data.length > 0) {
+          products = data;
+          localStorage.setItem('shaheer_store_products', JSON.stringify(products));
+          renderProducts();
+        }
+      } catch (e) {
+        console.warn('Supabase offline or table pending, fallback to local storage', e);
+      }
+    }
+
     // Render Products Grid
     function renderProducts() {
       const container = document.getElementById('products-grid');
       const filtered = products.filter(p => currentFilter === 'All' || p.category === currentFilter);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="col-span-full text-center py-12 text-zinc-500 text-xs">No frames available in this category.</div>`;
+        return;
+      }
 
       container.innerHTML = filtered.map(p => `
         <div class="bg-[#0a0a0d] border border-zinc-800/80 hover:border-[#D4AF37]/40 rounded-2xl p-4 flex flex-col justify-between group transition-all duration-300 hover:-translate-y-1 shadow-xl">
           <div>
             <!-- Image & Badge -->
             <div class="relative aspect-square rounded-xl overflow-hidden bg-zinc-900 mb-3.5">
-              <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <img src="${p.image || p.image_url || 'https://via.placeholder.com/400'}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#D4AF37] text-black">${p.badge || 'Luxury'}</span>
-              <button onclick="openTryOnModalFor('${p.image}')" class="absolute top-2.5 right-2.5 p-2 rounded-xl bg-black/60 backdrop-blur-md text-white hover:text-[#D4AF37] transition" title="Try On">
+              <button onclick="openTryOnModalFor('${p.image || p.image_url}')" class="absolute top-2.5 right-2.5 p-2 rounded-xl bg-black/60 backdrop-blur-md text-white hover:text-[#D4AF37] transition" title="Try On">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
               </button>
             </div>
 
             <!-- Details -->
-            <div class="text-[11px] text-zinc-500 font-mono">${p.brand} • ${p.category}</div>
+            <div class="text-[11px] text-zinc-500 font-mono">${p.brand || 'Shaheer'} • ${p.category || 'Eyewear'}</div>
             <h3 class="font-bold text-white text-sm mt-0.5 leading-snug group-hover:text-[#D4AF37] transition">${p.name}</h3>
             <div class="flex items-baseline gap-2 mt-2">
               <span class="text-base font-bold font-mono text-white">Rs ${Number(p.price).toLocaleString()}</span>
@@ -954,12 +995,12 @@
 
     // Product Detail & Lens Selection
     function openProductDetailModal(id) {
-      const prod = products.find(p => p.id === id);
+      const prod = products.find(p => String(p.id) === String(id));
       if (!prod) return;
       currentDetailProduct = prod;
 
-      document.getElementById('detail-image').src = prod.image;
-      document.getElementById('detail-brand').innerText = prod.brand;
+      document.getElementById('detail-image').src = prod.image || prod.image_url;
+      document.getElementById('detail-brand').innerText = prod.brand || 'Shaheer Signature';
       document.getElementById('detail-name').innerText = prod.name;
       document.getElementById('detail-price').innerText = `Rs ${Number(prod.price).toLocaleString()}`;
       document.getElementById('detail-orig-price').innerText = prod.origPrice ? `Rs ${Number(prod.origPrice).toLocaleString()}` : '';
@@ -980,7 +1021,7 @@
     function updateSelectedLensPrice() {
       if (!currentDetailProduct) return;
       const lensVal = Number(document.getElementById('lens-select').value);
-      const total = currentDetailProduct.price + lensVal;
+      const total = Number(currentDetailProduct.price) + lensVal;
       document.getElementById('detail-total-price').innerText = `Rs ${total.toLocaleString()}`;
     }
 
@@ -994,9 +1035,9 @@
         id: 'cart_' + Date.now(),
         productId: currentDetailProduct.id,
         name: currentDetailProduct.name,
-        price: currentDetailProduct.price + lensPrice,
+        price: Number(currentDetailProduct.price) + lensPrice,
         lensName: lensName,
-        image: currentDetailProduct.image
+        image: currentDetailProduct.image || currentDetailProduct.image_url
       });
 
       saveCart();
@@ -1006,16 +1047,16 @@
     }
 
     function quickAddToCart(id) {
-      const prod = products.find(p => p.id === id);
+      const prod = products.find(p => String(p.id) === String(id));
       if (!prod) return;
 
       cart.push({
         id: 'cart_' + Date.now(),
         productId: prod.id,
         name: prod.name,
-        price: prod.price,
+        price: Number(prod.price),
         lensName: 'Demo CR39 Lenses',
-        image: prod.image
+        image: prod.image || prod.image_url
       });
 
       saveCart();
@@ -1027,7 +1068,7 @@
       const lensSelect = document.getElementById('lens-select');
       const lensPrice = Number(lensSelect.value);
       const lensName = lensSelect.options[lensSelect.selectedIndex].getAttribute('data-name');
-      const total = currentDetailProduct.price + lensPrice;
+      const total = Number(currentDetailProduct.price) + lensPrice;
 
       const msg = `Assalam-o-Alaikum Shaheer Opticals! I want to order:\n\nFrame: ${currentDetailProduct.name}\nLens: ${lensName}\nTotal Price: Rs ${total.toLocaleString()}\n\nPlease confirm availability at your Rawalpindi store.`;
       window.open(`https://wa.me/923345514480?text=${encodeURIComponent(msg)}`, '_blank');
@@ -1065,7 +1106,7 @@
 
       let subtotal = 0;
       container.innerHTML = cart.map((item, idx) => {
-        subtotal += item.price;
+        subtotal += Number(item.price);
         return `
           <div class="py-3 flex items-center justify-between gap-3 text-xs">
             <div class="flex items-center gap-3">
@@ -1073,7 +1114,7 @@
               <div>
                 <div class="font-bold text-white">${item.name}</div>
                 <div class="text-[10px] text-[#D4AF37]">${item.lensName || 'Demo Lens'}</div>
-                <div class="font-mono text-zinc-300 font-bold mt-0.5">Rs ${item.price.toLocaleString()}</div>
+                <div class="font-mono text-zinc-300 font-bold mt-0.5">Rs ${Number(item.price).toLocaleString()}</div>
               </div>
             </div>
             <button onclick="removeCartItem(${idx})" class="p-1.5 text-zinc-500 hover:text-red-400">
@@ -1115,7 +1156,7 @@
       const address = document.getElementById('order-address').value;
 
       const orderNumber = 'SO-' + Math.floor(1000 + Math.random() * 9000);
-      const totalAmount = cart.reduce((acc, i) => acc + i.price, 0);
+      const totalAmount = cart.reduce((acc, i) => acc + Number(i.price), 0);
       const itemsList = cart.map(i => `${i.name} (${i.lensName})`).join(', ');
 
       const newOrder = {
@@ -1181,7 +1222,9 @@
     }
 
     function openTryOnModalFor(glassesImg) {
-      document.getElementById('try-on-glasses').src = glassesImg;
+      if (glassesImg) {
+        document.getElementById('try-on-glasses').src = glassesImg;
+      }
       openTryOnModal();
     }
 
@@ -1203,8 +1246,8 @@
       // KPIs
       document.getElementById('admin-stat-products').innerText = products.length;
       document.getElementById('admin-stat-orders').innerText = orders.filter(o => o.status === 'Pending').length;
-      document.getElementById('admin-stat-low').innerText = products.filter(p => p.stock <= 4).length;
-      const totalSales = orders.reduce((acc, o) => acc + (o.amount || 0), 0);
+      document.getElementById('admin-stat-low').innerText = products.filter(p => Number(p.stock) <= 4).length;
+      const totalSales = orders.reduce((acc, o) => acc + (Number(o.amount) || 0), 0);
       document.getElementById('admin-stat-sales').innerText = 'Rs ' + totalSales.toLocaleString();
 
       // Orders Table
@@ -1223,7 +1266,8 @@
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${o.status === 'Delivered' ? 'bg-emerald-950 text-emerald-400' : 'bg-amber-950 text-amber-400'}">${o.status}</span>
             </td>
             <td class="p-3 text-right">
-              <a href="https://wa.me/923345514480?text=Order%20${o.orderNumber}%20Status%20Update%20for%20${o.customerName}" target="_blank" class="px-2 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-900 hover:bg-emerald-900 transition">
+              <a href="https://wa.me/923345514480?text=Order%20${o.orderNumber}%20Status%20Update%20for
+              %20${o.customerName}" target="_blank" class="px-2 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-900 hover:bg-emerald-900 transition">
                 WhatsApp
               </a>
             </td>
@@ -1236,9 +1280,9 @@
       prodsTbody.innerHTML = products.map(p => `
         <tr class="hover:bg-zinc-900/40 transition">
           <td class="p-3 font-semibold text-white">${p.name}</td>
-          <td class="p-3"><span class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[10px]">${p.category}</span></td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[10px]">${p.category || 'Glasses'}</span></td>
           <td class="p-3 font-mono font-bold text-[#D4AF37]">Rs ${Number(p.price).toLocaleString()}</td>
-          <td class="p-3 font-mono text-xs ${p.stock <= 3 ? 'text-red-400 font-bold' : 'text-emerald-400'}">${p.stock} units</td>
+          <td class="p-3 font-mono text-xs ${Number(p.stock) <= 3 ? 'text-red-400 font-bold' : 'text-emerald-400'}">${p.stock || 0} units</td>
           <td class="p-3 space-x-1">
             <button onclick="adminAdjustStock('${p.id}', -1)" class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 hover:text-white">-1</button>
             <button onclick="adminAdjustStock('${p.id}', 1)" class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 hover:text-white">+1</button>
@@ -1253,7 +1297,7 @@
     }
 
     function adminAdjustStock(id, diff) {
-      products = products.map(p => p.id === id ? { ...p, stock: Math.max(0, p.stock + diff) } : p);
+      products = products.map(p => String(p.id) === String(id) ? { ...p, stock: Math.max(0, (Number(p.stock) || 0) + diff) } : p);
       localStorage.setItem('shaheer_store_products', JSON.stringify(products));
       renderAdminDashboard();
       renderProducts();
@@ -1262,7 +1306,7 @@
 
     function adminDeleteProduct(id) {
       if (confirm('Delete this frame from catalog?')) {
-        products = products.filter(p => p.id !== id);
+        products = products.filter(p => String(p.id) !== String(id));
         localStorage.setItem('shaheer_store_products', JSON.stringify(products));
         renderAdminDashboard();
         renderProducts();
@@ -1280,7 +1324,7 @@
         id: 'so-' + Date.now(),
         name,
         brand: 'Shaheer Signature',
-        category,
+        category: category || 'Glasses',
         price: parseInt(price) || 12000,
         stock: 10,
         image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&q=80&w=800',
@@ -1298,6 +1342,7 @@
       renderCategories();
       renderProducts();
       updateCartBadge();
+      loadProductsFromSupabase();
       lucide.createIcons();
     });
   </script>
